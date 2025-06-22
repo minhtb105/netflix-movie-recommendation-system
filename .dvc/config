@@ -2,3 +2,4 @@
     remote = ml-artifacts
 ['remote "ml-artifacts"']
     url = azure://ml-artifacts/raw
+'''
