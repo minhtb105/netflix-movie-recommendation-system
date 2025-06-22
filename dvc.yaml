@@ -1,0 +1,13 @@
+stages:
+  ingest:
+    cmd: python steps/ingest_data.py
+    deps:
+      - steps/ingest_data.py
+      - src/ingest_strategy.py
+      - data/raw/ml-100k/u.data
+      - data/raw/ml-100k/u.item
+      - data/raw/ml-100k/u.user
+    outs:
+      - data/processed/ratings.csv
+      - data/processed/movies.csv
+      - data/processed/users.csv
