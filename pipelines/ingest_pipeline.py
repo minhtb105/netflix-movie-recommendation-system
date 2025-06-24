@@ -1,0 +1,54 @@
+from pathlib import Path
+import sys
+import logging
+
+project_root = Path(__file__).resolve().parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from steps.ingest_data import ingest_df
+import yaml
+
+
+def ingest_ml100k_pipeline():
+    params = yaml.safe_load(open(project_root / "params.yaml"))["ingest"]
+    base_path     = project_root / params["base_path"]
+    processed_dir = project_root / params["processed_dir"]
+    
+    ratings = ingest_df(
+        source_path=str(Path(base_path) / "u.data"),
+        sep="\t",
+        header=None,
+        names=["user_id", "item_id", "rating", "timestamp"]
+    )
+    
+    movies = ingest_df(
+        source_path=str(Path(base_path) / "u.item"),
+        sep="|",
+        header=None,
+        encoding="latin-1",
+        names=[
+            "movie_id", "title", "release_date", "video_release_date", "IMDb_URL",
+            "unknown", "Action", "Adventure", "Animation", "Children's", "Comedy",
+            "Crime", "Documentary", "Drama", "Fantasy", "Film-Noir", "Horror",
+            "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western"
+        ]
+    )
+    
+    users = ingest_df(
+        source_path=str(Path(base_path) / "u.user"),
+        sep="|",
+        header=None,
+        names=["user_id", "age", "gender", "occupation", "zip_code"]
+    )
+    
+    processed_dir = Path(params['processed_dir'])
+    processed_dir.mkdir(parents=True, exist_ok=True)
+    ratings.to_csv(processed_dir / "ratings.csv", index=False)
+    movies.to_csv(processed_dir / "movies.csv", index=False)
+    users.to_csv(processed_dir / "users.csv", index=False)
+
+    logging.info("Ingestion complete. Processed files are in %s", str(processed_dir))
+    
+if __name__ == "__main__":
+    ingest_ml100k_pipeline()

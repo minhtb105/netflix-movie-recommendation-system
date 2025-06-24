@@ -1,0 +1,124 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python pipelines/ingest_pipeline.py
+    deps:
+    - path: data/raw/ml-100k/u.data
+      hash: md5
+      md5: 6e47046882bad158b0efbb84cd5cb987
+      size: 1979173
+    - path: data/raw/ml-100k/u.item
+      hash: md5
+      md5: c9e7f390115d79079537301d5204f3f7
+      size: 236344
+    - path: data/raw/ml-100k/u.user
+      hash: md5
+      md5: 1b53539edc13caad0282c8500608a319
+      size: 22628
+    - path: pipelines/ingest_pipeline.py
+      hash: md5
+      md5: 5e69c773c28c4b9f966d3a15cecd9845
+      size: 1841
+    - path: src/ingest_strategy.py
+      hash: md5
+      md5: d34c1f3e4ef24c09d49291ba5f251213
+      size: 1868
+    - path: steps/ingest_data.py
+      hash: md5
+      md5: 02241dfb5e7d2bac261506f8165fd30b
+      size: 1028
+    params:
+      params.yaml:
+        ingest.base_path: data/raw/ml-100k
+        ingest.processed_dir: data/processed
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: c16c70f99fa5b1787df915ea91d27afb.dir
+      size: 2342551
+      nfiles: 3
+  process_ratings:
+    cmd: python pipelines/ratings_pipeline.py
+    deps:
+    - path: data/processed/ratings.csv
+      hash: md5
+      md5: 26763292aa76168d3e41e33bfc594e7d
+      size: 2079207
+    - path: pipelines/ratings_pipeline.py
+      hash: md5
+      md5: c28fd339a09b52ac3ea17af62ff02f20
+      size: 1618
+    - path: steps/prepare_data.py
+      hash: md5
+      md5: f0723d80361732576ef1eff251880ccc
+      size: 2316
+    params:
+      params.yaml:
+        process_ratings.file_path: data/processed/ratings.csv
+        process_ratings.normalize_columns:
+        - user_id
+        - item_id
+        process_ratings.out_dir: data/feature/ratings
+        process_ratings.target_col: rating
+        process_ratings.test_size: 0.2
+        process_ratings.timestamp_col: timestamp
+    outs:
+    - path: data/feature/ratings
+      hash: md5
+      md5: fd867587f6298385a2c57ceefc98a816.dir
+      size: 7895846
+      nfiles: 4
+  process_movies:
+    cmd: python pipelines/movies_pipeline.py
+    deps:
+    - path: data/processed/movies.csv
+      hash: md5
+      md5: a98e850fd903b42c47a8f5e6651a88de
+      size: 239733
+    - path: pipelines/movies_pipeline.py
+      hash: md5
+      md5: a7b8c27151166fdf82fb98e4d3718db7
+      size: 961
+    - path: steps/prepare_data.py
+      hash: md5
+      md5: f0723d80361732576ef1eff251880ccc
+      size: 2316
+    params:
+      params.yaml:
+        process_movies.date_col: release_date
+        process_movies.file_path: data/processed/movies.csv
+        process_movies.out_dir: data/feature/movies
+    outs:
+    - path: data/feature/movies
+      hash: md5
+      md5: 83dd9ef19d87768c88c6af9cb423c4b3.dir
+      size: 157727
+      nfiles: 1
+  process_users:
+    cmd: python pipelines/users_pipeline.py
+    deps:
+    - path: data/processed/users.csv
+      hash: md5
+      md5: 0074e4d3e53891d1b6288f7dd7c68edc
+      size: 23611
+    - path: pipelines/users_pipeline.py
+      hash: md5
+      md5: ac04ed88e1c960b5b3eb8e1666f04cc0
+      size: 842
+    - path: steps/prepare_data.py
+      hash: md5
+      md5: f0723d80361732576ef1eff251880ccc
+      size: 2316
+    params:
+      params.yaml:
+        process_users.enc_cols:
+        - gender
+        - occupation
+        process_users.file_path: data/processed/users.csv
+        process_users.out_dir: data/feature/users
+    outs:
+    - path: data/feature/users
+      hash: md5
+      md5: 2c42b96b7286727de7dd1e8809fe4803.dir
+      size: 488321
+      nfiles: 1
