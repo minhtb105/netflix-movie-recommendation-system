@@ -1,3 +1,5 @@
-# Ignore all raw/processed data
+# Ignore all raw/processed/feature data
 data/raw/
 data/processed/
+data/feature
+.dvc/config
