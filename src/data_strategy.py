@@ -133,6 +133,35 @@ class DataNormalizeStrategy(DataStrategy):
                 logging.error(f"Error in normalizing data: {e}")
                 raise e
 
+class TextVectorizeStrategy(DataStrategy):
+    def handle_data(self, df_train: pd.DataFrame,
+                    df_test: Optional[pd.DataFrame] = None,
+                    column: str = "", 
+                    max_features: int = 1000) -> pd.DataFrame:
+        from sklearn.feature_extraction.text import TfidfVectorizer
+
+        if not column:
+            raise ValueError("You must specify a text column to vectorize.")
+        
+        vectorizer = TfidfVectorizer(max_features=max_features)
+        tfidf_train = vectorizer.fit_transform(df_train[column].astype(str))
+        tfidf_train_df = pd.DataFrame(tfidf_train.toarray(), 
+                                      columns=vectorizer.get_feature_names_out(),
+                                      index=df_train.index)
+
+        df_train = pd.concat([df_train.drop(columns=[column]), tfidf_train_df], axis=1)
+        
+        if df_test is not None:
+            tfidf_test = vectorizer.transform(df_test[column].astype(str))
+            tfidf_test_df = pd.DataFrame(tfidf_test.toarray(),
+                                         columns=vectorizer.get_feature_names_out(),
+                                         index=df_test.index)
+            df_test = pd.concat([df_test.drop(columns=[column]), tfidf_test_df], axis=1)
+            return df_train, df_test
+
+        return df_train, None
+
+
 class DataCleaning:
     def __init__(self, data: pd.DataFrame, strategy: DataStrategy):
         self.data = data
