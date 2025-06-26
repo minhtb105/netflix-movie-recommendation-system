@@ -9,7 +9,7 @@ from typing import List
 import pandas as pd
 from steps.prepare_data import clean_df, encode_df, normalize_df
 import yaml
-
+from datetime import datetime, UTC
 
 def process_users_pipeline():
     params = yaml.safe_load(open("params.yaml"))["process_users"]
@@ -18,6 +18,7 @@ def process_users_pipeline():
     
     enc_cols = params["enc_cols"]
     df, _ = encode_df(df, method="onehot", columns=enc_cols)
+    df["event_timestamp"] = datetime.now(UTC)  # event_timestamp_column for feast FileSource
     
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)

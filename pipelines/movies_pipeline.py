@@ -20,7 +20,7 @@ def process_movies_pipeline():
     df = FeatureEngineer.add_time_features(
         df,
         datetime_cols=[date_col],
-        drop_original=True
+        drop_original=False
     )
     
     vectorize_col = params['vectorize_col']
