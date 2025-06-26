@@ -39,5 +39,6 @@ class FeatureEngineer:
         df = df.sort_values(groupby_cols + [ts_col])
         df["prev_ts"] = df.groupby(groupby_cols)[ts_col].shift(1)
         df["time_since_last"] = df[ts_col] - df["prev_ts"]
+        df["time_since_last"] = df["time_since_last"].dt.total_seconds()
         
         return df

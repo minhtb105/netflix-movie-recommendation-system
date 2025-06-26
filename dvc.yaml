@@ -28,7 +28,7 @@ stages:
       - process_ratings.target_col
       - process_ratings.test_size
     outs:
-      - data/feature/ratings
+      - feature_repo/data/ratings
 
   process_movies:
     cmd: python pipelines/movies_pipeline.py
@@ -43,7 +43,7 @@ stages:
       - process_movies.vectorize_col
       - process_movies.max_features
     outs:
-      - data/feature/movies
+      - feature_repo/data/movies
 
   process_users:
     cmd: python pipelines/users_pipeline.py
@@ -56,4 +56,4 @@ stages:
       - process_users.enc_cols
       - process_users.out_dir
     outs:
-      - data/feature/users
+      - feature_repo/data/users

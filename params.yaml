@@ -1,0 +1,24 @@
+ingest:
+  base_path: "data/raw/ml-100k"
+  processed_dir: "data/processed"
+
+process_ratings:
+  file_path: "data/processed/ratings.csv"
+  out_dir: "feature_repo/data/ratings"
+  timestamp_col: "timestamp"
+  target_col: "rating"
+  test_size: 0.2
+
+process_movies:
+  file_path: "data/processed/movies.csv"
+  date_col: "release_date"
+  out_dir: "feature_repo/data/movies"
+  vectorize_col: "title"
+  max_features: 1000
+
+process_users:
+  file_path: "data/processed/users.csv"
+  enc_cols:
+    - "gender"
+    - "occupation"
+  out_dir: "feature_repo/data/users"

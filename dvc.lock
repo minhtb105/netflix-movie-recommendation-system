@@ -55,15 +55,15 @@ stages:
     params:
       params.yaml:
         process_ratings.file_path: data/processed/ratings.csv
-        process_ratings.out_dir: data/feature/ratings
+        process_ratings.out_dir: feature_repo/data/ratings
         process_ratings.target_col: rating
         process_ratings.test_size: 0.2
         process_ratings.timestamp_col: timestamp
     outs:
-    - path: data/feature/ratings
+    - path: feature_repo/data/ratings
       hash: md5
-      md5: 5561c132c42dcbb94a1f55756b13d1e1.dir
-      size: 463363
+      md5: e295c9f3351ee7bacb6f19950b6badd8.dir
+      size: 472530
       nfiles: 4
   process_movies:
     cmd: python pipelines/movies_pipeline.py
@@ -85,13 +85,13 @@ stages:
         process_movies.date_col: release_date
         process_movies.file_path: data/processed/movies.csv
         process_movies.max_features: 1000
-        process_movies.out_dir: data/feature/movies
+        process_movies.out_dir: feature_repo/data/movies
         process_movies.vectorize_col: title
     outs:
-    - path: data/feature/movies
+    - path: feature_repo/data/movies
       hash: md5
-      md5: dde28f259b090fd896026f58c70de2c4.dir
-      size: 731912
+      md5: cb51b9087ba2c4f2dbb7993f6ad88d42.dir
+      size: 97799
       nfiles: 1
   process_users:
     cmd: python pipelines/users_pipeline.py
@@ -114,9 +114,9 @@ stages:
         - gender
         - occupation
         process_users.file_path: data/processed/users.csv
-        process_users.out_dir: data/feature/users
+        process_users.out_dir: feature_repo/data/users
     outs:
-    - path: data/feature/users
+    - path: feature_repo/data/users
       hash: md5
       md5: ea8c0ff486fd14caaf47ceec136c1b17.dir
       size: 33721
