@@ -46,18 +46,15 @@ stages:
       size: 2079207
     - path: pipelines/ratings_pipeline.py
       hash: md5
-      md5: c28fd339a09b52ac3ea17af62ff02f20
-      size: 1618
+      md5: 260bd2cfe2b4f14fea5a5f8fc159c5f5
+      size: 1500
     - path: steps/prepare_data.py
       hash: md5
-      md5: f0723d80361732576ef1eff251880ccc
-      size: 2316
+      md5: a2caaf350ef7bb23d3dff9666026f98d
+      size: 2890
     params:
       params.yaml:
         process_ratings.file_path: data/processed/ratings.csv
-        process_ratings.normalize_columns:
-        - user_id
-        - item_id
         process_ratings.out_dir: data/feature/ratings
         process_ratings.target_col: rating
         process_ratings.test_size: 0.2
@@ -65,8 +62,8 @@ stages:
     outs:
     - path: data/feature/ratings
       hash: md5
-      md5: fd867587f6298385a2c57ceefc98a816.dir
-      size: 7895846
+      md5: 5561c132c42dcbb94a1f55756b13d1e1.dir
+      size: 463363
       nfiles: 4
   process_movies:
     cmd: python pipelines/movies_pipeline.py
@@ -77,22 +74,24 @@ stages:
       size: 239733
     - path: pipelines/movies_pipeline.py
       hash: md5
-      md5: a7b8c27151166fdf82fb98e4d3718db7
-      size: 961
+      md5: 208dc68b0568995289d2a8db52b6ba97
+      size: 1241
     - path: steps/prepare_data.py
       hash: md5
-      md5: f0723d80361732576ef1eff251880ccc
-      size: 2316
+      md5: a2caaf350ef7bb23d3dff9666026f98d
+      size: 2890
     params:
       params.yaml:
         process_movies.date_col: release_date
         process_movies.file_path: data/processed/movies.csv
+        process_movies.max_features: 1000
         process_movies.out_dir: data/feature/movies
+        process_movies.vectorize_col: title
     outs:
     - path: data/feature/movies
       hash: md5
-      md5: 83dd9ef19d87768c88c6af9cb423c4b3.dir
-      size: 157727
+      md5: dde28f259b090fd896026f58c70de2c4.dir
+      size: 731912
       nfiles: 1
   process_users:
     cmd: python pipelines/users_pipeline.py
@@ -103,12 +102,12 @@ stages:
       size: 23611
     - path: pipelines/users_pipeline.py
       hash: md5
-      md5: ac04ed88e1c960b5b3eb8e1666f04cc0
-      size: 842
+      md5: b4d452f04c172ecea97514975add8761
+      size: 807
     - path: steps/prepare_data.py
       hash: md5
-      md5: f0723d80361732576ef1eff251880ccc
-      size: 2316
+      md5: a2caaf350ef7bb23d3dff9666026f98d
+      size: 2890
     params:
       params.yaml:
         process_users.enc_cols:
@@ -119,6 +118,6 @@ stages:
     outs:
     - path: data/feature/users
       hash: md5
-      md5: 2c42b96b7286727de7dd1e8809fe4803.dir
-      size: 488321
+      md5: ea8c0ff486fd14caaf47ceec136c1b17.dir
+      size: 33721
       nfiles: 1
