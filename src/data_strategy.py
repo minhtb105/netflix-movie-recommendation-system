@@ -1,11 +1,11 @@
 import pandas as pd
 from abc import ABC, abstractmethod
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Tuple
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.feature_extraction.text import TfidfVectorizer
 import logging
-
 
 class DataStrategy(ABC):
     """
@@ -134,29 +134,28 @@ class DataNormalizeStrategy(DataStrategy):
                 raise e
 
 class TextVectorizeStrategy(DataStrategy):
-    def handle_data(self, df_train: pd.DataFrame,
-                    df_test: Optional[pd.DataFrame] = None,
-                    column: str = "", 
-                    max_features: int = 1000) -> pd.DataFrame:
-        from sklearn.feature_extraction.text import TfidfVectorizer
-
+    def handle_data(
+        self,
+        df_train: pd.DataFrame,
+        df_test: Optional[pd.DataFrame] = None,
+        column: str = "",
+        max_features: int = 1000,
+        output_col: Optional[str] = None,
+    ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
+        output_col = output_col or f"{column}_tfidf"
         if not column:
             raise ValueError("You must specify a text column to vectorize.")
-        
         vectorizer = TfidfVectorizer(max_features=max_features)
         tfidf_train = vectorizer.fit_transform(df_train[column].astype(str))
-        tfidf_train_df = pd.DataFrame(tfidf_train.toarray(), 
-                                      columns=vectorizer.get_feature_names_out(),
-                                      index=df_train.index)
 
-        df_train = pd.concat([df_train.drop(columns=[column]), tfidf_train_df], axis=1)
-        
+        df_train[output_col] = [row for row in tfidf_train.toarray()]
+
+        df_train = df_train.drop(columns=[column])
+
         if df_test is not None:
             tfidf_test = vectorizer.transform(df_test[column].astype(str))
-            tfidf_test_df = pd.DataFrame(tfidf_test.toarray(),
-                                         columns=vectorizer.get_feature_names_out(),
-                                         index=df_test.index)
-            df_test = pd.concat([df_test.drop(columns=[column]), tfidf_test_df], axis=1)
+            df_test[output_col] = [row for row in tfidf_test.toarray()]
+            df_test = df_test.drop(columns=[column])
             return df_train, df_test
 
         return df_train, None
