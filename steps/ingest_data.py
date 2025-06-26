@@ -1,21 +1,37 @@
 import pandas as pd
 import logging
-from zenml import step
+from pathlib import Path
+import sys
+from typing import Union, List, Optional, Annotated
 
-class IngestData:
-    def __init__(self, data_path: str):
-        self.data_path = data_path
+project_root = Path(__file__).resolve().parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from src.ingest_strategy import *
+
+
+def ingest_df(
+    source_path: Union[str, Path],
+    sep: str = "\t",
+    header: Optional[int] = None,
+    names: Optional[List[str]] = None,
+    encoding: Optional[str] = None
+) -> pd.DataFrame:
+    """
+    ZenML step: ingest given file into DataFrame using explicit parameters.
+    Chooses strategy based on file extension via IngestContext.
+    """
+    context = IngestContext(source_path)
+    read_kwargs = {"sep": sep}
     
-    def get_data(self):
-        logging.info(f"Ingest data from {self.data_path}")
-        return pd.read_csv(self.data_path)
-    
-@step
-def ingest_df(data_path: str) -> pd.DataFrame:
-    try:
-        ingest_data = IngestData(data_path)
-        df = ingest_data.get_data()
-        return df
-    except Exception as e:
-        logging.error("Error while ingesting data: {e}")
-        raise e
+    if header is not None:
+        read_kwargs["header"] = header
+        
+    if names is not None:
+        read_kwargs["names"] = names
+        
+    if encoding is not None:
+        read_kwargs["encoding"] = encoding
+        
+    return context.read(**read_kwargs)

@@ -6,6 +6,7 @@ from src.data_strategy import (
     DataDivideStrategy,
     DataEncodeStrategy,
     DataNormalizeStrategy,
+    TextVectorizeStrategy,
     DataCleaning,
 )
 from src.feature_engineer import FeatureEngineer
@@ -52,8 +53,17 @@ def encode_df(df_train: pd.DataFrame,
 def normalize_df(df_train: pd.DataFrame,
                 df_test: Optional[pd.DataFrame] = None, 
                 method: str = "standard", 
-                columns: Union[List[str], None] = None) -> pd.DataFrame:
+                columns: Union[List[str], None] = None) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
     normalize_strategy = DataNormalizeStrategy()
     
     return normalize_strategy.handle_data(df_train, df_test, method, columns)
     
+def vectorize_text(df_train: pd.DataFrame,
+                   df_test: Optional[pd.DataFrame] = None,
+                   column: str = "",
+                   max_features: int = 1000) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
+    vectorize_strategy = TextVectorizeStrategy()
+    df_train, df_test = vectorize_strategy.handle_data(df_train, df_test, column, max_features)
+    logging.info("TF-IDF vectorization applied to column: %s", column)
+    
+    return df_train, df_test

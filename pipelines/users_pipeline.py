@@ -18,11 +18,10 @@ def process_users_pipeline():
     
     enc_cols = params["enc_cols"]
     df, _ = encode_df(df, method="onehot", columns=enc_cols)
-    df, _ = normalize_df(df, method="standard")
     
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)
-    df.to_csv(f"{output_dir}/X_train.csv", index=False)
+    df.to_parquet(f"{output_dir}/user_features.parquet", index=False)
     
 if __name__ == "__main__":
     process_users_pipeline()
