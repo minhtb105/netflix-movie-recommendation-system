@@ -1,6 +1,9 @@
 # Ignore all raw/processed/feature data
-data/raw/
+data/raw/ml-100k
 data/processed/
 data/feature
 .dvc/config
 .dvc/config.local
+feature_repo/registry.db
+feature_repo/online_store.db
+feature_repo/.feast
