@@ -59,7 +59,7 @@ y_train_source = FileSource(
     path=r'data/ratings/rating_target_train.parquet',
     event_timestamp_column="event_timestamp")
 
-y_test_fv = FeatureView(
+y_train_fv = FeatureView(
     name="y_train_rating",
     entities=None,
     ttl=None,
