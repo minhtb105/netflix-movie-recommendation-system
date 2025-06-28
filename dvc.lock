@@ -46,8 +46,8 @@ stages:
       size: 2079207
     - path: pipelines/ratings_pipeline.py
       hash: md5
-      md5: 9a2e011a74e2d2e513f731e09f3a7cf5
-      size: 1784
+      md5: 33199fad552578544374972cc7622a5d
+      size: 1679
     - path: steps/prepare_data.py
       hash: md5
       md5: a2caaf350ef7bb23d3dff9666026f98d
@@ -62,8 +62,8 @@ stages:
     outs:
     - path: feature_repo/data/ratings
       hash: md5
-      md5: 12ee0e8001ce7ff8bcd558458e5cf5db.dir
-      size: 993615
+      md5: d2f0bc23750eb01ef7f42b2f792ce17c.dir
+      size: 991955
       nfiles: 4
   process_movies:
     cmd: python pipelines/movies_pipeline.py

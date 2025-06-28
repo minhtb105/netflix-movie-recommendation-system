@@ -28,12 +28,10 @@ def process_ratings_pipeline():
     test_size = params['test_size']
     X_train, X_test, y_train, y_test = divide_df(df, target_col, test_size)
     y_train, y_test = pd.DataFrame(y_train), pd.DataFrame(y_test)
-    
-    # event_timestamp_column for feast FileSource
-    X_train["event_timestamp"] = datetime.now(UTC)
-    X_test["event_timestamp"] = datetime.now(UTC)
-    y_train["event_timestamp"] = datetime.now(UTC)
-    y_test["event_timestamp"] = datetime.now(UTC)
+   
+    # event_timestamp_column for feast FileStore
+    y_train['event_timestamp'] = datetime.now(UTC)
+    y_test['event_timestamp'] = datetime.now(UTC)
    
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)
