@@ -6,7 +6,6 @@ process_ratings:
   file_path: "data/processed/ratings.csv"
   out_dir: "feature_repo/data/ratings"
   timestamp_col: "timestamp"
-  target_col: "rating"
   test_size: 0.2
 
 process_movies:

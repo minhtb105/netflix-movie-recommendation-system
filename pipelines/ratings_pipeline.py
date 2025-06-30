@@ -24,21 +24,13 @@ def process_ratings_pipeline():
     
     df = df.drop(columns=["prev_ts"])
     
-    target_col = params['target_col']
     test_size = params['test_size']
-    X_train, X_test, y_train, y_test = divide_df(df, target_col, test_size)
-    y_train, y_test = pd.DataFrame(y_train), pd.DataFrame(y_test)
-   
-    # event_timestamp_column for feast FileStore
-    y_train['event_timestamp'] = datetime.now(UTC)
-    y_test['event_timestamp'] = datetime.now(UTC)
+    df_train, df_test = divide_df(df, test_size)
    
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)
-    X_train.to_parquet(f"{output_dir}/rating_features_train.parquet", index=False)
-    X_test.to_parquet(f"{output_dir}/rating_features_test.parquet",  index=False)
-    y_train.to_parquet(f"{output_dir}/rating_target_train.parquet", index=False)
-    y_test.to_parquet(f"{output_dir}/rating_target_test.parquet",  index=False)
+    df_train.to_parquet(f"{output_dir}/rating_train.parquet", index=False)
+    df_test.to_parquet(f"{output_dir}/rating_test.parquet",  index=False)
     
 if __name__ == "__main__":
     process_ratings_pipeline()

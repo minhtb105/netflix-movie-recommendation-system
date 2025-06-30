@@ -46,25 +46,24 @@ stages:
       size: 1979206
     - path: pipelines/ratings_pipeline.py
       hash: md5
-      md5: 105304c7aec446daac15d652a0f0a203
-      size: 1636
+      md5: 72ced41a91ae298d30dc2e9d2fc6e00a
+      size: 1174
     - path: steps/prepare_data.py
       hash: md5
-      md5: f411c1db7b753895966aaafb30d4329f
-      size: 2821
+      md5: 29d95600126eeeb362947efe9f812cef
+      size: 2714
     params:
       params.yaml:
         process_ratings.file_path: data/processed/ratings.csv
         process_ratings.out_dir: feature_repo/data/ratings
-        process_ratings.target_col: rating
         process_ratings.test_size: 0.2
         process_ratings.timestamp_col: timestamp
     outs:
     - path: feature_repo/data/ratings
       hash: md5
-      md5: d298edfcc16c1c906117c5db88680abe.dir
-      size: 992059
-      nfiles: 4
+      md5: 36ccfa8526eff1bfcbed13fd34319061.dir
+      size: 989181
+      nfiles: 2
   process_movies:
     cmd: python pipelines/movies_pipeline.py
     deps:
@@ -78,8 +77,8 @@ stages:
       size: 1203
     - path: steps/prepare_data.py
       hash: md5
-      md5: f411c1db7b753895966aaafb30d4329f
-      size: 2821
+      md5: 29d95600126eeeb362947efe9f812cef
+      size: 2714
     params:
       params.yaml:
         process_movies.date_col: release_date
@@ -106,8 +105,8 @@ stages:
       size: 908
     - path: steps/prepare_data.py
       hash: md5
-      md5: f411c1db7b753895966aaafb30d4329f
-      size: 2821
+      md5: 29d95600126eeeb362947efe9f812cef
+      size: 2714
     params:
       params.yaml:
         process_users.enc_cols:
@@ -118,6 +117,6 @@ stages:
     outs:
     - path: feature_repo/data/users
       hash: md5
-      md5: 8e2e7f6238a154d236fe41a116e8fb88.dir
+      md5: faeb10708a7c2db45ea021f79893ff4e.dir
       size: 34546
       nfiles: 1

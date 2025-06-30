@@ -25,7 +25,6 @@ stages:
       - process_ratings.file_path
       - process_ratings.out_dir
       - process_ratings.timestamp_col
-      - process_ratings.target_col
       - process_ratings.test_size
     outs:
       - feature_repo/data/ratings

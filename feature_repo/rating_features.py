@@ -8,7 +8,7 @@ from feast.types import Float64, Int32, Int64, Array
 
 
 X_train_source = FileSource(
-    path=r'data/ratings/rating_features_train.parquet',
+    path=r'data/ratings/rating_train.parquet',
     event_timestamp_column="timestamp")
 
 user = Entity(name='user_id', 
@@ -30,13 +30,14 @@ X_train_fv = FeatureView(
         Field(name='timestamp_hour', dtype=Int32),
         Field(name='timestamp_dayofweek', dtype=Int32),
         Field(name="timestamp_is_weekend", dtype=Int32),
-        Field(name="time_since_last", dtype=Float64)
+        Field(name="time_since_last", dtype=Float64),
+        Field(name='rating', dtype=Int64),
     ],
     source=X_train_source
 )
 
 X_test_source = FileSource(
-    path=r"data/ratings/rating_features_test.parquet",
+    path=r"data/ratings/rating_test.parquet",
     event_timestamp_column="timestamp")
 
 X_test_fv = FeatureView(
@@ -50,35 +51,8 @@ X_test_fv = FeatureView(
         Field(name='timestamp_hour', dtype=Int32),
         Field(name='timestamp_dayofweek', dtype=Int32),
         Field(name="timestamp_is_weekend", dtype=Int32),
-        Field(name="time_since_last", dtype=Float64)
+        Field(name="time_since_last", dtype=Float64),
+        Field(name='rating', dtype=Int64),
     ],
     source=X_test_source
-)
-
-y_train_source = FileSource(
-    path=r'data/ratings/rating_target_train.parquet',
-    event_timestamp_column="event_timestamp")
-
-y_train_fv = FeatureView(
-    name="y_train_rating",
-    entities=None,
-    ttl=None,
-    schema=[
-        Field(name='rating', dtype=Int64),
-    ],
-    source=y_train_source
-)
-
-y_test_source = FileSource(
-    path=r'data/ratings/rating_target_test.parquet',
-    event_timestamp_column="event_timestamp")
-
-y_test_fv = FeatureView(
-    name="y_test_rating",
-    entities=None,
-    ttl=None,
-    schema=[
-        Field(name='rating', dtype=Int64),
-    ],
-    source=y_test_source
 )

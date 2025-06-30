@@ -33,14 +33,13 @@ def feature_engineer(df: pd.DataFrame,
     return df
 
 def divide_df(df: pd.DataFrame, 
-                    target_col: str,
-                    test_size: float = 0.2) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+            test_size: float = 0.2) -> Tuple[pd.DataFrame, pd.DataFrame]:
     # Data division
     divider = DataDivideStrategy()
-    X_train, X_test, y_train, y_test = divider.handle_data(df, target_col, test_size)
-    logging.info("Data split: train %d, test %d", len(X_train), len(X_test))
+    df_train, df_test = divider.handle_data(df, test_size)
+    logging.info("Data split: train %d, test %d", len(df_train), len(df_test))
     
-    return X_train, X_test, y_train, y_test
+    return df_train, df_test
 
 def encode_df(df_train: pd.DataFrame,
             df_test: Optional[pd.DataFrame] = None,  
