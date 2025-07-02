@@ -7,3 +7,4 @@ data/feature
 feature_repo/registry.db
 feature_repo/online_store.db
 feature_repo/.feast
+.vscode
