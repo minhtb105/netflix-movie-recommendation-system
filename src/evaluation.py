@@ -54,7 +54,7 @@ class RMSE(Evaluation):
             logging.error(f"Error while calculating RMSE: {e}")
             raise e
     
-class Procision(Evaluation):
+class Precision(Evaluation):
     def calculate_scores(self, y_true: np.ndarray, y_pred: np.ndarray):
         """
         Calculate Precision
