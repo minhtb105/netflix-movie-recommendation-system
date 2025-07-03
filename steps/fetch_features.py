@@ -1,7 +1,7 @@
 import pandas as pd
 from feast import FeatureStore
 
-store = FeatureStore(repo_path="~/projects/movie-recommender/feature_repo")
+store = FeatureStore(repo_path="feature_repo")
 REPO_PATH = "feature_repo"
 store = FeatureStore(repo_path=REPO_PATH)
 
@@ -39,6 +39,7 @@ def get_user_features_df():
             "user_features:occupation_writer",
         ]
     ).to_df()
+    
     return user_df
 
 def get_movie_features_df():
@@ -77,6 +78,7 @@ def get_movie_features_df():
             "movie_features:title_tfidf",
         ]
     ).to_df()
+    
     return movie_df
 
 def get_rating_features_df():
@@ -97,4 +99,5 @@ def get_rating_features_df():
             "X_train_rating:rating"
         ]
     ).to_df()
+    
     return rating_df
