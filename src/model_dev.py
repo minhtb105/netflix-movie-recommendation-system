@@ -7,6 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import mlflow
 import mlflow.pyfunc as pyfunc
 from mlflow.tracking import MlflowClient
+from mlflow.pyfunc import PythonModel
 
 
 class Model(ABC):
@@ -24,11 +25,24 @@ class PopularityBased(Model):
         self.rating_mean.to_pickle('model/popularity_model.pkl')
         mlflow.log_artifact('model/popularity_model.pkl', artifact_path='popularity_model')
 
-    def recommend(self, user_id: int = None, N: int = 5):
+    def recommend(self, N: int = 5):
         return self.rating_mean.head(N)
 
+class PopularityPyFuncModel(pyfunc.PythonModel):
+    def __init__(self, model: PopularityBased):
+        self.model = model
+
+    def predict(self, model_input: list[dict[str, int]], params=None):
+        results = []
+        
+        for row in model_input:
+            N = row.get('N', 5)
+            results.append(self.model.recommend(N=N))
+
+        return results
+
 class UserBasedCF(Model):
-    def train(self, df: pd.DataFrame, target_user_id: Optional[int] = None):
+    def train(self, df: pd.DataFrame):
         self.user_item_matrix = df.pivot(index="user_id", columns="item_id", values="rating").fillna(0)
         self.user_sim_matrix = cosine_similarity(self.user_item_matrix)
         self.user_sim_df = pd.DataFrame(self.user_sim_matrix,
@@ -66,6 +80,22 @@ class UserBasedCF(Model):
         predictions = {item: self.predict(user_id, item) for item in unrated_items}
         ranked = sorted(predictions.items(), key=lambda x: x[1], reverse=True)
         return ranked[:N]
+
+class UserCFPyfuncModel(pyfunc.PythonModel):
+    def __init__(self, model: UserBasedCF):
+        self.model = model
+
+    def predict(self, model_input: list[dict[str, int]], params=None):
+        results = []
+        
+        for row in model_input:
+            user_id = row.get('user_id', None)
+            item_id = row.get('item_id', None)
+            k = row.get('k', 5)
+
+            results.append(self.model.predict(user_id=user_id, item_id=item_id, k=k))
+
+        return results
 
 class ItemBasedCF(Model):
     def train(self, df: pd.DataFrame):
@@ -108,6 +138,22 @@ class ItemBasedCF(Model):
         ranked = sorted(predictions.items(), key=lambda x: x[1], reverse=True)
         return ranked[:N]
 
+class ItemCFPyfuncModel(pyfunc.PythonModel):
+    def __init__(self, model: ItemBasedCF):
+        self.model = model
+
+    def predict(self, model_input: list[dict[str, int]], params=None):
+        results = []
+        
+        for row in model_input:
+            user_id = row.get('user_id', None)
+            item_id = row.get('item_id', None)
+            k = row.get('k', 5)
+
+            results.append(self.model.predict(user_id=user_id, item_id=item_id, k=k))
+
+        return results
+
 class ContentBasedCF(Model):
     def train(self, df: pd.DataFrame):
         pass
@@ -115,3 +161,4 @@ class ContentBasedCF(Model):
 class MatrixFactorization(Model):
     def train(self, df, **kwargs):
         pass
+    
