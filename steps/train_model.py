@@ -8,12 +8,17 @@ from mlflow.pyfunc import PythonModel
 import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
-def train_model(py_model: PythonModel, df_train: pd.DataFrame, run_name: str) -> None:
+def train_model(py_model: PythonModel, run_name: str) -> None:
+    mlflow.end_run()
+    
     with mlflow.start_run(run_name=run_name):
-        py_model.model.train(df_train)
         class_name = py_model.__class__.__name__
         mlflow.log_param("model_type", class_name)
+        if class_name != "PopularityPyFuncModel":
+            py_model.model.train()
         
         if class_name == "PopularityPyFuncModel":
             input_example = [{"N": 5}]
@@ -27,7 +32,9 @@ def train_model(py_model: PythonModel, df_train: pd.DataFrame, run_name: str) ->
             input_example=input_example,
         )
         
-def get_or_train(model_instance: PythonModel, df_train: pd.DataFrame) -> PythonModel:
+        mlflow.end_run()
+        
+def get_or_train(model_instance: PythonModel) -> PythonModel:
     client = MlflowClient()
     model_class = model_instance.__class__
     model_name = model_class.__name__
@@ -47,6 +54,6 @@ def get_or_train(model_instance: PythonModel, df_train: pd.DataFrame) -> PythonM
     if runs:
         return mlflow.pyfunc.load_model(f"runs:/{runs[0].info.run_id}/model")
 
-    train_model(model_instance, df_train, run_name=model_name)
+    train_model(model_instance, run_name=model_name)
     
     return model_instance

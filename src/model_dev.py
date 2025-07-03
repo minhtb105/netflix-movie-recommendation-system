@@ -41,15 +41,21 @@ class PopularityPyFuncModel(pyfunc.PythonModel):
 
         return results
 
+def compute_user_item_matrix(df: pd.DataFrame) -> pd.DataFrame:
+    user_item_matrix = df.pivot(index="user_id", columns="item_id", values="rating")
+    user_item_matrix.to_pickle('model/user_item_matrix.pkl')
+    mlflow.log_artifact('model/user_item_matrix.pkl', artifact_path='user_item_matrix')
+    
+    return user_item_matrix
+
 class UserBasedCF(Model):
-    def train(self, df: pd.DataFrame):
-        self.user_item_matrix = df.pivot(index="user_id", columns="item_id", values="rating").fillna(0)
+    def train(self):
+        self.user_item_matrix = pd.read_pickle('model/user_item_matrix.pkl').fillna(0)
         self.user_sim_matrix = cosine_similarity(self.user_item_matrix)
         self.user_sim_df = pd.DataFrame(self.user_sim_matrix,
                                         index=self.user_item_matrix.index,
                                         columns=self.user_item_matrix.index)
-        self.user_item_matrix.to_pickle('model/user_item_matrix.pkl')
-        mlflow.log_artifact('model/user_item_matrix.pkl', artifact_path='user_item_matrix')
+    
         self.user_sim_df.to_pickle('model/user_based_cf_model.pkl')
         mlflow.log_artifact('model/user_based_cf_model.pkl', artifact_path='user_based_cf_model')
 
@@ -98,15 +104,14 @@ class UserCFPyfuncModel(pyfunc.PythonModel):
         return results
 
 class ItemBasedCF(Model):
-    def train(self, df: pd.DataFrame):
-        self.user_item_matrix = df.pivot_table(index='user_id', columns='item_id', values='rating')
+    def train(self):
+        self.user_item_matrix = pd.read_pickle('model/user_item_matrix.pkl')
         self.item_user_matrix = self.user_item_matrix.T.fillna(0)
         self.item_sim_matrix = cosine_similarity(self.item_user_matrix)
         self.item_sim_df = pd.DataFrame(self.item_sim_matrix,
                                         index=self.item_user_matrix.index,
                                         columns=self.item_user_matrix.index)
-        self.user_item_matrix.to_pickle('model/user_item_matrix.pkl')
-        mlflow.log_artifact('model/user_item_matrix.pkl', artifact_path='user_item_matrix')
+        
         self.item_sim_df.to_pickle('model/item_based_cf_model.pkl')
         mlflow.log_artifact('model/item_based_cf_model.pkl', artifact_path='item_based_cf_model')
 
