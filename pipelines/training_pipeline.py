@@ -8,8 +8,8 @@ if str(project_root) not in sys.path:
 import pandas as pd
 from steps.train_model import get_or_train
 from src.model_dev import (
-    PopularityBased, UserBasedCF, ItemBasedCF,
-    PopularityPyFuncModel, UserCFPyfuncModel, ItemCFPyfuncModel,
+    UserBasedCF, ItemBasedCF,
+    UserCFPyfuncModel, ItemCFPyfuncModel,
     compute_user_item_matrix
 )
 from steps.fetch_features import (
@@ -26,13 +26,6 @@ warnings.filterwarnings("ignore", category=UserWarning)
 def save_user_item_matrix():
     df = get_rating_features_df()
     compute_user_item_matrix(df)
-
-def top_n_rating_pipeline():
-    df = get_rating_features_df()
-    base_model = PopularityBased()
-    base_model.train(df)
-    model = PopularityPyFuncModel(model=base_model)
-    get_or_train(model)
 
 def user_based_cf_pipeline():
     base_model = UserBasedCF()

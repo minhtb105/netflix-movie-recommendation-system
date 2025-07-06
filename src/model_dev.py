@@ -1,4 +1,5 @@
 import logging
+import os
 from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
@@ -19,30 +20,9 @@ class Model(ABC):
     def recommend(self, user_id: int, N: int = 5):
         pass
 
-class PopularityBased(Model):
-    def train(self, df: pd.DataFrame):
-        self.rating_mean = df.groupby('item_id').rating.mean().sort_values(ascending=False)
-        self.rating_mean.to_pickle('model/popularity_model.pkl')
-        mlflow.log_artifact('model/popularity_model.pkl', artifact_path='popularity_model')
-
-    def recommend(self, N: int = 5):
-        return self.rating_mean.head(N)
-
-class PopularityPyFuncModel(pyfunc.PythonModel):
-    def __init__(self, model: PopularityBased):
-        self.model = model
-
-    def predict(self, model_input: list[dict[str, int]], params=None):
-        results = []
-        
-        for row in model_input:
-            N = row.get('N', 5)
-            results.append(self.model.recommend(N=N))
-
-        return results
-
 def compute_user_item_matrix(df: pd.DataFrame) -> pd.DataFrame:
     user_item_matrix = df.pivot(index="user_id", columns="item_id", values="rating")
+    os.makedirs("model", exist_ok=True)
     user_item_matrix.to_pickle('model/user_item_matrix.pkl')
     mlflow.log_artifact('model/user_item_matrix.pkl', artifact_path='user_item_matrix')
     

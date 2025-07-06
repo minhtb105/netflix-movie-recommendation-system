@@ -17,13 +17,10 @@ def train_model(py_model: PythonModel, run_name: str) -> None:
     with mlflow.start_run(run_name=run_name):
         class_name = py_model.__class__.__name__
         mlflow.log_param("model_type", class_name)
-        if class_name != "PopularityPyFuncModel":
-            py_model.model.train()
         
-        if class_name == "PopularityPyFuncModel":
-            input_example = [{"N": 5}]
-        else:
-            input_example = [{"user_id": 1, "item_id": 1, "k": 5}]
+        py_model.model.train()
+        
+        input_example = [{"user_id": 1, "item_id": 1, "k": 5}]
           
         pyfunc.log_model(
             artifact_path="model",

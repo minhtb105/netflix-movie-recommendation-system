@@ -65,16 +65,6 @@ stages:
       - src/model_dev.py
     outs:
       - model/user_item_matrix.pkl
-
-  top_n_rating:
-    cmd: python -c "from pipelines.training_pipeline import top_n_rating_pipeline; top_n_rating_pipeline()"
-    deps:
-      - pipelines/training_pipeline.py
-      - steps/train_model.py
-      - src/model_dev.py
-      - steps/fetch_features.py
-    outs:
-      - model/popularity_model.pkl
   
   user_based_cf:
     cmd: python -c "from pipelines.training_pipeline import user_based_cf_pipeline; user_based_cf_pipeline()"

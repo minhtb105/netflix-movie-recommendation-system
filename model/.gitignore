@@ -1,3 +1,4 @@
 /popularity_model.pkl
 /user_based_cf_model.pkl
 /item_based_cf_model.pkl
+/user_item_matrix.pkl
