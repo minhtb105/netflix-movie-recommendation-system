@@ -1,4 +1,28 @@
 stages:
+  fetch_tmdb_metadata:
+    cmd: python pipelines/tmdb_metadata_pipeline.py
+    deps:
+      - pipelines/tmdb_metadata_pipeline.py
+      - src/base_client.py
+      - utils/downloader.py
+      - services/tv_api.py
+      - src/base_client.py
+    outs:
+      - data/raw/movie_ids.json
+      - data/raw/movies_metadata.json
+      - data/raw/tv_ids.json
+      - data/raw/tv_metadata.json
+
+  extract_tmdb_features:
+    cmd: python pipelines/extract_tmdb_features.py
+    deps:
+      - pipelines/extract_tmdb_features.py
+      - data/raw/movies_metadata.json
+      - data/raw/tv_metadata.json
+    outs:
+      - data/raw/movies_features.json
+      - data/raw/tv_features.json
+
   ingest:
     wdir: .
     cmd: python pipelines/ingest_pipeline.py
