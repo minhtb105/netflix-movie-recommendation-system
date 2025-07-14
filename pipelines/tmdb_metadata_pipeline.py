@@ -105,7 +105,7 @@ async def main():
                     "movie_id": r["id"],
                     "img_type": "backdrop"
                 })
-    await async_batch_download_images(movie_image_infos, "data/images/movie")
+    await async_batch_download_images(movie_image_infos, "app/static/images/movie")
 
     tv_ids = await fetch_tv_ids(tv_service)
     tv_meta = await fetch_tv_metadata(tv_service, tv_ids)
@@ -125,7 +125,7 @@ async def main():
                     "movie_id": r["id"],
                     "img_type": "backdrop"
                 })
-    await async_batch_download_images(tv_image_infos, "data/images/tv")
+    await async_batch_download_images(tv_image_infos, "app/static/images/tv")
 
     await mv_service.close()
     await tv_service.close()

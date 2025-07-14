@@ -2,6 +2,9 @@
 data/raw/ml-100k
 data/processed/
 data/feature
+data/images
+services/__pycache__
+utils/__pycache__
 .dvc/config
 .dvc/config.local
 feature_repo/registry.db
@@ -16,3 +19,8 @@ src/__pycache__
 src/*.pyc
 .venv
 mlruns/
+schemas/__pycache__
+app/__pycache__
+users.json
+app/static/images/movie
+app/static/images/tv
