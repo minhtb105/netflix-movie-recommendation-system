@@ -34,9 +34,12 @@ class TMDBBaseClient:
                 response = await self.client.get(url, params=params)
                 response.raise_for_status()
                 return response.json()
+            except httpx.HTTPStatusError as e:
+                logging.error(f"HTTP {e.response.status_code} for GET {url} - {e.response.text}")
+                raise
             except httpx.RequestError as e:
-                logging.error(f"Status {response.status_code} for GET {url} - {response.text}")
-                return None
+                logging.error(f"RequestError for GET {url} - {e!r}")
+                raise 
 
     async def close(self):
         await self.client.aclose()

@@ -35,7 +35,7 @@ class MovieService(TMDBBaseClient):
         endpoint = f"/movie/{movie_id}"
         params = {
             "language": language,
-            "append_to_response": "images,keywords,credits,release_dates,providers",
+            "append_to_response": "images,keywords,credits,providers",
             "include_image_language": include_image_language
         }
         
@@ -74,3 +74,10 @@ class MovieService(TMDBBaseClient):
         params = {"end_date": end_date, "page": page, "start_date": start_date}
         
         return await self._get(endpoint, params)
+    
+    async def fetch_trailers(self, movie_id: int, language: str = "en-US"):
+        endpoint = f"/movie/{movie_id}/videos"
+        params = {"language": language}
+        
+        return await self._get(endpoint, params)
+           

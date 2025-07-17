@@ -75,3 +75,10 @@ class TVService(TMDBBaseClient):
         
         return await self._get(endpoint, params)
         
+    async def fetch_tv_trailers(self, series_id: int, 
+                               include_video_language: str = "en-US"):
+        endpoint = f"/tv/{series_id}/videos"
+        params = {"include_video_language": include_video_language}
+        
+        return await self._get(endpoint, params)
+    

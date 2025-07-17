@@ -229,20 +229,20 @@ stages:
     deps:
     - path: pipelines/tmdb_metadata_pipeline.py
       hash: md5
-      md5: 98b374e43592655bc5a861251c2f6cc3
-      size: 4425
+      md5: e843ab8e6300ed79a32c00adf68f3e27
+      size: 4790
     - path: services/tv_api.py
       hash: md5
-      md5: eb1b671ceaed5e9dc4e2ce7b372b1303
-      size: 2939
+      md5: 6f8a1cd5f1ff53eb3f25b47ab27c1c67
+      size: 3241
     - path: src/base_client.py
       hash: md5
-      md5: 6d8c3ea1c2d1a54045f4f627a0ba4b8f
-      size: 1407
+      md5: 3253cefdff8be36fe8258c86b523e10b
+      size: 1542
     - path: src/base_client.py
       hash: md5
-      md5: 6d8c3ea1c2d1a54045f4f627a0ba4b8f
-      size: 1407
+      md5: 3253cefdff8be36fe8258c86b523e10b
+      size: 1542
     - path: utils/downloader.py
       hash: md5
       md5: 773083168180c0a9b00505e317d5ac7c
@@ -250,41 +250,41 @@ stages:
     outs:
     - path: data/raw/movie_ids.json
       hash: md5
-      md5: efdacdec1dd7cd1dcb38c2ce12cf22fe
-      size: 2895
+      md5: dbb7f06f8c5cae8537eaa2ac73d87790
+      size: 101860
     - path: data/raw/movies_metadata.json
       hash: md5
-      md5: 42bf88fdca87b30457c6d320b4c3e375
-      size: 41177394
+      md5: e246f30262e15002f7bdad2cf4d084f1
+      size: 829940790
     - path: data/raw/tv_ids.json
       hash: md5
-      md5: 624eed459b033bb249ed8247731260dd
-      size: 2689
+      md5: 9363e791ce71b6a039ff5f959a7686bc
+      size: 62871
     - path: data/raw/tv_metadata.json
       hash: md5
-      md5: 72b2c0a7931b1316478f33444a98ac4d
-      size: 105350341
+      md5: 9c442a49c3ea9dab3082d14d8e70e1cd
+      size: 854199714
   extract_tmdb_features:
-    cmd: python pipelines/extract_tmdb_features.py
+    cmd: python src/extract_tmdb_features.py
     deps:
     - path: data/raw/movies_metadata.json
       hash: md5
-      md5: 42bf88fdca87b30457c6d320b4c3e375
-      size: 41177394
+      md5: e246f30262e15002f7bdad2cf4d084f1
+      size: 829940790
     - path: data/raw/tv_metadata.json
       hash: md5
-      md5: 72b2c0a7931b1316478f33444a98ac4d
-      size: 105350341
-    - path: pipelines/extract_tmdb_features.py
+      md5: 9c442a49c3ea9dab3082d14d8e70e1cd
+      size: 854199714
+    - path: src/extract_tmdb_features.py
       hash: md5
-      md5: a75e8b34e138e5bd175b33c8b22db31a
-      size: 3254
+      md5: a47b8006036469365bd462177d58f1da
+      size: 3256
     outs:
     - path: data/raw/movies_features.json
       hash: md5
-      md5: e7ce1dbe6098eb48fca3b08fbca31005
-      size: 9426107
+      md5: 2a7fc47ddc227e4af21d5dc1627ca751
+      size: 99457799
     - path: data/raw/tv_features.json
       hash: md5
-      md5: 8ce14d97b3114a8676aed9881ee5cef0
-      size: 25863262
+      md5: 943a0b9ebf5e6e274c8c8d717f277913
+      size: 96459509

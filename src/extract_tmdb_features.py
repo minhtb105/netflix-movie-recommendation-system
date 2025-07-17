@@ -24,27 +24,15 @@ def extract_features(meta_list, out_path, is_tv=False):
         if credits:
             cast = [
                 {
-                    "id": c.get("id"),
                     "name": c.get("name"),
                     "character": c.get("character") or c.get("roles", [{}])[0].get("character"),
-                    "profile_path": c.get("profile_path"),
                 }
                 for c in credits.get("cast", [])
             ]
             crew = [
-                {
-                    "id": c.get("id"),
-                    "name": c.get("name"),
-                    "department": c.get("department"),
-                    "job": c.get("job") or (c.get("jobs", [{}])[0].get("job") if c.get("jobs") else None),
-                    "profile_path": c.get("profile_path"),
-                }
-                for c in credits.get("crew", [])
+                c.get("name") for c in credits.get("crew", [])
             ]
-
-        # Release date
-        release_date = details.get("release_date") or details.get("first_air_date")
-
+            
         # Content ratings (TV)
         content_ratings = []
         if is_tv:
@@ -61,11 +49,25 @@ def extract_features(meta_list, out_path, is_tv=False):
         vote_average = details.get("vote_average")
         popularity = details.get("popularity")
 
+        # Videos
+        videos = item.get("videos", {}).get("results", [])
+        video_key = -1
+        for vid in videos:
+            if vid['site'] == "Youtube" and vid['type'] == 'Trailer':
+                video_key = vid['key']
+                break
+
+        # Reviews
+        reviews = item.get("reviews", {}).get("results", [])
+        reviews_content = []
+        if len(reviews) > 0:
+            for review in reviews:
+                reviews_content.append(review['content'])
+
         record = {
             "id": details.get("id"),
             "title": details.get("title") or details.get("name"),
             "overview": details.get("overview"),
-            "release_date": release_date,
             "vote_average": vote_average,
             "popularity": popularity,
             "genres": genres,
@@ -76,6 +78,8 @@ def extract_features(meta_list, out_path, is_tv=False):
             "external_ids": external_ids,
             "poster_path": poster_path,
             "backdrop_path": backdrop_path,
+            "video_key": video_key,
+            "review": reviews_content
         }
         features.append(record)
 

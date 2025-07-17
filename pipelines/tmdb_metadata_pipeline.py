@@ -16,7 +16,7 @@ FEATURE_DIR = Path("data/raw")
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 FEATURE_DIR.mkdir(parents=True, exist_ok=True)
 
-async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 10):
+async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 500):
     movie_ids = set()
     for func in [mv_service.fetch_popular, mv_service.fetch_top_rated, mv_service.fetch_upcoming]:
         for page in range(1, max_pages + 1):
@@ -38,9 +38,13 @@ async def fetch_movie_metadata(mv_service: MovieService, movie_ids: list[int]):
     for mid in movie_ids:
         # parallel fetch
         details = await mv_service.fetch_movie_details(mid)
+        videos = await mv_service.fetch_trailers(mid)
+        reviews = await mv_service.fetch_movie_reviews(mid)
         all_meta.append({
             "id": mid,
-            "details": details
+            "details": details,
+            "videos": videos,
+            "reviews": reviews
         })
         await asyncio.sleep(0.25)
         
@@ -49,7 +53,7 @@ async def fetch_movie_metadata(mv_service: MovieService, movie_ids: list[int]):
         
     return all_meta
 
-async def fetch_tv_ids(tv_service: TVService, max_pages: int = 10):
+async def fetch_tv_ids(tv_service: TVService, max_pages: int = 500):
     tv_ids = set()
     for func in [tv_service.fetch_popular_tv, tv_service.fetch_top_rated_tv]:
         for page in range(1, max_pages + 1):
@@ -70,9 +74,13 @@ async def fetch_tv_metadata(tv_service: TVService, tv_ids: list[int]):
     all_meta = []
     for tid in tv_ids:
         details = await tv_service.fetch_tv_details(tid)
+        videos = await tv_service.fetch_tv_trailers(tid)
+        reviews = await tv_service.fetch_tv_reviews(tid)
         all_meta.append({
             "id": tid,
             "details": details,
+            "videos": videos,
+            "reviews": reviews
         })
         
         await asyncio.sleep(0.25)
