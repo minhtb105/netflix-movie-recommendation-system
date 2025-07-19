@@ -12,7 +12,7 @@ import yaml
 from datetime import datetime, UTC
 
 def process_users_pipeline():
-    params = yaml.safe_load(open("params.yaml"))["process_users"]
+    params = yaml.safe_load(open("params.yaml"))["process_users_movielens"]
     df = pd.read_csv(params['file_path'])
     df = clean_df(df)
     

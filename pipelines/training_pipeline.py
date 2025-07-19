@@ -18,24 +18,37 @@ from steps.fetch_features import (
     get_rating_features_df,
 )
 import warnings
+import mlflow
+
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 def save_user_item_matrix():
-    df = get_rating_features_df()
-    compute_user_item_matrix(df)
+    mlflow.set_experiment("SaveUserItemMatrix")
+     
+    with mlflow.start_run(run_name="SaveUserItemMatrix"):
+        df = get_rating_features_df()
+        mlflow.log_param("num_rows", len(df))
+        compute_user_item_matrix(df)
+        mlflow.set_tag("step", "create_user_item_matrix")
 
 def user_based_cf_pipeline():
-    base_model = UserBasedCF()
-    base_model.train()
-    model = UserCFPyfuncModel(model=base_model)
-    get_or_train(model)
+    mlflow.set_experiment("UserBasedCF")
+    
+    with mlflow.start_run(run_name="UserBasedCFPipeline"):
+        base_model = UserBasedCF()
+        base_model.train()
+        model = UserCFPyfuncModel(model=base_model)
+        get_or_train(model)
 
 def item_based_cf_pipeline():
-    base_model = ItemBasedCF()
-    base_model.train()
-    model = ItemCFPyfuncModel(model=base_model)
-    get_or_train(model)
+    mlflow.set_experiment("ItemBasedCF")
+    
+    with mlflow.start_run(run_name="ItemBasedCFPipeline"):
+        base_model = ItemBasedCF()
+        base_model.train()
+        model = ItemCFPyfuncModel(model=base_model)
+        get_or_train(model)
     

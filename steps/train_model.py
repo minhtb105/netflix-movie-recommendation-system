@@ -12,24 +12,20 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 def train_model(py_model: PythonModel, run_name: str) -> None:
-    mlflow.end_run()
-    
-    with mlflow.start_run(run_name=run_name):
-        class_name = py_model.__class__.__name__
-        mlflow.log_param("model_type", class_name)
+    class_name = py_model.__class__.__name__
+    mlflow.log_param("model_type", class_name)
         
-        py_model.model.train()
+    py_model.model.train()
         
-        input_example = [{"user_id": 1, "item_id": 1, "k": 5}]
+    input_example = [{"user_id": 1, "item_id": 1, "k": 5}]
           
-        pyfunc.log_model(
-            artifact_path="model",
-            python_model=py_model,
-            registered_model_name=f"{class_name}_model",
-            input_example=input_example,
-        )
+    pyfunc.log_model(
+        artifact_path="model",
+        python_model=py_model,
+        registered_model_name=f"{class_name}_model",
+        input_example=input_example,
+    )
         
-        mlflow.end_run()
         
 def get_or_train(model_instance: PythonModel) -> PythonModel:
     client = MlflowClient()

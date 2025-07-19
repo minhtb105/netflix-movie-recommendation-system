@@ -6,7 +6,7 @@ REPO_PATH = "feature_repo"
 store = FeatureStore(repo_path=REPO_PATH)
 
 def get_user_features_df():
-    entity_df = pd.read_parquet("feature_repo/data/users/user_features.parquet")
+    entity_df = pd.read_parquet("feature_repo/data/users_movielens/user_features.parquet")
     entity_df["event_timestamp"] = pd.to_datetime(entity_df["event_timestamp"])
 
     user_df = store.get_historical_features(
@@ -43,7 +43,7 @@ def get_user_features_df():
     return user_df
 
 def get_movie_features_df():
-    entity_df = pd.read_parquet("feature_repo/data/movies/movie_features_train.parquet")
+    entity_df = pd.read_parquet("feature_repo/data/movies_movielens/movie_features_train.parquet")
     entity_df["release_date"] = pd.to_datetime(entity_df["release_date"])
     entity_df = entity_df.rename(columns={"release_date": "event_timestamp"})
 
@@ -82,7 +82,7 @@ def get_movie_features_df():
     return movie_df
 
 def get_rating_features_df():
-    entity_df = pd.read_parquet("feature_repo/data/ratings/rating_train.parquet")
+    entity_df = pd.read_parquet("feature_repo/data/ratings_movielens/rating_train.parquet")
     entity_df["timestamp"] = pd.to_datetime(entity_df["timestamp"])
     entity_df = entity_df.rename(columns={"timestamp": "event_timestamp"})
 

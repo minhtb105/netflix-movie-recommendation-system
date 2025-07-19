@@ -8,7 +8,7 @@ from feast.types import Int32, Int64, Float64
 
 
 user_source = FileSource(
-    path=r'data/users/user_features.parquet', 
+    path=r'data/users_movielens/user_features.parquet', 
     event_timestamp_column="event_timestamp")
 
 user = Entity(name='user_id', 

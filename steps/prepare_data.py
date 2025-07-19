@@ -52,10 +52,11 @@ def encode_df(df_train: pd.DataFrame,
 def normalize_df(df_train: pd.DataFrame,
                 df_test: Optional[pd.DataFrame] = None, 
                 method: str = "standard", 
-                columns: Union[List[str], None] = None) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
+                columns: Union[List[str], None] = None,
+                log_transform_columns: Union[List[str], None] = None) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
     normalize_strategy = DataNormalizeStrategy()
     
-    return normalize_strategy.handle_data(df_train, df_test, method, columns)
+    return normalize_strategy.handle_data(df_train, df_test, method, columns, log_transform_columns)
     
 def vectorize_text(df_train: pd.DataFrame,
                    df_test: Optional[pd.DataFrame] = None,

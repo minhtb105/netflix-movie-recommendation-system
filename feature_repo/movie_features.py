@@ -8,7 +8,7 @@ from feast.types import Float64, Int32, Int64, Array
 
 
 movie_source = FileSource(
-    path=r'data/movies/movie_features_train.parquet',
+    path='data/movies_movielens/movie_features_train.parquet',
     event_timestamp_column='release_date')
 
 movie = Entity(name='movie_id', 

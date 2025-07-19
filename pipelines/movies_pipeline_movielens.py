@@ -11,7 +11,7 @@ import pandas as pd
 import yaml
 
 def process_movies_pipeline():
-    params = yaml.safe_load(open("params.yaml"))["process_movies"]
+    params = yaml.safe_load(open("params.yaml"))["process_movies_movielens"]
     df = pd.read_csv(params['file_path'])
     
     date_col = params['date_col']

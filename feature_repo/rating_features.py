@@ -8,7 +8,7 @@ from feast.types import Float64, Int32, Int64, Array
 
 
 X_train_source = FileSource(
-    path=r'data/ratings/rating_train.parquet',
+    path=r'data/ratings_movielens/rating_train.parquet',
     event_timestamp_column="timestamp")
 
 user = Entity(name='user_id', 
@@ -37,7 +37,7 @@ X_train_fv = FeatureView(
 )
 
 X_test_source = FileSource(
-    path=r"data/ratings/rating_test.parquet",
+    path=r"data/ratings_movielens/rating_test.parquet",
     event_timestamp_column="timestamp")
 
 X_test_fv = FeatureView(

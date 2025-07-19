@@ -9,6 +9,7 @@ import mlflow
 import mlflow.pyfunc as pyfunc
 from mlflow.tracking import MlflowClient
 from mlflow.pyfunc import PythonModel
+from scipy.sparse import hstack
 
 
 class Model(ABC):
@@ -24,6 +25,7 @@ def compute_user_item_matrix(df: pd.DataFrame) -> pd.DataFrame:
     user_item_matrix = df.pivot(index="user_id", columns="item_id", values="rating")
     os.makedirs("model", exist_ok=True)
     user_item_matrix.to_pickle('model/user_item_matrix.pkl')
+    
     mlflow.log_artifact('model/user_item_matrix.pkl', artifact_path='user_item_matrix')
     
     return user_item_matrix
@@ -141,6 +143,27 @@ class ItemCFPyfuncModel(pyfunc.PythonModel):
 
 class ContentBasedCF(Model):
     def train(self, df: pd.DataFrame):
+        X_features = hstack([
+            tfidf_genres,
+            tfidf_keywords,
+            tfidf_cast,
+            tfidf_overview,
+            np.array(df[['vote_average', 'popularity']])
+        ])
+        self.item_item_matrix = cosine_similarity(X_features)
+
+    def recommend(self, movie_index: int, top_k=5):
+        sim_scores = self.item_item_matrix[movie_index]
+        similar_indices = np.argsort(sim_scores)[::-1][1:top_k+1]
+        recommended_titles = df.iloc[similar_indices]['title'].tolist()
+        
+        return recommended_titles
+    
+class ContentCFPyfuncModel(pyfunc.PythonModel):
+    def __init__(self, model: ContentBasedCF):
+        self.model = model
+
+    def predict(self, model_input: list[dict[str, int]], params=None):
         pass
 
 class MatrixFactorization(Model):

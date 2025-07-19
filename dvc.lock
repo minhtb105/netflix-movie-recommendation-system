@@ -126,16 +126,16 @@ stages:
     deps:
     - path: pipelines/training_pipeline.py
       hash: md5
-      md5: c71a6ba9dbef0676f8b994e09ad363df
-      size: 1093
+      md5: 04ff081f6363f5cfc72056423881478e
+      size: 1574
     - path: src/model_dev.py
       hash: md5
-      md5: 87a6dbc92994ec5760bee6c06bb2ed76
-      size: 5715
+      md5: 0b2242dcbb9c3da0714763d300a72ace
+      size: 6508
     - path: steps/fetch_features.py
       hash: md5
-      md5: 00eedcabe1c2c31a1f31e895e08f097d
-      size: 3925
+      md5: 1c407403a2d45bbedef6491bf1f759f0
+      size: 3955
     outs:
     - path: model/user_item_matrix.pkl
       hash: md5
@@ -176,20 +176,20 @@ stages:
       size: 12423645
     - path: pipelines/training_pipeline.py
       hash: md5
-      md5: c71a6ba9dbef0676f8b994e09ad363df
-      size: 1093
+      md5: 04ff081f6363f5cfc72056423881478e
+      size: 1574
     - path: src/model_dev.py
       hash: md5
-      md5: 87a6dbc92994ec5760bee6c06bb2ed76
-      size: 5715
+      md5: 0b2242dcbb9c3da0714763d300a72ace
+      size: 6508
     - path: steps/fetch_features.py
       hash: md5
-      md5: 00eedcabe1c2c31a1f31e895e08f097d
-      size: 3925
+      md5: 1c407403a2d45bbedef6491bf1f759f0
+      size: 3955
     - path: steps/train_model.py
       hash: md5
-      md5: 11b408c825d0f452d41eaf4a9f509c06
-      size: 1749
+      md5: 8ddff7adfee829012e80c389c632e066
+      size: 1612
     outs:
     - path: model/user_based_cf_model.pkl
       hash: md5
@@ -205,20 +205,20 @@ stages:
       size: 12423645
     - path: pipelines/training_pipeline.py
       hash: md5
-      md5: c71a6ba9dbef0676f8b994e09ad363df
-      size: 1093
+      md5: 04ff081f6363f5cfc72056423881478e
+      size: 1574
     - path: src/model_dev.py
       hash: md5
-      md5: 87a6dbc92994ec5760bee6c06bb2ed76
-      size: 5715
+      md5: 0b2242dcbb9c3da0714763d300a72ace
+      size: 6508
     - path: steps/fetch_features.py
       hash: md5
-      md5: 00eedcabe1c2c31a1f31e895e08f097d
-      size: 3925
+      md5: 1c407403a2d45bbedef6491bf1f759f0
+      size: 3955
     - path: steps/train_model.py
       hash: md5
-      md5: 11b408c825d0f452d41eaf4a9f509c06
-      size: 1749
+      md5: 8ddff7adfee829012e80c389c632e066
+      size: 1612
     outs:
     - path: model/item_based_cf_model.pkl
       hash: md5
@@ -233,8 +233,8 @@ stages:
       size: 4790
     - path: services/tv_api.py
       hash: md5
-      md5: 6f8a1cd5f1ff53eb3f25b47ab27c1c67
-      size: 3241
+      md5: 77447d58a0abbfa3293de199252ef6dc
+      size: 3212
     - path: src/base_client.py
       hash: md5
       md5: 3253cefdff8be36fe8258c86b523e10b
@@ -250,41 +250,124 @@ stages:
     outs:
     - path: data/raw/movie_ids.json
       hash: md5
-      md5: dbb7f06f8c5cae8537eaa2ac73d87790
-      size: 101860
+      md5: ca38115130a01b03af0c9efceb61176d
+      size: 103563
     - path: data/raw/movies_metadata.json
       hash: md5
-      md5: e246f30262e15002f7bdad2cf4d084f1
-      size: 829940790
+      md5: e160169b3462266ebdecbbc9d1777e46
+      size: 836545603
     - path: data/raw/tv_ids.json
       hash: md5
-      md5: 9363e791ce71b6a039ff5f959a7686bc
-      size: 62871
+      md5: 2d9772f2c041a25e66666317380c159b
+      size: 73753
     - path: data/raw/tv_metadata.json
       hash: md5
-      md5: 9c442a49c3ea9dab3082d14d8e70e1cd
-      size: 854199714
+      md5: 04fdee3233224998d3c1ab202316cbf3
+      size: 940973071
   extract_tmdb_features:
     cmd: python src/extract_tmdb_features.py
     deps:
     - path: data/raw/movies_metadata.json
       hash: md5
-      md5: e246f30262e15002f7bdad2cf4d084f1
-      size: 829940790
+      md5: e160169b3462266ebdecbbc9d1777e46
+      size: 836545603
     - path: data/raw/tv_metadata.json
       hash: md5
-      md5: 9c442a49c3ea9dab3082d14d8e70e1cd
-      size: 854199714
+      md5: 04fdee3233224998d3c1ab202316cbf3
+      size: 940973071
     - path: src/extract_tmdb_features.py
       hash: md5
-      md5: a47b8006036469365bd462177d58f1da
-      size: 3256
+      md5: 98b53b5417c4557262d9db5f6b79062b
+      size: 3774
     outs:
     - path: data/raw/movies_features.json
       hash: md5
-      md5: 2a7fc47ddc227e4af21d5dc1627ca751
-      size: 99457799
+      md5: 92fb98ae9060ad6fce380d51392fa0f2
+      size: 112468557
     - path: data/raw/tv_features.json
       hash: md5
-      md5: 943a0b9ebf5e6e274c8c8d717f277913
-      size: 96459509
+      md5: 882b8edf3f7649b93a1d1c5ddaf94ec1
+      size: 107966283
+  process_ratings_movielens:
+    cmd: python pipelines/ratings_pipeline_movielens.py
+    deps:
+    - path: data/processed/ratings.csv
+      hash: md5
+      md5: ad3c6cf0bc7d2e9d40d33a64366258f0
+      size: 1979206
+    - path: pipelines/ratings_pipeline_movielens.py
+      hash: md5
+      md5: 54f7e240832a8406312f89d3ecfe04d1
+      size: 1184
+    - path: steps/prepare_data.py
+      hash: md5
+      md5: d64bc188eead19dc9037cb5aaa211dca
+      size: 2807
+    params:
+      params.yaml:
+        process_ratings_movielens.file_path: data/processed/ratings.csv
+        process_ratings_movielens.out_dir: feature_repo/data/ratings_movielens
+        process_ratings_movielens.test_size: 0.2
+        process_ratings_movielens.timestamp_col: timestamp
+    outs:
+    - path: feature_repo/data/ratings_movielens
+      hash: md5
+      md5: 36ccfa8526eff1bfcbed13fd34319061.dir
+      size: 989181
+      nfiles: 2
+  process_movies_movielens:
+    cmd: python pipelines/movies_pipeline_movielens.py
+    deps:
+    - path: data/processed/movies.csv
+      hash: md5
+      md5: b90af40d0a885d001df74b8b2d764436
+      size: 238050
+    - path: pipelines/movies_pipeline_movielens.py
+      hash: md5
+      md5: 3fee7fa9f7fc17ed6b80b630c471cc0e
+      size: 1213
+    - path: steps/prepare_data.py
+      hash: md5
+      md5: d64bc188eead19dc9037cb5aaa211dca
+      size: 2807
+    params:
+      params.yaml:
+        process_movies_movielens.date_col: release_date
+        process_movies_movielens.file_path: data/processed/movies.csv
+        process_movies_movielens.max_features: 1000
+        process_movies_movielens.out_dir: feature_repo/data/movies_movielens
+        process_movies_movielens.vectorize_col: title
+    outs:
+    - path: feature_repo/data/movies_movielens
+      hash: md5
+      md5: 9bae3ac5a24a214229dbd5be07f8222b.dir
+      size: 102055
+      nfiles: 1
+  process_users_movielens:
+    cmd: python pipelines/users_pipeline_movielens.py
+    deps:
+    - path: data/processed/users.csv
+      hash: md5
+      md5: 7a2b704cd2dca88a29d97790a923ff81
+      size: 22667
+    - path: pipelines/users_pipeline_movielens.py
+      hash: md5
+      md5: 993034be92c2d51c847526fd8bbdfa27
+      size: 918
+    - path: steps/prepare_data.py
+      hash: md5
+      md5: d64bc188eead19dc9037cb5aaa211dca
+      size: 2807
+    params:
+      params.yaml:
+        process_users_movielens.enc_cols:
+        - gender
+        - occupation
+        process_users_movielens.file_path: data/processed/users.csv
+        process_users_movielens.out_dir: feature_repo/data/users_movielens
+    outs:
+    - path: feature_repo/data/users_movielens
+      hash: md5
+      md5: fb6c38f1e5cac3e2eac84e305785b8f3.dir
+      size: 34546
+      nfiles: 1
