@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from abc import ABC, abstractmethod
 from typing import Union, List, Optional, Tuple
 from sklearn.model_selection import train_test_split
@@ -6,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.feature_extraction.text import TfidfVectorizer
 import logging
+
 
 class DataStrategy(ABC):
     """
@@ -106,7 +108,8 @@ class DataNormalizeStrategy(DataStrategy):
     def handle_data(self, df_train: pd.DataFrame,
                     df_test: Optional[pd.DataFrame] = None,
                     method: str = "standard", 
-                    columns: Union[List[str], None] = None) -> pd.DataFrame:
+                    columns: Union[List[str], None] = None,
+                    log_transform_columns: Union[List[str], None] = None) -> pd.DataFrame:
         """
         :param method: 'standard' or 'minmax'
         :param columns: List of numeric column names to normalize. If None, auto-select numeric columns.
@@ -115,6 +118,15 @@ class DataNormalizeStrategy(DataStrategy):
             if columns is None:
                 columns = df_train.select_dtypes(include=['number']).columns.tolist()
             
+            # Step 1: Optional log-transform
+            if log_transform_columns:
+                for col in log_transform_columns:
+                    if col in df_train.columns:
+                        df_train[col] = np.log1p(df_train[col])
+                        if df_test is not None:
+                            df_test[col] = np.log1p(df_test[col])
+            
+            # Step 2: Scaling
             if method == "standard":
                 scaler = StandardScaler()
             elif method == "minmax":
