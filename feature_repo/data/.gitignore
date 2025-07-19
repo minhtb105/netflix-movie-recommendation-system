@@ -1,3 +1,4 @@
-/ratings
 /movies
-/users
+/movies/movielens
+/ratings/movielens
+/users/movielens

@@ -10,6 +10,7 @@ utils/__pycache__
 feature_repo/registry.db
 feature_repo/online_store.db
 feature_repo/.feast
+feature_repo/data/
 .vscode
 steps/*.pyc
 steps/__pycache__
