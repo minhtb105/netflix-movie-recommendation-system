@@ -8,6 +8,10 @@ def extract_features(meta_list, out_path, is_tv=False):
     for item in meta_list:
         details = item.get("details", item)
         
+        # Title
+        title = details.get("title") or details.get("name")
+        title = " ".join(title) 
+        
         # Genres
         genres = [g["id"] for g in details.get("genres", [])]
 
@@ -16,6 +20,7 @@ def extract_features(meta_list, out_path, is_tv=False):
             keywords = [kw["name"] for kw in details.get("keywords", {}).get("results", [])]
         else:
             keywords = [kw["name"] for kw in details.get("keywords", {}).get("keywords", [])]
+        keywords = " ".join(keywords)
 
         # Credits
         credits = details.get("credits") or details.get("aggregate_credits")
@@ -29,33 +34,19 @@ def extract_features(meta_list, out_path, is_tv=False):
                 }
                 for c in credits.get("cast", [])
             ]
-            crew = [
-                c.get("name") for c in credits.get("crew", [])
-            ]
+            crew = " ".join([c.get("name") for c in credits.get("crew", [])])
             
-        # Content ratings (TV)
-        content_ratings = []
-        if is_tv:
-            content_ratings = details.get("content_ratings", {}).get("results", [])
-
-        # External IDs
-        external_ids = details.get("external_ids", {})
-
         # Poster & Backdrop
         poster_path = details.get("poster_path")
         backdrop_path = details.get("backdrop_path")
 
         # Vote & popularity
         vote_average = details.get("vote_average")
+        vote_count = details.get("vote_count")
         popularity = details.get("popularity")
 
         # Videos
         videos = item.get("videos", {}).get("results", [])
-        video_key = -1
-        for vid in videos:
-            if vid['site'] == "Youtube" and vid['type'] == 'Trailer':
-                video_key = vid['key']
-                break
 
         # Reviews
         reviews = item.get("reviews", {}).get("results", [])
@@ -64,21 +55,45 @@ def extract_features(meta_list, out_path, is_tv=False):
             for review in reviews:
                 reviews_content.append(review['content'])
 
+        # Budget
+        budget = details.get("budget", 0)
+
+        # Revenue
+        revenue = details.get("revenue", 0)
+
+        # Runtime
+        runtime = details.get("runtime", 0)
+        
+        # Origin, Production countries
+        origin_country = details.get("origin_country", [])
+        production_countries = details.get("production_countries", [])
+        countries_name = []
+        for production_country in production_countries:
+            countries_name.append(production_country['name']) 
+
+        # Original language
+        original_language = details.get("original_language", "")
+
         record = {
             "id": details.get("id"),
-            "title": details.get("title") or details.get("name"),
-            "overview": details.get("overview"),
+            "title": title,
+            "overview": str(details.get("overview")),
             "vote_average": vote_average,
+            "vote_count": vote_count,
             "popularity": popularity,
+            "budget": budget,
+            "revenue": revenue,
+            "runtime": runtime,
+            "origin_country": origin_country,
+            "original_language": original_language,
+            "production_countries": countries_name,
             "genres": genres,
             "keywords": keywords,
             "cast": cast,
             "crew": crew,
-            "content_ratings": content_ratings,
-            "external_ids": external_ids,
             "poster_path": poster_path,
             "backdrop_path": backdrop_path,
-            "video_key": video_key,
+            "videos": videos,
             "review": reviews_content
         }
         features.append(record)

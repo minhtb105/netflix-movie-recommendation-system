@@ -34,7 +34,7 @@ class TVService(TMDBBaseClient):
         endpoint = f"/tv/{series_id}"
         params = {
             "language": language,
-            "append_to_response": "images,keywords,content_ratings,external_ids,aggregate_credits,providers",
+            "append_to_response": "images,keywords,aggregate_credits,providers",
             "include_image_language": include_image_language
         }
         
