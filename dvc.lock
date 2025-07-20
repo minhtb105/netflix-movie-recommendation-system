@@ -277,17 +277,17 @@ stages:
       size: 940973071
     - path: src/extract_tmdb_features.py
       hash: md5
-      md5: 98b53b5417c4557262d9db5f6b79062b
-      size: 3774
+      md5: 4e00bf099cd5e504f5dd2c9d26dcee72
+      size: 3872
     outs:
     - path: data/raw/movies_features.json
       hash: md5
-      md5: 92fb98ae9060ad6fce380d51392fa0f2
-      size: 112468557
+      md5: 01fa547f9fde68962fa3cf8ed46f0a90
+      size: 111796175
     - path: data/raw/tv_features.json
       hash: md5
-      md5: 882b8edf3f7649b93a1d1c5ddaf94ec1
-      size: 107966283
+      md5: 34dc0b46a4dc9ff38785bdcdae3b8b25
+      size: 107513727
   process_ratings_movielens:
     cmd: python pipelines/ratings_pipeline_movielens.py
     deps:
@@ -299,10 +299,14 @@ stages:
       hash: md5
       md5: 54f7e240832a8406312f89d3ecfe04d1
       size: 1184
+    - path: src/data_strategy.py
+      hash: md5
+      md5: 03dd82587d7270eeb22b2529eebfa913
+      size: 10499
     - path: steps/prepare_data.py
       hash: md5
-      md5: d64bc188eead19dc9037cb5aaa211dca
-      size: 2807
+      md5: 711150d08e113b619261c9c622bebb23
+      size: 3491
     params:
       params.yaml:
         process_ratings_movielens.file_path: data/processed/ratings.csv
@@ -324,12 +328,16 @@ stages:
       size: 238050
     - path: pipelines/movies_pipeline_movielens.py
       hash: md5
-      md5: 3fee7fa9f7fc17ed6b80b630c471cc0e
-      size: 1213
+      md5: 657d0d2d4250390da4f5da737676ddb7
+      size: 1327
+    - path: src/data_strategy.py
+      hash: md5
+      md5: 03dd82587d7270eeb22b2529eebfa913
+      size: 10499
     - path: steps/prepare_data.py
       hash: md5
-      md5: d64bc188eead19dc9037cb5aaa211dca
-      size: 2807
+      md5: 711150d08e113b619261c9c622bebb23
+      size: 3491
     params:
       params.yaml:
         process_movies_movielens.date_col: release_date
@@ -354,10 +362,14 @@ stages:
       hash: md5
       md5: 993034be92c2d51c847526fd8bbdfa27
       size: 918
+    - path: src/data_strategy.py
+      hash: md5
+      md5: 03dd82587d7270eeb22b2529eebfa913
+      size: 10499
     - path: steps/prepare_data.py
       hash: md5
-      md5: d64bc188eead19dc9037cb5aaa211dca
-      size: 2807
+      md5: 711150d08e113b619261c9c622bebb23
+      size: 3491
     params:
       params.yaml:
         process_users_movielens.enc_cols:
@@ -368,6 +380,60 @@ stages:
     outs:
     - path: feature_repo/data/users_movielens
       hash: md5
-      md5: fb6c38f1e5cac3e2eac84e305785b8f3.dir
+      md5: 954f8064df37c5b29dc5a3bb1a1da4cb.dir
       size: 34546
       nfiles: 1
+  process_movies_tmdb:
+    cmd: python pipelines/movies_pipeline_tmdb.py
+    deps:
+    - path: pipelines/movies_pipeline_tmdb.py
+      hash: md5
+      md5: b503d095763eb4e2dd5177946b5a736a
+      size: 3113
+    - path: src/data_strategy.py
+      hash: md5
+      md5: 03dd82587d7270eeb22b2529eebfa913
+      size: 10499
+    - path: steps/prepare_data.py
+      hash: md5
+      md5: 711150d08e113b619261c9c622bebb23
+      size: 3491
+    params:
+      params.yaml:
+        process_movies_tmdb.drop_cols:
+        - poster_path
+        - backdrop_path
+        - videos
+        process_movies_tmdb.enc_cols:
+        - original_language
+        - origin_country
+        - production_countries
+        process_movies_tmdb.file_path: data/raw/movies_features.json
+        process_movies_tmdb.log_transform_cols:
+        - vote_count
+        - budget
+        - revenue
+        - popularity
+        process_movies_tmdb.multi_lable_enc_cols:
+        - genres
+        process_movies_tmdb.normalize_col:
+        - vote_average
+        process_movies_tmdb.out_dir: feature_repo/data/movies_tmdb
+        process_movies_tmdb.output_cols:
+        - title_vectorize
+        - overview_vectorize
+        - keywords_vectorize
+        - cast_vectorize
+        - crew_vectorize
+        process_movies_tmdb.vectorize_cols:
+        - title
+        - overview
+        - keywords
+        - cast
+        - crew
+    outs:
+    - path: feature_repo/data/movies_tmdb
+      hash: md5
+      md5: 5c87965d0d36f1e0c5cebc654867c942.dir
+      size: 197133894
+      nfiles: 2

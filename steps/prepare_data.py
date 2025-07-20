@@ -2,12 +2,13 @@ import pandas as pd
 import logging
 from typing import List, Tuple, Union, Optional
 from src.data_strategy import (
+    DataStrategy,
     DataPreprocessStrategy,
     DataDivideStrategy,
     DataEncodeStrategy,
     DataNormalizeStrategy,
     TextVectorizeStrategy,
-    DataCleaning,
+    MultiLabelEncodeStrategy 
 )
 from src.feature_engineer import FeatureEngineer
 
@@ -49,6 +50,17 @@ def encode_df(df_train: pd.DataFrame,
     
     return encode_strategy.handle_data(df_train, df_test, method, columns)
 
+def multi_label_encode_df(df_train: pd.DataFrame,
+                          columns: List[str],
+                          df_test: Optional[pd.DataFrame] = None) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
+    """
+    Encode multi-label categorical columns (lists) into binary columns.
+    """
+    strategy = MultiLabelEncodeStrategy()
+
+    return strategy.handle_data(df_train, columns, df_test)
+
+
 def normalize_df(df_train: pd.DataFrame,
                 df_test: Optional[pd.DataFrame] = None, 
                 method: str = "standard", 
@@ -59,11 +71,17 @@ def normalize_df(df_train: pd.DataFrame,
     return normalize_strategy.handle_data(df_train, df_test, method, columns, log_transform_columns)
     
 def vectorize_text(df_train: pd.DataFrame,
+                   column: str,
+                   output_col: Optional[str] = None,
                    df_test: Optional[pd.DataFrame] = None,
-                   column: str = "",
-                   max_features: int = 1000) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
-    vectorize_strategy = TextVectorizeStrategy()
-    df_train, df_test = vectorize_strategy.handle_data(df_train, df_test, column, max_features)
-    logging.info("TF-IDF vectorization applied to column: %s", column)
+                   max_features: int = 1000,
+                   strategy: Optional[DataStrategy] = None) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
+    if strategy is None:
+        raise ValueError("You must provide a strategy instance.")
+    
+    if isinstance(strategy, TextVectorizeStrategy):
+        df_train, df_test = strategy.handle_data(df_train, df_test, column, max_features, output_col)
+    else:
+        df_train, df_test = strategy.handle_data(df_train, df_test, column, output_col)
     
     return df_train, df_test

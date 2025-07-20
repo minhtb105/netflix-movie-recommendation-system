@@ -1,0 +1,100 @@
+from pathlib import Path
+import sys
+
+project_root = Path(__file__).resolve().parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from steps.prepare_data import (
+    clean_df, vectorize_text, 
+    normalize_df, encode_df,
+    multi_label_encode_df,
+)
+from src.data_strategy import BERTVectorizeStrategy
+import pandas as pd
+import numpy as np
+import yaml
+
+def process_movies_pipeline():
+    params = yaml.safe_load(open("params.yaml"))["process_movies_tmdb"]
+    df = pd.read_json(params['file_path'])
+    
+    drop_cols = params['drop_cols']
+    df = df.drop(columns=drop_cols)
+    
+    n = len(df)
+    
+    for i in range(n):
+        casts = []
+        for cast_info in df.loc[i, 'cast']:
+            character = str(cast_info.get('character') or '').lower()
+            if 'uncredited' not in character and 'voice' not in character:
+                casts.append(cast_info['name'])
+                
+        if casts:
+            df.loc[i, 'cast'] = " ".join(casts)
+        else:
+            df.loc[i, 'cast'] = "unknown"   
+    
+    vectorize_cols = params['vectorize_cols']
+    output_cols = params['output_cols']
+    for col, output_col in zip(vectorize_cols, output_cols):
+        df, _ = vectorize_text(df, column=col, output_col=output_col, strategy=BERTVectorizeStrategy())
+        
+    normalize_col = params['normalize_col']
+    df, _ = normalize_df(df, columns=normalize_col)
+    
+    log_transform_cols = params['log_transform_cols']
+    df, _ = normalize_df(df, log_transform_columns=log_transform_cols)
+
+    enc_cols = params['enc_cols']
+    df, _ = encode_df(df_train=df, columns=enc_cols)
+    
+    multi_lable_enc_cols = params['multi_lable_enc_cols']
+    df, _ = multi_label_encode_df(df, columns=multi_lable_enc_cols)
+    
+    df_review = pd.DataFrame(df['review'])
+    df = df.drop(columns=['review'])
+    df_review, _ = vectorize_text(
+        df_review, 
+        column='review',
+        output_col='review_vectorize',
+        strategy=BERTVectorizeStrategy()
+    )
+   
+    df = combine_features(df, vector_cols=df.columns)
+   
+    output_dir = Path(params['out_dir'])
+    output_dir.mkdir(parents=True, exist_ok=True)
+    df.to_parquet(f"{output_dir}/movie_features_train.parquet", index=False)
+    df_review.to_parquet(f"{output_dir}/movie_reviews_train.parquet", index=False)
+
+
+def combine_features(df: pd.DataFrame, vector_cols: list[str]) -> pd.DataFrame:
+    """
+    Combine all feature columns (which are lists/vectors) into a single vector column.
+    """
+    def merge_vectors(row):
+        vectors = []
+        for col in vector_cols:
+            value = row[col]
+            if value is None:
+                raise ValueError(f"Column '{col}' contains None at row {row.name}")
+
+            array = np.array(value)
+
+            if array.ndim == 0:
+                array = np.array([value])
+
+            vectors.append(array)
+
+        return np.concatenate(vectors)
+
+    df['feature_vector'] = df.apply(merge_vectors, axis=1)
+    df = df.drop(columns=vector_cols)
+    
+    return df
+
+
+if __name__ == "__main__":
+    process_movies_pipeline()

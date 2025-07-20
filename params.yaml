@@ -2,22 +2,56 @@ ingest:
   base_path: "data/raw/ml-100k"
   processed_dir: "data/processed"
 
-process_ratings:
+process_ratings_movielens:
   file_path: "data/processed/ratings.csv"
-  out_dir: "feature_repo/data/ratings"
+  out_dir: "feature_repo/data/ratings_movielens"
   timestamp_col: "timestamp"
   test_size: 0.2
 
-process_movies:
+process_movies_movielens:
   file_path: "data/processed/movies.csv"
   date_col: "release_date"
-  out_dir: "feature_repo/data/movies"
+  out_dir: "feature_repo/data/movies_movielens"
   vectorize_col: "title"
   max_features: 1000
 
-process_users:
+process_users_movielens:
   file_path: "data/processed/users.csv"
   enc_cols:
     - "gender"
     - "occupation"
-  out_dir: "feature_repo/data/users"
+  out_dir: "feature_repo/data/users_movielens"
+
+process_movies_tmdb:
+  file_path: "data/raw/movies_features.json"
+  drop_cols:
+    - "poster_path"
+    - "backdrop_path"
+    - "videos"
+  vectorize_cols: 
+    - "title"
+    - "overview"
+    - "keywords"
+    - "cast"
+    - "crew"
+  output_cols:
+    - "title_vectorize"
+    - "overview_vectorize"
+    - "keywords_vectorize"
+    - "cast_vectorize"
+    - "crew_vectorize"
+  normalize_col:
+    - "vote_average"
+  enc_cols:
+    - "original_language"
+    - "origin_country"
+    - "production_countries"
+  multi_lable_enc_cols:
+    - "genres"
+  log_transform_cols:
+    - "vote_count"
+    - "budget"
+    - "revenue"
+    - "popularity"
+  out_dir: "feature_repo/data/movies_tmdb"
+  

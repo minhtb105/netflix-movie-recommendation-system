@@ -45,6 +45,7 @@ stages:
       - pipelines/ratings_pipeline_movielens.py
       - steps/prepare_data.py
       - data/processed/ratings.csv
+      - src/data_strategy.py
     params:
       - process_ratings_movielens.file_path
       - process_ratings_movielens.out_dir
@@ -59,6 +60,7 @@ stages:
       - pipelines/movies_pipeline_movielens.py
       - steps/prepare_data.py
       - data/processed/movies.csv
+      - src/data_strategy.py
     params:
       - process_movies_movielens.file_path
       - process_movies_movielens.date_col
@@ -74,6 +76,7 @@ stages:
       - pipelines/users_pipeline_movielens.py
       - steps/prepare_data.py
       - data/processed/users.csv
+      - src/data_strategy.py
     params:
       - process_users_movielens.file_path
       - process_users_movielens.enc_cols
@@ -112,3 +115,21 @@ stages:
     outs:
       - model/item_based_cf_model.pkl
   
+  process_movies_tmdb:
+    cmd: python pipelines/movies_pipeline_tmdb.py
+    deps:
+      - pipelines/movies_pipeline_tmdb.py
+      - steps/prepare_data.py
+      - src/data_strategy.py
+    params:
+      - process_movies_tmdb.file_path
+      - process_movies_tmdb.drop_cols
+      - process_movies_tmdb.vectorize_cols
+      - process_movies_tmdb.output_cols
+      - process_movies_tmdb.normalize_col
+      - process_movies_tmdb.enc_cols
+      - process_movies_tmdb.multi_lable_enc_cols
+      - process_movies_tmdb.log_transform_cols
+      - process_movies_tmdb.out_dir
+    outs:
+      - feature_repo/data/movies_tmdb

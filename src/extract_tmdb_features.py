@@ -10,7 +10,6 @@ def extract_features(meta_list, out_path, is_tv=False):
         
         # Title
         title = details.get("title") or details.get("name")
-        title = " ".join(title) 
         
         # Genres
         genres = [g["id"] for g in details.get("genres", [])]
@@ -66,10 +65,15 @@ def extract_features(meta_list, out_path, is_tv=False):
         
         # Origin, Production countries
         origin_country = details.get("origin_country", [])
+        origin_country = " ".join(origin_country)
+        
         production_countries = details.get("production_countries", [])
+        
         countries_name = []
         for production_country in production_countries:
             countries_name.append(production_country['name']) 
+            
+        countries_name = " ".join(countries_name)
 
         # Original language
         original_language = details.get("original_language", "")

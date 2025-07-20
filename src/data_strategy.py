@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy as np
+from sentence_transformers import SentenceTransformer
 from abc import ABC, abstractmethod
 from typing import Union, List, Optional, Tuple
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder, MultiLabelBinarizer
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.feature_extraction.text import TfidfVectorizer
 import logging
@@ -169,8 +170,87 @@ class TextVectorizeStrategy(DataStrategy):
             return df_train, df_test
 
         return df_train, None
+         
+class BERTVectorizeStrategy(DataStrategy):
+    """
+    Strategy for vectorizing text columns using all-MiniLM-L6-v2 SentenceTransformer.
+    """
 
+    def __init__(self):
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')
 
+    def handle_data(
+        self,
+        df_train: pd.DataFrame,
+        df_test: Optional[pd.DataFrame] = None,
+        column: str = "",
+        output_col: Optional[str] = None,
+    ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
+        output_col = output_col or f"{column}_bert"
+        if not column:
+            raise ValueError("You must specify a text column to vectorize.")
+
+        # Process train set
+        texts_train = df_train[column].astype(str).tolist()
+        embeddings_train = self.model.encode(texts_train, show_progress_bar=True)
+        df_train[output_col] = [emb.tolist() for emb in embeddings_train]
+        df_train = df_train.drop(columns=[column])
+
+        # Process test set if exists
+        if df_test is not None:
+            texts_test = df_test[column].astype(str).tolist()
+            embeddings_test = self.model.encode(texts_test, show_progress_bar=True)
+            df_test[output_col] = [emb.tolist() for emb in embeddings_test]
+            df_test = df_test.drop(columns=[column])
+            return df_train, df_test
+
+        return df_train, None
+    
+class MultiLabelEncodeStrategy(DataStrategy):
+    """
+    Strategy for encoding multi-label categorical columns (like list of countries).
+    Each category is converted into one-hot columns using MultiLabelBinarizer.
+    """
+    def handle_data(self,
+                    df_train: pd.DataFrame,
+                    columns: List[str],
+                    df_test: Optional[pd.DataFrame] = None
+                   ) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
+        """
+        :param columns: List of columns that are multi-label categorical (lists of categories).
+        """
+        if not columns:
+            raise ValueError("You must specify at least one column to encode.")
+        
+        mlb_dict = {}
+
+        for col in columns:
+            if col not in df_train.columns:
+                raise ValueError(f"Column '{col}' not found in DataFrame.")
+            
+            mlb = MultiLabelBinarizer()
+
+            # Fit and transform train data
+            train_encoded = mlb.fit_transform(df_train[col])
+            new_cols = [f"{col}_{cls}" for cls in mlb.classes_]
+
+            df_train_encoded = pd.DataFrame(train_encoded, columns=new_cols, index=df_train.index)
+            df_train = pd.concat([df_train.drop(columns=[col]), df_train_encoded], axis=1)
+
+            mlb_dict[col] = mlb
+
+            # Transform test data if provided
+            if df_test is not None:
+                if col not in df_test.columns:
+                    raise ValueError(f"Column '{col}' not found in test DataFrame.")
+
+                test_encoded = mlb.transform(df_test[col])
+                df_test_encoded = pd.DataFrame(test_encoded, columns=new_cols, index=df_test.index)
+                df_test = pd.concat([df_test.drop(columns=[col]), df_test_encoded], axis=1)
+
+        return df_train, df_test
+    
+    
 class DataCleaning:
     def __init__(self, data: pd.DataFrame, strategy: DataStrategy):
         self.data = data
