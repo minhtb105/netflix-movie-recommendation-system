@@ -36,7 +36,7 @@ def process_movies_pipeline():
     
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(f"{output_dir}/movie_features_train.parquet", index=False)
+    df.to_parquet(f"{output_dir}/movie_features.parquet", index=False)
 
 if __name__ == "__main__":
     process_movies_pipeline()
