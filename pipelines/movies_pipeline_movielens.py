@@ -7,6 +7,7 @@ if str(project_root) not in sys.path:
 
 from steps.prepare_data import clean_df, vectorize_text
 from src.feature_engineer import FeatureEngineer
+from src.data_strategy import TextVectorizeStrategy
 import pandas as pd
 import yaml
 
@@ -27,7 +28,8 @@ def process_movies_pipeline():
     max_features = params['max_features']
     df, _ = vectorize_text(df_train=df,
                             column=vectorize_col,
-                            max_features=max_features) 
+                            max_features=max_features,
+                            strategy=TextVectorizeStrategy()) 
     
     # Drop original dates
     df = df.drop(columns=['IMDb_URL'])
