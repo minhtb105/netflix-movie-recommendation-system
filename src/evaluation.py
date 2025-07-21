@@ -200,3 +200,102 @@ class F1AtK(Evaluation):
         except Exception as e:
             logging.error(f"Error while calculating F1@{self.k}: {e}")
             raise e
+
+class MAPAtK(Evaluation):
+    def __init__(self, k: int):
+        self.k = k
+
+    def calculate_scores(self, y_true_list: list, y_pred_list: list):
+        """
+        MAP@K over multiple users
+        Args:
+            y_true_list: List of sets (ground-truth items for each user)
+            y_pred_list: List of lists (predicted items for each user)
+        Returns:
+            MAP@K score
+        """
+        try:
+            average_precisions = []
+
+            for y_true, y_pred in zip(y_true_list, y_pred_list):
+                hits = 0
+                precision_sum = 0
+
+                for i, item in enumerate(y_pred[:self.k], start=1):
+                    if item in y_true:
+                        hits += 1
+                        precision_sum += hits / i  # Precision at i
+
+                ap_at_k = precision_sum / min(len(y_true), self.k) if len(y_true) > 0 else 0.0
+                average_precisions.append(ap_at_k)
+
+            map_at_k = np.mean(average_precisions)
+            logging.info(f'MAP@{self.k}: {map_at_k}')
+            return map_at_k
+
+        except Exception as e:
+            logging.error(f"Error while calculating MAP@{self.k}: {e}")
+            raise e
+
+class NDCGAtK(Evaluation):
+    def __init__(self, k: int):
+        self.k = k
+
+    def calculate_scores(self, y_true: set, y_pred: list):
+        """
+        NDCG@K
+        Args:
+            y_true: Set of relevant items
+            y_pred: List of recommended items
+        Returns:
+            NDCG@K score
+        """
+        try:
+            dcg = 0.0
+            for i, item in enumerate(y_pred[:self.k], start=1):
+                if item in y_true:
+                    dcg += 1 / np.log2(i + 1)
+
+            # Ideal DCG
+            ideal_hits = min(len(y_true), self.k)
+            idcg = sum(1 / np.log2(i + 1) for i in range(1, ideal_hits + 1))
+
+            ndcg = dcg / idcg if idcg > 0 else 0.0
+
+            logging.info(f'NDCG@{self.k}: {ndcg}')
+            return ndcg
+
+        except Exception as e:
+            logging.error(f"Error while calculating NDCG@{self.k}: {e}")
+            raise e
+
+class MRR(Evaluation):
+    def calculate_scores(self, y_true_list: list, y_pred_list: list):
+        """
+        MRR (Mean Reciprocal Rank)
+        Args:
+            y_true_list: List of sets (ground-truth items for each user)
+            y_pred_list: List of lists (predicted items for each user)
+        Returns:
+            MRR score
+        """
+        try:
+            reciprocal_ranks = []
+
+            for y_true, y_pred in zip(y_true_list, y_pred_list):
+                rank = 0
+                for idx, item in enumerate(y_pred, start=1):
+                    if item in y_true:
+                        rank = idx
+                        break
+
+                rr = 1 / rank if rank > 0 else 0.0
+                reciprocal_ranks.append(rr)
+
+            mrr = np.mean(reciprocal_ranks)
+            logging.info(f'MRR: {mrr}')
+            return mrr
+
+        except Exception as e:
+            logging.error(f"Error while calculating MRR: {e}")
+            raise e
