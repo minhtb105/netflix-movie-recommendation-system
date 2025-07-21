@@ -8,8 +8,8 @@ if str(project_root) not in sys.path:
 import pandas as pd
 from steps.train_model import get_or_train
 from src.model_dev import (
-    UserBasedCF, ItemBasedCF,
-    UserCFPyfuncModel, ItemCFPyfuncModel,
+    UserBasedCF, ItemBasedCF, ContentBasedFiltering
+    UserCFPyfuncModel, ItemCFPyfuncModel, ContentFPyfuncModel
     compute_user_item_matrix
 )
 from steps.fetch_features import (
@@ -50,5 +50,14 @@ def item_based_cf_pipeline():
         base_model = ItemBasedCF()
         base_model.train()
         model = ItemCFPyfuncModel(model=base_model)
+        get_or_train(model)
+    
+def content_based_filtering_pipeline():
+    mlflow.set_experiment("ContentBasedF")
+    
+    with mlflow.start_run(run_name="ContentBasedFPipeline"):
+        base_model = ContentBasedFiltering()
+        base_model.train()
+        model = ContentFPyfuncModel(model=base_model)
         get_or_train(model)
     
