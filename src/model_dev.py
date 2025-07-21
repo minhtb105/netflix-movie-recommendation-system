@@ -37,9 +37,6 @@ class UserBasedCF(Model):
         self.user_sim_df = pd.DataFrame(self.user_sim_matrix,
                                         index=self.user_item_matrix.index,
                                         columns=self.user_item_matrix.index)
-    
-        self.user_sim_df.to_pickle('model/user_based_cf_model.pkl')
-        mlflow.log_artifact('model/user_based_cf_model.pkl', artifact_path='user_based_cf_model')
 
     def predict(self, user_id: int, item_id: int, k: int = 10):
         if item_id not in self.user_item_matrix.columns or user_id not in self.user_item_matrix.index:
@@ -93,9 +90,6 @@ class ItemBasedCF(Model):
         self.item_sim_df = pd.DataFrame(self.item_sim_matrix,
                                         index=self.item_user_matrix.index,
                                         columns=self.item_user_matrix.index)
-        
-        self.item_sim_df.to_pickle('model/item_based_cf_model.pkl')
-        mlflow.log_artifact('model/item_based_cf_model.pkl', artifact_path='item_based_cf_model')
 
     def predict(self, user_id: int, item_id: int, k: int = 10):
         if user_id not in self.user_item_matrix.index or item_id not in self.item_sim_df.index:
