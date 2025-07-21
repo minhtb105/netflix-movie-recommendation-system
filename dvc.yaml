@@ -101,8 +101,6 @@ stages:
       - src/model_dev.py
       - steps/fetch_features.py
       - model/user_item_matrix.pkl
-    outs:
-      - model/user_based_cf_model.pkl
 
   item_based_cf:
     cmd: python -c "from pipelines.training_pipeline import item_based_cf_pipeline; item_based_cf_pipeline()"
@@ -112,8 +110,6 @@ stages:
       - src/model_dev.py
       - steps/fetch_features.py
       - model/user_item_matrix.pkl
-    outs:
-      - model/item_based_cf_model.pkl
   
   process_movies_tmdb:
     cmd: python pipelines/movies_pipeline_tmdb.py
@@ -133,3 +129,23 @@ stages:
       - process_movies_tmdb.out_dir
     outs:
       - feature_repo/data/movies_tmdb
+
+  process_tv_tmdb:
+    cmd: python pipelines/tv_pipeline_tmdb.py
+    deps:
+      - pipelines/tv_pipeline_tmdb.py
+      - steps/prepare_data.py
+      - src/data_strategy.py
+    params:
+      - process_tv_tmdb.file_path
+      - process_tv_tmdb.drop_cols
+      - process_tv_tmdb.vectorize_cols
+      - process_tv_tmdb.output_cols
+      - process_tv_tmdb.normalize_col
+      - process_tv_tmdb.enc_cols
+      - process_tv_tmdb.multi_lable_enc_cols
+      - process_tv_tmdb.log_transform_cols
+      - process_tv_tmdb.out_dir
+    outs:
+      - feature_repo/data/tv_tmdb
+      

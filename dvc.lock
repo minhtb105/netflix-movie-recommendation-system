@@ -126,16 +126,16 @@ stages:
     deps:
     - path: pipelines/training_pipeline.py
       hash: md5
-      md5: 04ff081f6363f5cfc72056423881478e
-      size: 1574
+      md5: f8fde3ecdfadbc90a8794a7b051e0f9d
+      size: 1926
     - path: src/model_dev.py
       hash: md5
-      md5: 0b2242dcbb9c3da0714763d300a72ace
-      size: 6508
+      md5: e1ed35efffcbd1a1dd3babc0b841d6e2
+      size: 7747
     - path: steps/fetch_features.py
       hash: md5
-      md5: 1c407403a2d45bbedef6491bf1f759f0
-      size: 3955
+      md5: bafac79d5ce65086c1bcebd7feff9828
+      size: 4789
     outs:
     - path: model/user_item_matrix.pkl
       hash: md5
@@ -176,25 +176,20 @@ stages:
       size: 12423645
     - path: pipelines/training_pipeline.py
       hash: md5
-      md5: 04ff081f6363f5cfc72056423881478e
-      size: 1574
+      md5: f8fde3ecdfadbc90a8794a7b051e0f9d
+      size: 1926
     - path: src/model_dev.py
       hash: md5
-      md5: 0b2242dcbb9c3da0714763d300a72ace
-      size: 6508
+      md5: e1ed35efffcbd1a1dd3babc0b841d6e2
+      size: 7747
     - path: steps/fetch_features.py
       hash: md5
-      md5: 1c407403a2d45bbedef6491bf1f759f0
-      size: 3955
+      md5: bafac79d5ce65086c1bcebd7feff9828
+      size: 4789
     - path: steps/train_model.py
       hash: md5
       md5: 8ddff7adfee829012e80c389c632e066
       size: 1612
-    outs:
-    - path: model/user_based_cf_model.pkl
-      hash: md5
-      md5: 8e25a2fec3a7b8684bb57ca00a08a49b
-      size: 7122099
   item_based_cf:
     cmd: python -c "from pipelines.training_pipeline import 
       item_based_cf_pipeline; item_based_cf_pipeline()"
@@ -205,25 +200,20 @@ stages:
       size: 12423645
     - path: pipelines/training_pipeline.py
       hash: md5
-      md5: 04ff081f6363f5cfc72056423881478e
-      size: 1574
+      md5: f8fde3ecdfadbc90a8794a7b051e0f9d
+      size: 1926
     - path: src/model_dev.py
       hash: md5
-      md5: 0b2242dcbb9c3da0714763d300a72ace
-      size: 6508
+      md5: e1ed35efffcbd1a1dd3babc0b841d6e2
+      size: 7747
     - path: steps/fetch_features.py
       hash: md5
-      md5: 1c407403a2d45bbedef6491bf1f759f0
-      size: 3955
+      md5: bafac79d5ce65086c1bcebd7feff9828
+      size: 4789
     - path: steps/train_model.py
       hash: md5
       md5: 8ddff7adfee829012e80c389c632e066
       size: 1612
-    outs:
-    - path: model/item_based_cf_model.pkl
-      hash: md5
-      md5: 9bbddecb3299a0b651bb61fdfb8c16cb
-      size: 21635603
   fetch_tmdb_metadata:
     cmd: python pipelines/tmdb_metadata_pipeline.py
     deps:
@@ -438,4 +428,60 @@ stages:
       hash: md5
       md5: edfb0c9e67510c6b83e20350eaa195fa.dir
       size: 197191407
+      nfiles: 2
+  process_tv_tmdb:
+    cmd: python pipelines/tv_pipeline_tmdb.py
+    deps:
+    - path: pipelines/tv_pipeline_tmdb.py
+      hash: md5
+      md5: 1750647ab2de8519f1f831f3112e5b4d
+      size: 3429
+    - path: src/data_strategy.py
+      hash: md5
+      md5: 5974d55542c38a736f61b12eda00906a
+      size: 10646
+    - path: steps/prepare_data.py
+      hash: md5
+      md5: 711150d08e113b619261c9c622bebb23
+      size: 3491
+    params:
+      params.yaml:
+        process_tv_tmdb.drop_cols:
+        - id
+        - poster_path
+        - backdrop_path
+        - videos
+        process_tv_tmdb.enc_cols:
+        - original_language
+        - origin_country
+        - production_countries
+        process_tv_tmdb.file_path: data/raw/tv_features.json
+        process_tv_tmdb.log_transform_cols:
+        - vote_count
+        - budget
+        - revenue
+        - popularity
+        process_tv_tmdb.multi_lable_enc_cols:
+        - genres
+        process_tv_tmdb.normalize_col:
+        - vote_average
+        - runtime
+        process_tv_tmdb.out_dir: feature_repo/data/tv_tmdb
+        process_tv_tmdb.output_cols:
+        - title_vectorize
+        - overview_vectorize
+        - keywords_vectorize
+        - cast_vectorize
+        - crew_vectorize
+        process_tv_tmdb.vectorize_cols:
+        - title
+        - overview
+        - keywords
+        - cast
+        - crew
+    outs:
+    - path: feature_repo/data/tv_tmdb
+      hash: md5
+      md5: feea69f80dbd81593fe8ba08e266dfb4.dir
+      size: 111052936
       nfiles: 2

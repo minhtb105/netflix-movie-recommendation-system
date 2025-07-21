@@ -56,4 +56,39 @@ process_movies_tmdb:
     - "revenue"
     - "popularity"
   out_dir: "feature_repo/data/movies_tmdb"
+
+process_tv_tmdb:
+  file_path: "data/raw/tv_features.json"
+  drop_cols:
+    - "id"
+    - "poster_path"
+    - "backdrop_path"
+    - "videos"
+  vectorize_cols: 
+    - "title"
+    - "overview"
+    - "keywords"
+    - "cast"
+    - "crew"
+  output_cols:
+    - "title_vectorize"
+    - "overview_vectorize"
+    - "keywords_vectorize"
+    - "cast_vectorize"
+    - "crew_vectorize"
+  normalize_col:
+    - "vote_average"
+    - "runtime"
+  enc_cols:
+    - "original_language"
+    - "origin_country"
+    - "production_countries"
+  multi_lable_enc_cols:
+    - "genres"
+  log_transform_cols:
+    - "vote_count"
+    - "budget"
+    - "revenue"
+    - "popularity"
+  out_dir: "feature_repo/data/tv_tmdb"
   
