@@ -9,7 +9,7 @@ import mlflow
 import mlflow.pyfunc as pyfunc
 from mlflow.tracking import MlflowClient
 from mlflow.pyfunc import PythonModel
-from scipy.sparse import hstack
+from scipy.sparse import vstack
 
 
 class Model(ABC):
@@ -41,7 +41,7 @@ class UserBasedCF(Model):
         self.user_sim_df.to_pickle('model/user_based_cf_model.pkl')
         mlflow.log_artifact('model/user_based_cf_model.pkl', artifact_path='user_based_cf_model')
 
-    def predict(self, user_id: int, item_id: int, k: int = 5):
+    def predict(self, user_id: int, item_id: int, k: int = 10):
         if item_id not in self.user_item_matrix.columns or user_id not in self.user_item_matrix.index:
             return np.nan
 
@@ -58,7 +58,7 @@ class UserBasedCF(Model):
 
         return np.dot(top_k_users, ratings) / np.sum(np.abs(top_k_users))
 
-    def recommend(self, user_id: int, N: int = 5):
+    def recommend(self, user_id: int, N: int = 10):
         if user_id not in self.user_item_matrix.index:
             return []
 
@@ -97,7 +97,7 @@ class ItemBasedCF(Model):
         self.item_sim_df.to_pickle('model/item_based_cf_model.pkl')
         mlflow.log_artifact('model/item_based_cf_model.pkl', artifact_path='item_based_cf_model')
 
-    def predict(self, user_id: int, item_id: int, k: int = 5):
+    def predict(self, user_id: int, item_id: int, k: int = 10):
         if user_id not in self.user_item_matrix.index or item_id not in self.item_sim_df.index:
             return np.nan
 
@@ -114,7 +114,7 @@ class ItemBasedCF(Model):
 
         return np.dot(top_k_items, top_k_ratings) / np.sum(np.abs(top_k_items))
 
-    def recommend(self, user_id: int, N: int = 5):
+    def recommend(self, user_id: int, N: int = 10):
         if user_id not in self.user_item_matrix.index:
             return []
 
@@ -142,29 +142,65 @@ class ItemCFPyfuncModel(pyfunc.PythonModel):
         return results
 
 class ContentBasedCF(Model):
-    def train(self, df: pd.DataFrame):
-        X_features = hstack([
-            tfidf_genres,
-            tfidf_keywords,
-            tfidf_cast,
-            tfidf_overview,
-            np.array(df[['vote_average', 'popularity']])
-        ])
-        self.item_item_matrix = cosine_similarity(X_features)
-
-    def recommend(self, movie_index: int, top_k=5):
-        sim_scores = self.item_item_matrix[movie_index]
-        similar_indices = np.argsort(sim_scores)[::-1][1:top_k+1]
-        recommended_titles = df.iloc[similar_indices]['title'].tolist()
+    def train(self, df: pd.DataFrame, reviews_df: pd.DataFrame):
+        """
+        Train both feature-based and review-based similarity matrices.
+        """
+        # Build feature-based item-item similarity
+        features = np.vstack(df['feature_vector'].to_numpy())
+        self.feature_similarity = cosine_similarity(features)
+        self.df = df.reset_index(drop=True)
         
-        return recommended_titles
+        # Build review-based item-item similarity (if reviews exist)
+        reviews = np.vstack(reviews_df['review_vectorize'].to_numpy())
+        self.review_similarity = cosine_similarity(reviews)
+        
+        # Map movie_id to index
+        self.movie_id_to_index = {
+            movie_id: idx for idx, movie_id in enumerate(df['movie_id'])
+        }
+        
+        # Track movie_ids that have reviews
+        self.movies_with_reviews = set(reviews_df['movie_id'].tolist())
+
+    def recommend(self, movie_index: int, top_k=10):
+        """
+        Recommend top_k similar movies to the given movie_id.
+        Use review similarity if available, else fallback to feature similarity.
+        """
+        idx = self.movie_id_to_index.get(movie_id)
+        if idx is None:
+            return []  # Movie not found
+
+        if movie_id in self.movies_with_reviews:
+            sim_scores = self.review_similarity[idx]
+        else:
+            sim_scores = self.feature_similarity[idx]
+
+        # Get top_k similar movies (excluding the movie itself)
+        sim_scores[idx] = -1  # Exclude itself
+        similar_indices = np.argsort(sim_scores)[::-1][:top_k]
+
+        recommended_movie_ids = self.df.iloc[similar_indices]['movie_id'].tolist()
+        
+        return recommended_movie_ids
     
 class ContentCFPyfuncModel(pyfunc.PythonModel):
     def __init__(self, model: ContentBasedCF):
         self.model = model
 
-    def predict(self, model_input: list[dict[str, int]], params=None):
-        pass
+    def predict(self, model_input: list[dict], params=None):
+         """
+        Given input as list of dicts with 'movie_id', return recommended movie_ids.
+        Example input: [{'movie_id': 123}, {'movie_id': 456}]
+        """
+        results = []
+        for item in model_input:
+            movie_id = item.get('movie_id')
+            recommended = self.model.recommend(movie_id, top_k=params.get('top_k', 5) if params else 5)
+            results.append({'movie_id': movie_id, 'recommendations': recommended})
+            
+        return results
 
 class MatrixFactorization(Model):
     def train(self, df, **kwargs):
