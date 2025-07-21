@@ -135,7 +135,7 @@ class ItemCFPyfuncModel(pyfunc.PythonModel):
 
         return results
 
-class ContentBasedCF(Model):
+class ContentBasedFiltering(Model):
     def train(self, df: pd.DataFrame, reviews_df: pd.DataFrame):
         """
         Train both feature-based and review-based similarity matrices.
@@ -179,8 +179,8 @@ class ContentBasedCF(Model):
         
         return recommended_movie_ids
     
-class ContentCFPyfuncModel(pyfunc.PythonModel):
-    def __init__(self, model: ContentBasedCF):
+class ContentFPyfuncModel(pyfunc.PythonModel):
+    def __init__(self, model: ContentBasedFiltering):
         self.model = model
 
     def predict(self, model_input: list[dict], params=None):
