@@ -149,11 +149,11 @@ class RecallAtK(Evaluation):
     def __init__(self, k: int):
         self.k = k
         
-    def calculate_scores(self, y_true: set, y_pred: list):
+    def calculate_scores(self, y_true: list, y_pred: list):
         """
         Recall@K: fraction of relevant items covered in top-K recommendations.
         Args:
-            y_true: Set of ground-truth relevant items
+            y_true: List of ground-truth relevant items
             y_pred: List of recommended items (ordered)
         Returns:
             Recall@K score
