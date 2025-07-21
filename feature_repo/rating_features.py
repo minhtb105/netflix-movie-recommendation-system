@@ -1,10 +1,6 @@
-from datetime import datetime
-import pandas as pd
-from feast import Entity, FeatureView, Field, FeatureStore
-from feast import FileSource
+from feast import Entity, FeatureView, Field, FileSource
 from feast import ValueType
-from feast.data_format import ParquetFormat
-from feast.types import Float64, Int32, Int64, Array
+from feast.types import Float64, Int32, Int64
 
 
 X_train_source = FileSource(

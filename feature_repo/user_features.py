@@ -1,10 +1,6 @@
-from datetime import datetime
-import pandas as pd
-from feast import Entity, FeatureView, Field, FeatureStore
-from feast import FileSource
+from feast import Entity, FeatureView, Field, FileSource
 from feast import ValueType
-from feast.data_format import ParquetFormat
-from feast.types import Int32, Int64, Float64
+from feast.types import Int64, Float64
 
 
 user_source = FileSource(
@@ -31,7 +27,7 @@ user_fv = FeatureView(
         Field(name='occupation_engineer', dtype=Float64),
         Field(name='occupation_entertainment', dtype=Float64),
         Field(name='occupation_executive', dtype=Float64),
-        Field(name='occupation_healthcare ', dtype=Float64),
+        Field(name='occupation_healthcare', dtype=Float64),
         Field(name='occupation_homemaker', dtype=Float64),
         Field(name='occupation_lawyer', dtype=Float64),
         Field(name='occupation_librarian', dtype=Float64),
