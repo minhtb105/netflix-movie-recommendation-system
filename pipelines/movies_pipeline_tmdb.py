@@ -14,6 +14,8 @@ from src.data_strategy import BERTVectorizeStrategy
 import pandas as pd
 import numpy as np
 import yaml
+from datetime import datetime, UTC 
+
 
 def process_movies_pipeline():
     params = yaml.safe_load(open("params.yaml"))["process_movies_tmdb"]
@@ -63,6 +65,13 @@ def process_movies_pipeline():
     )
    
     df = combine_features(df, vector_cols=df.columns)
+    df["event_timestamp"] = datetime.now(UTC)
+    df.reset_index(drop=True, inplace=True)
+    df["movie_id"] = df.index.astype(str)
+    
+    df_review["event_timestamp"] = datetime.now(UTC)
+    df_review.reset_index(drop=True, inplace=True)
+    df_review["movie_id"] = df_review.index.astype(str)
    
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)

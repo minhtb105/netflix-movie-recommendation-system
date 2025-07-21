@@ -25,6 +25,7 @@ process_users_movielens:
 process_movies_tmdb:
   file_path: "data/raw/movies_features.json"
   drop_cols:
+    - "id"
     - "poster_path"
     - "backdrop_path"
     - "videos"
@@ -42,6 +43,7 @@ process_movies_tmdb:
     - "crew_vectorize"
   normalize_col:
     - "vote_average"
+    - "runtime"
   enc_cols:
     - "original_language"
     - "origin_country"

@@ -301,8 +301,8 @@ stages:
       size: 1184
     - path: src/data_strategy.py
       hash: md5
-      md5: 03dd82587d7270eeb22b2529eebfa913
-      size: 10499
+      md5: 5974d55542c38a736f61b12eda00906a
+      size: 10646
     - path: steps/prepare_data.py
       hash: md5
       md5: 711150d08e113b619261c9c622bebb23
@@ -328,12 +328,12 @@ stages:
       size: 238050
     - path: pipelines/movies_pipeline_movielens.py
       hash: md5
-      md5: 657d0d2d4250390da4f5da737676ddb7
-      size: 1327
+      md5: fdc87f3c1312654b4506382feb949444
+      size: 1321
     - path: src/data_strategy.py
       hash: md5
-      md5: 03dd82587d7270eeb22b2529eebfa913
-      size: 10499
+      md5: 5974d55542c38a736f61b12eda00906a
+      size: 10646
     - path: steps/prepare_data.py
       hash: md5
       md5: 711150d08e113b619261c9c622bebb23
@@ -348,7 +348,7 @@ stages:
     outs:
     - path: feature_repo/data/movies_movielens
       hash: md5
-      md5: 9bae3ac5a24a214229dbd5be07f8222b.dir
+      md5: 047c78bc1a74af71aa5e978628e8fa03.dir
       size: 102055
       nfiles: 1
   process_users_movielens:
@@ -364,8 +364,8 @@ stages:
       size: 918
     - path: src/data_strategy.py
       hash: md5
-      md5: 03dd82587d7270eeb22b2529eebfa913
-      size: 10499
+      md5: 5974d55542c38a736f61b12eda00906a
+      size: 10646
     - path: steps/prepare_data.py
       hash: md5
       md5: 711150d08e113b619261c9c622bebb23
@@ -380,7 +380,7 @@ stages:
     outs:
     - path: feature_repo/data/users_movielens
       hash: md5
-      md5: 954f8064df37c5b29dc5a3bb1a1da4cb.dir
+      md5: da3c9b055bbdf61f806a94784a07c462.dir
       size: 34546
       nfiles: 1
   process_movies_tmdb:
@@ -388,12 +388,12 @@ stages:
     deps:
     - path: pipelines/movies_pipeline_tmdb.py
       hash: md5
-      md5: b503d095763eb4e2dd5177946b5a736a
-      size: 3113
+      md5: 6b1a08c94f44ac38aedebf0c9984039e
+      size: 3447
     - path: src/data_strategy.py
       hash: md5
-      md5: 03dd82587d7270eeb22b2529eebfa913
-      size: 10499
+      md5: 5974d55542c38a736f61b12eda00906a
+      size: 10646
     - path: steps/prepare_data.py
       hash: md5
       md5: 711150d08e113b619261c9c622bebb23
@@ -401,6 +401,7 @@ stages:
     params:
       params.yaml:
         process_movies_tmdb.drop_cols:
+        - id
         - poster_path
         - backdrop_path
         - videos
@@ -418,6 +419,7 @@ stages:
         - genres
         process_movies_tmdb.normalize_col:
         - vote_average
+        - runtime
         process_movies_tmdb.out_dir: feature_repo/data/movies_tmdb
         process_movies_tmdb.output_cols:
         - title_vectorize
@@ -434,6 +436,6 @@ stages:
     outs:
     - path: feature_repo/data/movies_tmdb
       hash: md5
-      md5: 5c87965d0d36f1e0c5cebc654867c942.dir
-      size: 197133894
+      md5: edfb0c9e67510c6b83e20350eaa195fa.dir
+      size: 197191407
       nfiles: 2

@@ -192,14 +192,16 @@ class BERTVectorizeStrategy(DataStrategy):
 
         # Process train set
         texts_train = df_train[column].astype(str).tolist()
-        embeddings_train = self.model.encode(texts_train, show_progress_bar=True)
+        embeddings_train = self.model.encode(texts_train, show_progress_bar=True,
+                                             normalize_embeddings=True)
         df_train[output_col] = [emb.tolist() for emb in embeddings_train]
         df_train = df_train.drop(columns=[column])
 
         # Process test set if exists
         if df_test is not None:
             texts_test = df_test[column].astype(str).tolist()
-            embeddings_test = self.model.encode(texts_test, show_progress_bar=True)
+            embeddings_test = self.model.encode(texts_test, show_progress_bar=True,
+                                                normalize_embeddings=True)
             df_test[output_col] = [emb.tolist() for emb in embeddings_test]
             df_test = df_test.drop(columns=[column])
             return df_train, df_test
