@@ -101,3 +101,30 @@ def get_rating_features_df():
     ).to_df()
     
     return rating_df
+
+def get_movie_features_tmdb_df():
+    entity_df = pd.read_parquet("feature_repo/data/movies_tmdb/movie_features_train.parquet")
+    entity_df["event_timestamp"] = pd.to_datetime(entity_df["event_timestamp"])
+
+    movie_tmdb_df = store.get_historical_features(
+        entity_df=entity_df,
+        features=[
+            "movie_features_tmdb:feature_vector",
+        ]
+    ).to_df()
+
+    return movie_tmdb_df
+
+
+def get_movie_reviews_tmdb_df():
+    entity_df = pd.read_parquet("feature_repo/data/movies_tmdb/movie_reviews_train.parquet")
+    entity_df["event_timestamp"] = pd.to_datetime(entity_df["event_timestamp"])
+
+    movie_reviews_tmdb_df = store.get_historical_features(
+        entity_df=entity_df,
+        features=[
+            "movie_reviews_tmdb:review_vectorize",
+        ]
+    ).to_df()
+
+    return movie_reviews_tmdb_df
