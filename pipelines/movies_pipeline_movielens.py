@@ -31,6 +31,12 @@ def process_movies_pipeline():
                             max_features=max_features,
                             strategy=TextVectorizeStrategy()) 
     
+    df = df.rename(columns={
+        "Children's": "Childrens",
+        "Sci-Fi": "Sci_Fi",
+        "Film-Noir": "Film_Noir"
+    })
+    
     # Drop original dates
     df = df.drop(columns=['IMDb_URL'])
     

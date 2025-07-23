@@ -1,6 +1,6 @@
 from feast import Entity, FeatureView, Field, FileSource
 from feast import ValueType
-from feast.types import Int64, Float64
+from feast.types import Int64, Float64, String
 
 
 user_source = FileSource(
@@ -17,7 +17,7 @@ user_fv = FeatureView(
     ttl=None,
     schema=[
         Field(name='age', dtype=Int64),
-        Field(name='zip_code', dtype=Int64),
+        Field(name='zip_code', dtype=String),
         Field(name='gender_F', dtype=Float64),
         Field(name='gender_M', dtype=Float64),
         Field(name='occupation_administrator', dtype=Float64),

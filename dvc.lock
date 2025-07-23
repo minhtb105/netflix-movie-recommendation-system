@@ -134,8 +134,8 @@ stages:
       size: 7747
     - path: steps/fetch_features.py
       hash: md5
-      md5: bafac79d5ce65086c1bcebd7feff9828
-      size: 4789
+      md5: 08dc4f52710d143b1ae0daa431fc2469
+      size: 5857
     outs:
     - path: model/user_item_matrix.pkl
       hash: md5
@@ -184,8 +184,8 @@ stages:
       size: 7747
     - path: steps/fetch_features.py
       hash: md5
-      md5: bafac79d5ce65086c1bcebd7feff9828
-      size: 4789
+      md5: 08dc4f52710d143b1ae0daa431fc2469
+      size: 5857
     - path: steps/train_model.py
       hash: md5
       md5: 8ddff7adfee829012e80c389c632e066
@@ -208,8 +208,8 @@ stages:
       size: 7747
     - path: steps/fetch_features.py
       hash: md5
-      md5: bafac79d5ce65086c1bcebd7feff9828
-      size: 4789
+      md5: 08dc4f52710d143b1ae0daa431fc2469
+      size: 5857
     - path: steps/train_model.py
       hash: md5
       md5: 8ddff7adfee829012e80c389c632e066
@@ -318,8 +318,8 @@ stages:
       size: 238050
     - path: pipelines/movies_pipeline_movielens.py
       hash: md5
-      md5: fdc87f3c1312654b4506382feb949444
-      size: 1321
+      md5: ec64014316d6815de46f5f75d22ccba8
+      size: 1458
     - path: src/data_strategy.py
       hash: md5
       md5: 5974d55542c38a736f61b12eda00906a
@@ -338,8 +338,8 @@ stages:
     outs:
     - path: feature_repo/data/movies_movielens
       hash: md5
-      md5: 047c78bc1a74af71aa5e978628e8fa03.dir
-      size: 102055
+      md5: 9e32f4ef86d864a7a7c74373fee9be30.dir
+      size: 102050
       nfiles: 1
   process_users_movielens:
     cmd: python pipelines/users_pipeline_movielens.py
