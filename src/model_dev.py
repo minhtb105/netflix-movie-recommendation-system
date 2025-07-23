@@ -183,8 +183,8 @@ class ContentFPyfuncModel(pyfunc.PythonModel):
     def __init__(self, model: ContentBasedFiltering):
         self.model = model
 
-    def predict(self, model_input: list[dict], params=None):
-         """
+    def predict(self, model_input: list[dict[str, int]], params=None):
+        """
         Given input as list of dicts with 'movie_id', return recommended movie_ids.
         Example input: [{'movie_id': 123}, {'movie_id': 456}]
         """

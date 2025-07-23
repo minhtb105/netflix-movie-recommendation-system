@@ -378,8 +378,8 @@ stages:
     deps:
     - path: pipelines/movies_pipeline_tmdb.py
       hash: md5
-      md5: 6b1a08c94f44ac38aedebf0c9984039e
-      size: 3447
+      md5: 46c48d68000622257c912252802947c7
+      size: 3572
     - path: src/data_strategy.py
       hash: md5
       md5: 5974d55542c38a736f61b12eda00906a
@@ -391,7 +391,6 @@ stages:
     params:
       params.yaml:
         process_movies_tmdb.drop_cols:
-        - id
         - poster_path
         - backdrop_path
         - videos
@@ -423,19 +422,27 @@ stages:
         - keywords
         - cast
         - crew
+        process_tv_tmdb.keep_cols:
+        - id
+        - title
+        - overview
+        - vote_average
+        - vote_count
+        - genres
+        - video_key
     outs:
     - path: feature_repo/data/movies_tmdb
       hash: md5
-      md5: edfb0c9e67510c6b83e20350eaa195fa.dir
-      size: 197191407
+      md5: 691957077569d0d57e4ef03483cb94d4.dir
+      size: 197374143
       nfiles: 2
   process_tv_tmdb:
     cmd: python pipelines/tv_pipeline_tmdb.py
     deps:
     - path: pipelines/tv_pipeline_tmdb.py
       hash: md5
-      md5: 1750647ab2de8519f1f831f3112e5b4d
-      size: 3429
+      md5: b5439502ec73535f3b002535a2201e64
+      size: 3554
     - path: src/data_strategy.py
       hash: md5
       md5: 5974d55542c38a736f61b12eda00906a
@@ -447,7 +454,6 @@ stages:
     params:
       params.yaml:
         process_tv_tmdb.drop_cols:
-        - id
         - poster_path
         - backdrop_path
         - videos
@@ -456,6 +462,14 @@ stages:
         - origin_country
         - production_countries
         process_tv_tmdb.file_path: data/raw/tv_features.json
+        process_tv_tmdb.keep_cols:
+        - id
+        - title
+        - overview
+        - vote_average
+        - vote_count
+        - genres
+        - video_key
         process_tv_tmdb.log_transform_cols:
         - vote_count
         - budget
@@ -482,6 +496,6 @@ stages:
     outs:
     - path: feature_repo/data/tv_tmdb
       hash: md5
-      md5: feea69f80dbd81593fe8ba08e266dfb4.dir
-      size: 111052936
+      md5: 186a8e63ec0f74bc8835fdab2a5d451a.dir
+      size: 111052841
       nfiles: 2

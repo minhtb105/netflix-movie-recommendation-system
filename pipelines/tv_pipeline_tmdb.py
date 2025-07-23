@@ -21,6 +21,8 @@ def process_tv_pipeline():
     params = yaml.safe_load(open("params.yaml"))["process_tv_tmdb"]
     df = pd.read_json(params['file_path'])
     
+    df["video_key"] = df["videos"].apply(lambda vids: vids[0]["key"] if isinstance(vids, list) and len(vids) > 0 else "unknown")
+    
     drop_cols = params['drop_cols']
     df = df.drop(columns=drop_cols)
     
@@ -64,14 +66,12 @@ def process_tv_pipeline():
         strategy=BERTVectorizeStrategy()
     )
    
-    df = combine_features(df, vector_cols=df.columns)
+    keep_cols = params['keep_cols']
+    df = combine_features(df, vector_cols=df.columns, keep_cols=keep_cols)
     df["event_timestamp"] = datetime.now(UTC)
-    df.reset_index(drop=True, inplace=True)
-    df["movie_id"] = df.index.astype(str)
     
     df_review["event_timestamp"] = datetime.now(UTC)
-    df_review.reset_index(drop=True, inplace=True)
-    df_review["movie_id"] = df_review.index.astype(str)
+    df_review['id'] = df['id']
    
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -79,19 +79,20 @@ def process_tv_pipeline():
     df_review.to_parquet(f"{output_dir}/tv_reviews_train.parquet", index=False)
 
 
-def combine_features(df: pd.DataFrame, vector_cols: list[str]) -> pd.DataFrame:
+def combine_features(df: pd.DataFrame, vector_cols: list[str], keep_cols: list[str]) -> pd.DataFrame:
     """
     Combine all feature columns (which are lists/vectors) into a single vector column.
     """
+    feature_cols = [col for col in vector_cols if col not in keep_cols]
+
     def merge_vectors(row):
         vectors = []
-        for col in vector_cols:
+        for col in feature_cols:
             value = row[col]
             if value is None:
                 raise ValueError(f"Column '{col}' contains None at row {row.name}")
 
             array = np.array(value)
-
             if array.ndim == 0:
                 array = np.array([value])
 
@@ -100,7 +101,7 @@ def combine_features(df: pd.DataFrame, vector_cols: list[str]) -> pd.DataFrame:
         return np.concatenate(vectors)
 
     df['feature_vector'] = df.apply(merge_vectors, axis=1)
-    df = df.drop(columns=vector_cols)
+    df = df.drop(columns=feature_cols)
     
     return df
 

@@ -8,8 +8,8 @@ if str(project_root) not in sys.path:
 import pandas as pd
 from steps.train_model import get_or_train
 from src.model_dev import (
-    UserBasedCF, ItemBasedCF, ContentBasedFiltering
-    UserCFPyfuncModel, ItemCFPyfuncModel, ContentFPyfuncModel
+    UserBasedCF, ItemBasedCF, ContentBasedFiltering,
+    UserCFPyfuncModel, ItemCFPyfuncModel, ContentFPyfuncModel,
     compute_user_item_matrix
 )
 from steps.fetch_features import (

@@ -120,6 +120,7 @@ stages:
     params:
       - process_movies_tmdb.file_path
       - process_movies_tmdb.drop_cols
+      - process_tv_tmdb.keep_cols
       - process_movies_tmdb.vectorize_cols
       - process_movies_tmdb.output_cols
       - process_movies_tmdb.normalize_col
@@ -139,6 +140,7 @@ stages:
     params:
       - process_tv_tmdb.file_path
       - process_tv_tmdb.drop_cols
+      - process_tv_tmdb.keep_cols
       - process_tv_tmdb.vectorize_cols
       - process_tv_tmdb.output_cols
       - process_tv_tmdb.normalize_col

@@ -24,11 +24,18 @@ process_users_movielens:
 
 process_movies_tmdb:
   file_path: "data/raw/movies_features.json"
-  drop_cols:
-    - "id"
+  drop_cols: 
     - "poster_path"
     - "backdrop_path"
     - "videos"
+  keep_cols:
+    - "id"
+    - "title"
+    - "overview"
+    - "vote_average"
+    - "vote_count"
+    - "genres"
+    - "video_key"
   vectorize_cols: 
     - "title"
     - "overview"
@@ -60,10 +67,17 @@ process_movies_tmdb:
 process_tv_tmdb:
   file_path: "data/raw/tv_features.json"
   drop_cols:
-    - "id"
     - "poster_path"
     - "backdrop_path"
     - "videos"
+  keep_cols:
+    - "id"
+    - "title"
+    - "overview"
+    - "vote_average"
+    - "vote_count"
+    - "genres"
+    - "video_key"
   vectorize_cols: 
     - "title"
     - "overview"
