@@ -110,6 +110,9 @@ def get_movie_features_tmdb_df():
         entity_df=entity_df,
         features=[
             "movie_features_tmdb:feature_vector",
+            "movie_features_tmdb:vote_average",
+            "movie_features_tmdb:vote_count",
+            "movie_features_tmdb:video_key"
         ]
     ).to_df()
 
@@ -123,8 +126,38 @@ def get_movie_reviews_tmdb_df():
     movie_reviews_tmdb_df = store.get_historical_features(
         entity_df=entity_df,
         features=[
-            "movie_reviews_tmdb:review_vectorize",
+            "movie_reviews_tmdb:review_vectorize",   
         ]
     ).to_df()
 
     return movie_reviews_tmdb_df
+
+def get_tv_features_tmdb_df():
+    entity_df = pd.read_parquet("feature_repo/data/tv_tmdb/tv_features_train.parquet")
+    entity_df["event_timestamp"] = pd.to_datetime(entity_df["event_timestamp"])
+
+    tv_tmdb_df = store.get_historical_features(
+        entity_df=entity_df,
+        features=[
+            "tv_features_tmdb:feature_vector",
+            "tv_features_tmdb:vote_average",
+            "tv_features_tmdb:vote_count",
+            "tv_features_tmdb:video_key"
+        ]
+    ).to_df()
+
+    return tv_tmdb_df
+
+
+def get_tv_reviews_tmdb_df():
+    entity_df = pd.read_parquet("feature_repo/data/tv_tmdb/tv_reviews_train.parquet")
+    entity_df["event_timestamp"] = pd.to_datetime(entity_df["event_timestamp"])
+
+    tv_reviews_tmdb_df = store.get_historical_features(
+        entity_df=entity_df,
+        features=[
+            "tv_reviews_tmdb:review_vectorize",   
+        ]
+    ).to_df()
+
+    return tv_reviews_tmdb_df
