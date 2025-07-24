@@ -1,7 +1,6 @@
 import pandas as pd
 from feast import FeatureStore
 
-store = FeatureStore(repo_path="feature_repo")
 REPO_PATH = "feature_repo"
 store = FeatureStore(repo_path=REPO_PATH)
 
@@ -147,7 +146,6 @@ def get_tv_features_tmdb_df():
     ).to_df()
 
     return tv_tmdb_df
-
 
 def get_tv_reviews_tmdb_df():
     entity_df = pd.read_parquet("feature_repo/data/tv_tmdb/tv_reviews_train.parquet")
