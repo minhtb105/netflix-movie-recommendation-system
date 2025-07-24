@@ -1,10 +1,11 @@
-from feast import Entity, FeatureView, Field, FileSource
+from feast import Entity, FeatureView, Field, FileSource, FeatureStore
 from feast import ValueType
 from feast.types import Float64, Int32, Int64, Array
+import os
 
 
 movie_source = FileSource(
-    path='data/movies_movielens/movie_features.parquet',
+    path=os.path.join(os.path.dirname(__file__), "data/movies_movielens/movie_features.parquet"),
     event_timestamp_column='release_date')
 
 movie = Entity(name='movie_id', 
@@ -43,5 +44,11 @@ movie_fv = FeatureView(
         Field(name='release_date_is_weekend', dtype=Int32),
         Field(name='title_tfidf', dtype=Array(Float64)),
     ],
+    online=True,
     source=movie_source
 )
+
+os.makedirs("store_1000", exist_ok=True)
+store_path = os.path.join(os.path.dirname(__file__), "store_1000")
+fs_1000 = FeatureStore(repo_path=store_path)
+fs_1000.apply([movie_fv])
