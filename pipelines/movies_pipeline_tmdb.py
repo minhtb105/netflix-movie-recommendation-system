@@ -68,9 +68,10 @@ def process_movies_pipeline():
    
     keep_cols = params['keep_cols']
     df = combine_features(df, vector_cols=df.columns, keep_cols=keep_cols)
-    df["event_timestamp"] = datetime.now(UTC)
+    if "event_timestamp" not in df.columns:
+        df["event_timestamp"] = datetime.now(UTC)
+        df_review["event_timestamp"] = datetime.now(UTC)
     
-    df_review["event_timestamp"] = datetime.now(UTC)
     df_review['id'] = df['id']
    
     output_dir = Path(params['out_dir'])
