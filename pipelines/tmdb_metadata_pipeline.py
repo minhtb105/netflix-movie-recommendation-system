@@ -16,6 +16,7 @@ FEATURE_DIR = Path("data/raw")
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 FEATURE_DIR.mkdir(parents=True, exist_ok=True)
 
+
 async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 500):
     movie_ids = set()
     for func in [mv_service.fetch_popular, mv_service.fetch_top_rated, mv_service.fetch_upcoming]:
@@ -26,14 +27,12 @@ async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 500):
                     movie_ids.add(movie["id"])
                     
             await asyncio.sleep(0.25)
-            
-    ids = list(movie_ids)
-    with open(RAW_DIR / "movie_ids.json", "w") as f:
-        json.dump(ids, f)
         
-    return ids
+    return list(movie_ids)
 
-async def fetch_movie_metadata(mv_service: MovieService, movie_ids: list[int]):
+movie_metadata_path = f"{RAW_DIR}/movies_metadata.json"
+async def fetch_movie_metadata(mv_service: MovieService, movie_ids: list[int],
+                               out_path: str = movie_metadata_path):
     all_meta = []
     for mid in movie_ids:
         # parallel fetch
@@ -48,10 +47,11 @@ async def fetch_movie_metadata(mv_service: MovieService, movie_ids: list[int]):
         })
         await asyncio.sleep(0.25)
         
-    with open(RAW_DIR / "movies_metadata.json", "w", encoding="utf-8") as f:
+    with open(out_path, "w", encoding="utf-8") as f:
         json.dump(all_meta, f, ensure_ascii=False, indent=2)
         
     return all_meta
+
 
 async def fetch_tv_ids(tv_service: TVService, max_pages: int = 500):
     tv_ids = set()
@@ -64,13 +64,11 @@ async def fetch_tv_ids(tv_service: TVService, max_pages: int = 500):
             
             await asyncio.sleep(0.25)
             
-    ids = list(tv_ids)
-    with open(RAW_DIR / "tv_ids.json", "w") as f:
-        json.dump(ids, f)
-        
-    return ids   
+    return list(tv_ids)
 
-async def fetch_tv_metadata(tv_service: TVService, tv_ids: list[int]):
+tv_metadata_path = f"{RAW_DIR}/tv_metadata.json"
+async def fetch_tv_metadata(tv_service: TVService, tv_ids: list[int],
+                            out_path: str = tv_metadata_path):
     all_meta = []
     for tid in tv_ids:
         details = await tv_service.fetch_tv_details(tid)
@@ -85,7 +83,7 @@ async def fetch_tv_metadata(tv_service: TVService, tv_ids: list[int]):
         
         await asyncio.sleep(0.25)
         
-    with open(RAW_DIR / "tv_metadata.json", "w", encoding="utf-8") as f:
+    with open(out_path, "w", encoding="utf-8") as f:
         json.dump(all_meta, f, ensure_ascii=False, indent=2)
         
     return all_meta
