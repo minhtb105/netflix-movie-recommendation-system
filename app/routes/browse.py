@@ -1,9 +1,7 @@
-# app/routes/browse.py
 from fastapi import APIRouter, Request, Cookie
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
-from datetime import datetime
 from services.trending_api import TrendingService
 from services.tv_api import TVService
 from services.movie_api import MovieService
