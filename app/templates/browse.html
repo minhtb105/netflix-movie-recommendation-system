@@ -61,7 +61,7 @@
             <div class="media-card">
                 <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path if movie.poster_path else '/static/images/hero-replacement.png' }}"
                     alt="{{ movie.title or 'Movie poster' }}">
-                <p>{{ movie.title }}</p>
+                <p><a href="/movie/{{ movie.id }}">{{ movie.title }}</a></p>
             </div>
             {% endfor %}
         </div>
@@ -72,7 +72,7 @@
             <div class="media-card">
                 <img src="https://image.tmdb.org/t/p/w500{{ show.poster_path if show.poster_path else '/static/images/hero-replacement.png' }}"
                     alt="{{ show.name or 'TV show poster' }}">
-                <p>{{ show.name }}</p>
+                <p><a href="/tv/{{ show.id }}">{{ show.name }}</a></p>
             </div>
             {% endfor %}
         </div>
