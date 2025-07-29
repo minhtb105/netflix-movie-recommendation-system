@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="netflix_recommender",
-    version="0.1.0",
+    version="0.1.1",
     packages=find_packages(where="."), 
     include_package_data=True,
     install_requires=[
