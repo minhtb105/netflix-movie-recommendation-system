@@ -1,12 +1,15 @@
 import pandas as pd
 from feast import FeatureStore
 
-REPO_PATH = "feature_repo"
-store = FeatureStore(repo_path=REPO_PATH)
+BASE_PATH = "feature_repo"
+fs_1000 = FeatureStore(repo_path=f"{BASE_PATH}/store_1000")
+fs_768 = FeatureStore(repo_path=f"{BASE_PATH}/store_768")
+fs_2664 = FeatureStore(repo_path=f"{BASE_PATH}/store_2664")
+fs_3688 = FeatureStore(repo_path=f"{BASE_PATH}/store_3688")
 
 def get_user_features_online(user_ids):
     entity_rows = [{"user_id": uid} for uid in user_ids]
-    user_df = store.get_online_features(
+    user_df = fs_1000.get_online_features(
         features=[
             "user_features:age",
             "user_features:zip_code",
@@ -41,7 +44,7 @@ def get_user_features_online(user_ids):
 
 def get_movie_features_online(movie_ids):
     entity_rows = [{"movie_id": mid} for mid in movie_ids]
-    movie_df = store.get_online_features(
+    movie_df = fs_1000.get_online_features(
         features=[
             "movie_features:unknown",
             "movie_features:Action",
@@ -75,9 +78,9 @@ def get_movie_features_online(movie_ids):
 
     return movie_df
 
-def get_rating_features_online(user_ids, movie_ids):
-    entity_rows = [{"user_id": u, "movie_id": m} for u, m in zip(user_ids, movie_ids)]
-    rating_df = store.get_online_features(
+def get_rating_features_online(user_ids, item_ids):
+    entity_rows = [{"user_id": u, "item_id": m} for u, m in zip(user_ids, item_ids)]
+    rating_df = fs_1000.get_online_features(
         features=[
             "X_train_rating:timestamp_year",
             "X_train_rating:timestamp_month",
@@ -94,8 +97,8 @@ def get_rating_features_online(user_ids, movie_ids):
     return rating_df
 
 def get_movie_features_tmdb_online(movie_ids):
-    entity_rows = [{"movie_id": mid} for mid in movie_ids]
-    movie_tmdb_df = store.get_online_features(
+    entity_rows = [{"id": mid} for mid in movie_ids]
+    movie_tmdb_df = fs_3688.get_online_features(
         features=[
             "movie_features_tmdb:feature_vector",
             "movie_features_tmdb:vote_average",
@@ -108,8 +111,8 @@ def get_movie_features_tmdb_online(movie_ids):
     return movie_tmdb_df
 
 def get_movie_reviews_tmdb_online(movie_ids):
-    entity_rows = [{"movie_id": mid} for mid in movie_ids]
-    movie_reviews_tmdb_df = store.get_online_features(
+    entity_rows = [{"id": mid} for mid in movie_ids]
+    movie_reviews_tmdb_df = fs_768.get_online_features(
         features=[
             "movie_reviews_tmdb:review_vectorize",
         ],
@@ -119,8 +122,8 @@ def get_movie_reviews_tmdb_online(movie_ids):
     return movie_reviews_tmdb_df
 
 def get_tv_features_tmdb_online(tv_ids):
-    entity_rows = [{"tv_id": tid} for tid in tv_ids]
-    tv_tmdb_df = store.get_online_features(
+    entity_rows = [{"id": tid} for tid in tv_ids]
+    tv_tmdb_df = fs_2664.get_online_features(
         features=[
             "tv_features_tmdb:feature_vector",
             "tv_features_tmdb:vote_average",
@@ -133,8 +136,8 @@ def get_tv_features_tmdb_online(tv_ids):
     return tv_tmdb_df
 
 def get_tv_reviews_tmdb_online(tv_ids):
-    entity_rows = [{"tv_id": tid} for tid in tv_ids]
-    tv_reviews_tmdb_df = store.get_online_features(
+    entity_rows = [{"id": tid} for tid in tv_ids]
+    tv_reviews_tmdb_df = fs_768.get_online_features(
         features=[
             "tv_reviews_tmdb:review_vectorize",
         ],
