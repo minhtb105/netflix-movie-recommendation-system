@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from abc import ABC, abstractmethod
 from typing import Union, List, Optional, Tuple
 from sklearn.model_selection import train_test_split
@@ -175,7 +174,7 @@ class BERTVectorizeStrategy(DataStrategy):
     """
     Strategy for vectorizing text columns using all-MiniLM-L6-v2 SentenceTransformer.
     """
-
+    from sentence_transformers import SentenceTransformer
     def __init__(self):
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
 
