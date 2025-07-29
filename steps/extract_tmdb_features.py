@@ -12,7 +12,8 @@ def extract_features(meta_list, out_path, is_tv=False):
         title = details.get("title") or details.get("name")
         
         # Genres
-        genres = [g["id"] for g in details.get("genres", [])]
+        genre_ids = details.get("genres", []) or details.get("genre_ids", [])
+        genres = [g["id"] for g in genre_ids]
 
         # Keywords
         if is_tv:

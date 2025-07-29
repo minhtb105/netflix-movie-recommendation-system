@@ -14,9 +14,9 @@ stages:
       - data/raw/tv_metadata.json
 
   extract_tmdb_features:
-    cmd: python src/extract_tmdb_features.py
+    cmd: python steps/extract_tmdb_features.py
     deps:
-      - src/extract_tmdb_features.py
+      - steps/extract_tmdb_features.py
       - data/raw/movies_metadata.json
       - data/raw/tv_metadata.json
     outs:
