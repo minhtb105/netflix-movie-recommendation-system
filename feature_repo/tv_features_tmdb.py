@@ -29,7 +29,7 @@ tv_features_view = FeatureView(
 os.makedirs("store_2664", exist_ok=True)
 store_path = os.path.join(os.path.dirname(__file__), "store_2664")
 fs_2664 = FeatureStore(repo_path=store_path)
-fs_2664.apply([tv_features_view])
+fs_2664.apply([series_id, tv_features_view])
 
 review_source = FileSource(
     path=os.path.join(os.path.dirname(__file__), "data/tv_tmdb/tv_reviews_train.parquet"),
@@ -53,4 +53,4 @@ tv_reviews_view = FeatureView(
 os.makedirs("store_768", exist_ok=True)
 store_path = os.path.join(os.path.dirname(__file__), "store_768")
 fs_768 = FeatureStore(repo_path=store_path)
-fs_768.apply([tv_reviews_view])
+fs_768.apply([review_id, tv_reviews_view])

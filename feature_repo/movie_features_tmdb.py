@@ -29,7 +29,7 @@ movie_features_view = FeatureView(
 os.makedirs("store_3688", exist_ok=True)
 store_path = os.path.join(os.path.dirname(__file__), "store_3688")
 fs_3688 = FeatureStore(repo_path=store_path)
-fs_3688.apply([movie_features_view])
+fs_3688.apply([movie_id, movie_features_view])
 
 review_source = FileSource(
     path=os.path.join(os.path.dirname(__file__), "data/movies_tmdb/movie_reviews_train.parquet"),
@@ -53,5 +53,5 @@ movie_reviews_view = FeatureView(
 os.makedirs("store_768", exist_ok=True)
 store_path = os.path.join(os.path.dirname(__file__), "store_768")
 fs_768 = FeatureStore(repo_path=store_path)
-fs_768.apply([movie_reviews_view])
+fs_768.apply([review_id, movie_reviews_view])
 

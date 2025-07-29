@@ -51,4 +51,4 @@ movie_fv = FeatureView(
 os.makedirs("store_1000", exist_ok=True)
 store_path = os.path.join(os.path.dirname(__file__), "store_1000")
 fs_1000 = FeatureStore(repo_path=store_path)
-fs_1000.apply([movie_fv])
+fs_1000.apply([movie, movie_fv])
