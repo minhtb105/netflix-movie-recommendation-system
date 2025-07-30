@@ -26,20 +26,6 @@ def process_movies_pipeline():
     drop_cols = params['drop_cols']
     df = df.drop(columns=drop_cols)
     
-    n = len(df)
-    
-    for i in range(n):
-        casts = []
-        for cast_info in df.loc[i, 'cast']:
-            character = str(cast_info.get('character') or '').lower()
-            if 'uncredited' not in character and 'voice' not in character:
-                casts.append(cast_info['name'])
-                
-        if casts:
-            df.loc[i, 'cast'] = " ".join(casts)
-        else:
-            df.loc[i, 'cast'] = "unknown"   
-    
     vectorize_cols = params['vectorize_cols']
     output_cols = params['output_cols']
     for col, output_col in zip(vectorize_cols, output_cols):
@@ -57,12 +43,11 @@ def process_movies_pipeline():
     multi_lable_enc_cols = params['multi_lable_enc_cols']
     df, _ = multi_label_encode_df(df, columns=multi_lable_enc_cols)
     
-    df_review = pd.DataFrame(df['review'])
-    df = df.drop(columns=['review'])
-    df_review, _ = vectorize_text(
-        df_review, 
-        column='review',
-        output_col='review_vectorize',
+    review_df = pd.read_json(params['review_path'])
+    review_df, _ = vectorize_text(
+        review_df, 
+        column='content',
+        output_col='content_vectorize',
         strategy=BERTVectorizeStrategy()
     )
    
@@ -72,12 +57,11 @@ def process_movies_pipeline():
         df["event_timestamp"] = datetime.now(UTC)
         df_review["event_timestamp"] = datetime.now(UTC)
     
-    df_review['id'] = df['id']
    
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)
     df.to_parquet(f"{output_dir}/movie_features_train.parquet", index=False)
-    df_review.to_parquet(f"{output_dir}/movie_reviews_train.parquet", index=False)
+    review_df.to_parquet(f"{output_dir}/movie_reviews_train.parquet", index=False)
 
 
 def combine_features(df: pd.DataFrame, vector_cols: list[str], keep_cols: list[str]) -> pd.DataFrame:
