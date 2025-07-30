@@ -11,6 +11,10 @@ feature_repo/registry.db
 feature_repo/online_store.db
 feature_repo/.feast
 feature_repo/data/
+feature_repo/store_1000/
+feature_repo/store_2664/
+feature_repo/store_3688/
+feature_repo/store_768/
 .vscode
 steps/*.pyc
 steps/__pycache__
@@ -25,3 +29,16 @@ app/__pycache__
 users.json
 app/static/images/movie
 app/static/images/tv
+/app/static/images/no_poster.png
+app/routes/__pycache__/
+airflow-docker
+airflow_env
+airflow/dags/__pycache__
+airflow/logs
+airflow/plugins
+airflow/.env 
+airflow/airflow.db 
+airflow/simple_auth_manager_passwords.json.generated
+netflix_recommender.egg-info/
+logs/
+feature_repo/feature_store.yaml
