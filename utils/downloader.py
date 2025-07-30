@@ -1,7 +1,8 @@
 import os
 import logging
 import httpx
-import asyncio
+import 
+import re
 from typing import List
 
 
@@ -72,4 +73,48 @@ async def async_batch_download_images(image_infos: List[dict], save_dir: str):
             for info in image_infos if info.get("image_path")
         ]
         await asyncio.gather(*tasks)
-        
+
+def sanitize_filename(name: str) -> str:
+    name = re.sub(r'[^\w\s-]', '', name).strip().lower()
+    
+    return re.sub(r'[\s_-]+', '_', name)
+
+async def download_cast_images(cast_list: List[dict], save_dir: str = "app/static/images/cast"):
+    """
+    Download profile images of cast members.
+    
+    Args:
+        cast_list (List[dict]): Each dict must include:
+            - name (str): Actor's name (used for filename)
+            - profile_path (str): Image path from TMDB
+        save_dir (str): Directory to save images.
+    """
+    os.makedirs(save_dir, exist_ok=True)
+
+    async with httpx.AsyncClient(
+        timeout=httpx.Timeout(TIME_OUT),
+        limits=httpx.Limits(max_connections=MAX_CONCURRENT_DOWNLOADS)
+    ) as client:
+        tasks = []
+
+        for cast in cast_list:
+            profile_path = cast.get("profile_path")
+            name = cast.get("name")
+
+            if not profile_path or not name:
+                continue  
+
+            sanitized_name = sanitize_filename(name)
+            save_path = os.path.join(save_dir, f"{sanitized_name}.jpg")
+
+            task = download_image(
+                client,
+                image_path=profile_path,
+                save_dir=save_dir,
+                movie_id=sanitized_name, 
+                img_type=None  
+            )
+            tasks.append(task)
+
+        await asyncio.gather(*tasks)
+
