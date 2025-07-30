@@ -44,7 +44,9 @@ tv_reviews_view = FeatureView(
     entities=[review_id],
     ttl=None,
     schema=[
-        Field(name="review_vectorize", dtype=Array(Float32))
+        Field(name="user", dtype=String),
+        Field(name="content_vectorize", dtype=Array(Float32)),
+        Field(name="rating", dtype=String)
     ],
     online=True,
     source=review_source
