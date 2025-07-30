@@ -3,8 +3,9 @@ from pathlib import Path
 
 RAW_DIR = Path("data/raw")
 
-def extract_features(meta_list, out_path, is_tv=False):
+def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool=False):
     features = []
+    reviews_map = {}
     for item in meta_list:
         details = item.get("details", item)
         
@@ -16,10 +17,7 @@ def extract_features(meta_list, out_path, is_tv=False):
         genres = [g["id"] for g in genre_ids]
 
         # Keywords
-        if is_tv:
-            keywords = [kw["name"] for kw in details.get("keywords", {}).get("results", [])]
-        else:
-            keywords = [kw["name"] for kw in details.get("keywords", {}).get("keywords", [])]
+        keywords = [kw.get("name") for kw in details.get("keywords", {}).get("results" if is_tv else "keywords", [])]
         keywords = " ".join(keywords)
 
         # Credits
@@ -27,13 +25,15 @@ def extract_features(meta_list, out_path, is_tv=False):
         cast = []
         crew = []
         if credits:
-            cast = [
-                {
-                    "name": c.get("name"),
-                    "character": c.get("character") or c.get("roles", [{}])[0].get("character"),
-                }
-                for c in credits.get("cast", [])
-            ]
+            cast = []
+            for c in credits.get("cast", []):
+                character = (c.get("character") or c.get("roles", [{}])[0].get("character") or "").lower()
+                if "uncredited" not in character and "voice" not in character:
+                    cast.append({
+                        "name": c.get("name"),
+                        "character": character
+                    })
+
             crew = " ".join([c.get("name") for c in credits.get("crew", [])])
             
         # Poster & Backdrop
@@ -50,10 +50,16 @@ def extract_features(meta_list, out_path, is_tv=False):
 
         # Reviews
         reviews = item.get("reviews", {}).get("results", [])
-        reviews_content = []
-        if len(reviews) > 0:
-            for review in reviews:
-                reviews_content.append(review['content'])
+        movie_reviews = []
+        for review in reviews:
+            movie_reviews.append({
+                "username": review['author_details'].get('username', ''),
+                "content": review.get('content', ''),
+                "rating": review['author_details'].get('rating', 0)
+            })
+
+        if movie_reviews:
+            reviews_map[movie_id] = movie_reviews
 
         # Budget
         budget = details.get("budget", 0)
@@ -99,12 +105,17 @@ def extract_features(meta_list, out_path, is_tv=False):
             "poster_path": poster_path,
             "backdrop_path": backdrop_path,
             "videos": videos,
-            "review": reviews_content
         }
         features.append(record)
 
+    # Save feature
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(features, f, ensure_ascii=False, indent=2)
+
+    # Save review
+    # Save reviews
+    with open(review_out_path, "w", encoding="utf-8") as f:
+        json.dump(reviews_map, f, ensure_ascii=False, indent=2)
 
 def main():
     # Load raw metadata
@@ -114,8 +125,8 @@ def main():
         tv_meta = json.load(f)
 
     # Extract and save
-    extract_features(movies_meta, RAW_DIR / "movies_features.json")
-    extract_features(tv_meta, RAW_DIR / "tv_features.json")
+    extract_features(movies_meta, RAW_DIR / "movies_features.json", RAW_DIR / "movies_reviews.json")
+    extract_features(tv_meta, RAW_DIR / "tv_features.json", RAW_DIR / "tv_reviews.json")
 
 if __name__ == "__main__":
     main()
