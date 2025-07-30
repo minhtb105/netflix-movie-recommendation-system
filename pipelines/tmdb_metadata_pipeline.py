@@ -17,7 +17,7 @@ RAW_DIR.mkdir(parents=True, exist_ok=True)
 FEATURE_DIR.mkdir(parents=True, exist_ok=True)
 
 
-async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 500):
+async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 200):
     movie_ids = set()
     for func in [mv_service.fetch_popular, mv_service.fetch_top_rated, mv_service.fetch_upcoming]:
         for page in range(1, max_pages + 1):
@@ -53,7 +53,7 @@ async def fetch_movie_metadata(mv_service: MovieService, movie_ids: list[int],
     return all_meta
 
 
-async def fetch_tv_ids(tv_service: TVService, max_pages: int = 500):
+async def fetch_tv_ids(tv_service: TVService, max_pages: int = 200):
     tv_ids = set()
     for func in [tv_service.fetch_popular_tv, tv_service.fetch_top_rated_tv]:
         for page in range(1, max_pages + 1):
