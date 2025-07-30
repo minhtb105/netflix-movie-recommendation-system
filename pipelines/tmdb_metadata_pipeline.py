@@ -7,7 +7,7 @@ if str(project_root) not in sys.path:
 
 import json
 import asyncio
-from utils.downloader import async_batch_download_images
+from utils.downloader import async_batch_download_images, download_cast_images 
 from services.movie_api import MovieService
 from services.tv_api import TVService
 
@@ -97,6 +97,7 @@ async def main():
     movies_meta = await fetch_movie_metadata(mv_service, movie_ids)
 
     movie_image_infos = []
+    movie_cast_list = []
     for r in movies_meta:
         if r.get("details"):
             if r["details"].get("poster_path"):
@@ -110,13 +111,25 @@ async def main():
                     "image_path": r["details"]["backdrop_path"],
                     "movie_id": r["id"],
                     "img_type": "backdrop"
-                })
+                })  
+            
+            casts_info = r['details'].get("credits", {}).get("cast", [])
+            for c in casts_info:
+                character = (c.get("character") or c.get("roles", [{}])[0].get("character") or "").lower()
+                if "uncredited" not in character and "voice" not in character:
+                    movie_cast_list.append({
+                        "name": c.get("name"),
+                        "profile_path": c.get("profile_path", ""),
+                    })
+                
     await async_batch_download_images(movie_image_infos, "app/static/images/movie")
+    await download_cast_images(movie_cast_list)
 
     tv_ids = await fetch_tv_ids(tv_service)
     tv_meta = await fetch_tv_metadata(tv_service, tv_ids)
 
     tv_image_infos = []
+    tv_cast_list = []
     for r in tv_meta:
         if r.get("details"):
             if r["details"].get("poster_path"):
@@ -131,7 +144,18 @@ async def main():
                     "movie_id": r["id"],
                     "img_type": "backdrop"
                 })
+                
+            casts_info = r['details'].get("aggregate_credits", {}).get("cast", [])
+            for c in casts_info:
+                character = (c.get("character") or c.get("roles", [{}])[0].get("character") or "").lower()
+                if "uncredited" not in character and "voice" not in character:
+                    tv_cast_list.append({
+                        "name": c.get("name"),
+                        "profile_path": c.get("profile_path", ""),
+                    })
+                    
     await async_batch_download_images(tv_image_infos, "app/static/images/tv")
+    await download_cast_images(tv_cast_list)
 
     await mv_service.close()
     await tv_service.close()
