@@ -9,12 +9,15 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
     for item in meta_list:
         details = item.get("details", item)
         
+        # Id
+        id = item.get("id")
+        
         # Title
         title = details.get("title") or details.get("name")
         
         # Genres
         genre_ids = details.get("genres", []) or details.get("genre_ids", [])
-        genres = [g["id"] for g in genre_ids]
+        genres = [g["name"] for g in genre_ids]
 
         # Keywords
         keywords = [kw.get("name") for kw in details.get("keywords", {}).get("results" if is_tv else "keywords", [])]
@@ -31,7 +34,7 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
                 if "uncredited" not in character and "voice" not in character:
                     cast.append({
                         "name": c.get("name"),
-                        "character": character
+                        "character": character,
                     })
 
             crew = " ".join([c.get("name") for c in credits.get("crew", [])])
@@ -113,7 +116,6 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
         json.dump(features, f, ensure_ascii=False, indent=2)
 
     # Save review
-    # Save reviews
     with open(review_out_path, "w", encoding="utf-8") as f:
         json.dump(reviews_map, f, ensure_ascii=False, indent=2)
 
