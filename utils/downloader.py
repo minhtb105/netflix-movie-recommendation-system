@@ -20,7 +20,7 @@ common_headers = {
 
 async def _url_exists(client: httpx.AsyncClient, url: str) -> bool:
     try: 
-        resp = client.head(url, timeout=TIME_OUT)
+        resp = await client.get(url, timeout=TIME_OUT, headers=common_headers)
         
         return resp.status_code == 200
     except Exception:
