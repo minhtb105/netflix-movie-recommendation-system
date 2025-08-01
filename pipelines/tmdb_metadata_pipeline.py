@@ -17,7 +17,7 @@ RAW_DIR.mkdir(parents=True, exist_ok=True)
 FEATURE_DIR.mkdir(parents=True, exist_ok=True)
 
 
-async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 100):
+async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 50):
     movie_ids = set()
     for func in [mv_service.fetch_popular, mv_service.fetch_top_rated, mv_service.fetch_upcoming]:
         for page in range(1, max_pages + 1):
@@ -53,7 +53,7 @@ async def fetch_movie_metadata(mv_service: MovieService, movie_ids: list[int],
     return all_meta
 
 
-async def fetch_tv_ids(tv_service: TVService, max_pages: int = 100):
+async def fetch_tv_ids(tv_service: TVService, max_pages: int = 50):
     tv_ids = set()
     for func in [tv_service.fetch_popular_tv, tv_service.fetch_top_rated_tv]:
         for page in range(1, max_pages + 1):
@@ -104,25 +104,18 @@ async def main():
                 movie_image_infos.append({
                     "image_path": r["details"]["poster_path"],
                     "movie_id": r["id"],
-                    "img_type": "poster"
                 })
-            if r["details"].get("backdrop_path"):
-                movie_image_infos.append({
-                    "image_path": r["details"]["backdrop_path"],
-                    "movie_id": r["id"],
-                    "img_type": "backdrop"
-                })  
-            
+             
             casts_info = r['details'].get("credits", {}).get("cast", [])
             for c in casts_info:
                 character = (c.get("character") or c.get("roles", [{}])[0].get("character") or "").lower()
                 if "uncredited" not in character and "voice" not in character:
                     movie_cast_list.append({
-                        "name": c.get("name"),
+                        "id": c.get("id"),
                         "profile_path": c.get("profile_path", ""),
                     })
                 
-    await async_batch_download_images(movie_image_infos, "app/static/images/movie")
+    await async_batch_download_images(movie_image_infos, save_dir="app/static/images/movie")
     await download_cast_images(movie_cast_list)
 
     tv_ids = await fetch_tv_ids(tv_service)
@@ -136,13 +129,6 @@ async def main():
                 tv_image_infos.append({
                     "image_path": r["details"]["poster_path"],
                     "movie_id": r["id"],
-                    "img_type": "poster"
-                })
-            if r["details"].get("backdrop_path"):
-                tv_image_infos.append({
-                    "image_path": r["details"]["backdrop_path"],
-                    "movie_id": r["id"],
-                    "img_type": "backdrop"
                 })
                 
             casts_info = r['details'].get("aggregate_credits", {}).get("cast", [])
@@ -150,11 +136,11 @@ async def main():
                 character = (c.get("character") or c.get("roles", [{}])[0].get("character") or "").lower()
                 if "uncredited" not in character and "voice" not in character:
                     tv_cast_list.append({
-                        "name": c.get("name"),
+                        "id": c.get("id"),
                         "profile_path": c.get("profile_path", ""),
                     })
                     
-    await async_batch_download_images(tv_image_infos, "app/static/images/tv")
+    await async_batch_download_images(tv_image_infos, save_dir="app/static/images/tv")
     await download_cast_images(tv_cast_list)
 
     await mv_service.close()
