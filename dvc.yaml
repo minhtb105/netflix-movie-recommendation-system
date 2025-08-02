@@ -8,9 +8,7 @@ stages:
       - services/tv_api.py
       - src/base_client.py
     outs:
-      - data/raw/movie_ids.json
       - data/raw/movies_metadata.json
-      - data/raw/tv_ids.json
       - data/raw/tv_metadata.json
 
   extract_tmdb_features:
