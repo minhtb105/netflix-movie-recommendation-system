@@ -56,7 +56,7 @@ async def download_image(
                 async with aiofiles.open(save_path, 'wb') as f:
                     async for chunk in response.aiter_bytes():
                         await f.write(chunk)
-                logging.info(f"Downloaded image: {save_path}")
+                logging.debug(f"Saving image as {save_path} (from {image_path}, movie_id={movie_id})")
             else:
                 logging.warning(f"[Attempt {attempt}] Failed to download {url}: {response.status_code}")
             return
@@ -112,7 +112,7 @@ async def download_cast_image(client: httpx.AsyncClient, cast: dict, save_dir: s
         movie_id=str(id),
     )
         
-async def download_cast_images_batch(cast_lists: List[List[dict]], save_dir: str = "app/static/images/cast"):
+async def download_cast_images_batch(cast_lists: List[dict], save_dir: str = "app/static/images/cast"):
     os.makedirs(save_dir, exist_ok=True)
     transport = httpx.AsyncHTTPTransport(retries=2)
     
