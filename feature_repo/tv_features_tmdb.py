@@ -1,6 +1,6 @@
 from feast import Entity, FeatureView, Field, FeatureStore, FileSource, FeatureStore
 from feast import ValueType
-from feast.types import Float32, Array, Int32, String
+from feast.types import Float32, Array, Int32, String, Int64
 import os
 
 
@@ -26,10 +26,10 @@ tv_features_view = FeatureView(
     source=tv_source
 )
 
-os.makedirs("store_2664", exist_ok=True)
-store_path = os.path.join(os.path.dirname(__file__), "store_2664")
-fs_2664 = FeatureStore(repo_path=store_path)
-fs_2664.apply([series_id, tv_features_view])
+os.makedirs("store_2013", exist_ok=True)
+store_path = os.path.join(os.path.dirname(__file__), "store_2013")
+fs_2013 = FeatureStore(repo_path=store_path)
+fs_2013.apply([series_id, tv_features_view])
 
 review_source = FileSource(
     path=os.path.join(os.path.dirname(__file__), "data/tv_tmdb/tv_reviews_train.parquet"),
@@ -44,15 +44,15 @@ tv_reviews_view = FeatureView(
     entities=[review_id],
     ttl=None,
     schema=[
-        Field(name="user", dtype=String),
+        Field(name="username", dtype=String),
         Field(name="content_vectorize", dtype=Array(Float32)),
-        Field(name="rating", dtype=String)
+        Field(name="rating", dtype=Int64)
     ],
     online=True,
     source=review_source
 )
 
-os.makedirs("store_768", exist_ok=True)
-store_path = os.path.join(os.path.dirname(__file__), "store_768")
-fs_768 = FeatureStore(repo_path=store_path)
-fs_768.apply([review_id, tv_reviews_view])
+os.makedirs("store_384", exist_ok=True)
+store_path = os.path.join(os.path.dirname(__file__), "store_384")
+fs_384 = FeatureStore(repo_path=store_path)
+fs_384.apply([review_id, tv_reviews_view])
