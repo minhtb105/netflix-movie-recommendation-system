@@ -61,7 +61,7 @@ def process_tv_pipeline():
     review_df, _ = vectorize_text(
         review_df, 
         column='content',
-        output_col='review_vectorize',
+        output_col='content_vectorize',
         strategy=BERTVectorizeStrategy()
     )
    
@@ -69,7 +69,7 @@ def process_tv_pipeline():
     df = combine_features(df, vector_cols=df.columns, keep_cols=keep_cols)
     if "event_timestamp" not in df.columns:
         df["event_timestamp"] = datetime.now(UTC)
-        df_review["event_timestamp"] = datetime.now(UTC)
+        review_df["event_timestamp"] = datetime.now(UTC)
    
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)

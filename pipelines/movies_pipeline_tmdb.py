@@ -42,7 +42,7 @@ def process_movies_pipeline():
     
     multi_lable_enc_cols = params['multi_lable_enc_cols']
     df, _ = multi_label_encode_df(df, columns=multi_lable_enc_cols)
-    
+   
     review_df = pd.read_json(params['review_path'])
     review_df, _ = vectorize_text(
         review_df, 
@@ -55,9 +55,9 @@ def process_movies_pipeline():
     df = combine_features(df, vector_cols=df.columns, keep_cols=keep_cols)
     if "event_timestamp" not in df.columns:
         df["event_timestamp"] = datetime.now(UTC)
-        df_review["event_timestamp"] = datetime.now(UTC)
+        review_df["event_timestamp"] = datetime.now(UTC)
     
-   
+    
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)
     df.to_parquet(f"{output_dir}/movie_features_train.parquet", index=False)
