@@ -17,7 +17,7 @@ RAW_DIR.mkdir(parents=True, exist_ok=True)
 FEATURE_DIR.mkdir(parents=True, exist_ok=True)
 
 
-async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 300):
+async def fetch_movie_ids(mv_service: MovieService, max_pages: int = 6):
     movie_ids = set()
     for func in [mv_service.fetch_popular, mv_service.fetch_top_rated, mv_service.fetch_upcoming]:
         for page in range(1, max_pages + 1):
@@ -53,7 +53,7 @@ async def fetch_movie_metadata(mv_service: MovieService, movie_ids: list[int],
     return all_meta
 
 
-async def fetch_tv_ids(tv_service: TVService, max_pages: int = 300):
+async def fetch_tv_ids(tv_service: TVService, max_pages: int = 6):
     tv_ids = set()
     for func in [tv_service.fetch_popular_tv, tv_service.fetch_top_rated_tv]:
         for page in range(1, max_pages + 1):
@@ -113,10 +113,12 @@ async def main():
                     movie_cast_list.append({
                         "id": c.get("id"),
                         "profile_path": c.get("profile_path", ""),
+                        "porpularity": c.get("popularity", 0),
                     })
-                
+    sorted_movie_cast_list = sorted(movie_cast_list, key=lambda x: x["porpularity"], reverse=True)[:3]
+    
     await async_batch_download_images(movie_image_infos, save_dir="app/static/images/movie")
-    await download_cast_images_batch(movie_cast_list)
+    await download_cast_images_batch(sorted_movie_cast_list)
 
     tv_ids = await fetch_tv_ids(tv_service)
     tv_meta = await fetch_tv_metadata(tv_service, tv_ids)
@@ -138,10 +140,12 @@ async def main():
                     tv_cast_list.append({
                         "id": c.get("id"),
                         "profile_path": c.get("profile_path", ""),
+                        "porpularity": c.get("popularity", 0),
                     })
-                    
+    sorted_tv_cast_list = sorted(tv_cast_list, key=lambda x: x["porpularity"], reverse=True)[:3]
+    
     await async_batch_download_images(tv_image_infos, save_dir="app/static/images/tv")
-    await download_cast_images_batch(tv_cast_list)
+    await download_cast_images_batch(sorted_tv_cast_list)
 
     await mv_service.close()
     await tv_service.close()
