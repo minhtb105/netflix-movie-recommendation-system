@@ -10,6 +10,9 @@ stages:
     outs:
       - data/raw/movies_metadata.json
       - data/raw/tv_metadata.json
+      - app/static/images/movie
+      - app/static/images/tv
+      - app/static/images/cast
 
   extract_tmdb_features:
     cmd: python steps/extract_tmdb_features.py
