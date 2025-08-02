@@ -99,7 +99,7 @@ stages:
       - pipelines/training_pipeline.py
       - steps/train_model.py
       - src/model_dev.py
-      - steps/fetch_features.py
+      - steps/get_historical_features.py
       - model/user_item_matrix.pkl
 
   item_based_cf:
@@ -108,7 +108,7 @@ stages:
       - pipelines/training_pipeline.py
       - steps/train_model.py
       - src/model_dev.py
-      - steps/fetch_features.py
+      - steps/get_historical_features.py
       - model/user_item_matrix.pkl
   
   process_movies_tmdb:
