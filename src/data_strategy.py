@@ -5,7 +5,7 @@ from typing import Union, List, Optional, Tuple
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, MultiLabelBinarizer
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.feature_extraction.text import 
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sentence_transformers import SentenceTransformer
 import logging
 
