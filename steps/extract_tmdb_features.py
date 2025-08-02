@@ -5,7 +5,6 @@ RAW_DIR = Path("data/raw")
 
 def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool=False):
     features = []
-    reviews_map = {}
     for item in meta_list:
         details = item.get("details", item)
         
@@ -56,13 +55,12 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
         movie_reviews = []
         for review in reviews:
             movie_reviews.append({
+                "id": id,
                 "username": review['author_details'].get('username', ''),
                 "content": review.get('content', ''),
                 "rating": review['author_details'].get('rating', 0)
             })
 
-        if movie_reviews:
-            reviews_map[movie_id] = movie_reviews
 
         # Budget
         budget = details.get("budget", 0)
@@ -117,7 +115,7 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
 
     # Save review
     with open(review_out_path, "w", encoding="utf-8") as f:
-        json.dump(reviews_map, f, ensure_ascii=False, indent=2)
+        json.dump(movie_reviews, f, ensure_ascii=False, indent=2)
 
 def main():
     # Load raw metadata
