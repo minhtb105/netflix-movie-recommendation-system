@@ -88,7 +88,7 @@ stages:
     cmd: python -c "from pipelines.training_pipeline import save_user_item_matrix; save_user_item_matrix()"
     deps:
       - pipelines/training_pipeline.py
-      - steps/fetch_features.py
+      - steps/get_historical_features.py
       - src/model_dev.py
     outs:
       - model/user_item_matrix.pkl

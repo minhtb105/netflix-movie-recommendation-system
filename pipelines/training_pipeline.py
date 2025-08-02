@@ -12,7 +12,7 @@ from src.model_dev import (
     UserCFPyfuncModel, ItemCFPyfuncModel, ContentFPyfuncModel,
     compute_user_item_matrix
 )
-from steps.fetch_features import (
+from steps.get_historical_features import (
     get_user_features_df,
     get_movie_features_df,
     get_rating_features_df,
