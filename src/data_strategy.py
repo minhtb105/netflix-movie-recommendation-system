@@ -5,7 +5,8 @@ from typing import Union, List, Optional, Tuple
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, MultiLabelBinarizer
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import 
+from sentence_transformers import SentenceTransformer
 import logging
 
 
@@ -174,7 +175,6 @@ class BERTVectorizeStrategy(DataStrategy):
     """
     Strategy for vectorizing text columns using all-MiniLM-L6-v2 SentenceTransformer.
     """
-    from sentence_transformers import SentenceTransformer
     def __init__(self):
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
 
