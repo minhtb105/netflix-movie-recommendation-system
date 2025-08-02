@@ -14,6 +14,7 @@ MAX_CONCURRENT_DOWNLOADS = 5
 semaphore = asyncio.Semaphore(MAX_CONCURRENT_DOWNLOADS)
 common_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
                   "Referer": "https://www.themoviedb.org/"}
+downloaded_images_cache = set()
 
 async def download_image(
     client: httpx.AsyncClient,
@@ -29,6 +30,13 @@ async def download_image(
     url = f"{BASE_IMAGE_URL}{image_path}"
     file_name = f"{movie_id}.jpg"
     save_path = os.path.join(save_dir, file_name)
+    
+    # Check cache before downloading
+    cache_key = os.path.abspath(save_path)
+    if cache_key in downloaded_images_cache:
+        logging.debug(f"Image in cache, skipping: {save_path}")
+        return
+    
     if os.path.exists(save_path) and os.path.getsize(save_path) > 0:
         logging.debug(f"Image exists, skipping: {save_path}")
         return
