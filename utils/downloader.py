@@ -3,12 +3,14 @@ import logging
 import asyncio
 import httpx
 import re
+import aiofiles
 from typing import List
+import time
 
 
-BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w500"
-TIME_OUT = int(os.getenv("TIME_OUT", 60))
-MAX_CONCURRENT_DOWNLOADS = 2
+BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w300"
+TIME_OUT = int(os.getenv("TIME_OUT", 30))
+MAX_CONCURRENT_DOWNLOADS = 5
 semaphore = asyncio.Semaphore(MAX_CONCURRENT_DOWNLOADS)
 common_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
                   "Referer": "https://www.themoviedb.org/"}
@@ -27,16 +29,25 @@ async def download_image(
     url = f"{BASE_IMAGE_URL}{image_path}"
     file_name = f"{movie_id}.jpg"
     save_path = os.path.join(save_dir, file_name)
+    if os.path.exists(save_path) and os.path.getsize(save_path) > 0:
+        logging.debug(f"Image exists, skipping: {save_path}")
+        return
 
     for attempt in range(1, retries + 1):
         async with semaphore:
             logging.debug(f"[Attempt {attempt}] Downloading: {url}")
-            response = await client.get(url, timeout=TIME_OUT)
+            start = time.time()
+            response = await client.stream("GET", url, timeout=TIME_OUT)
+            elapsed = time.time() - start
+            if elapsed > 5:
+                logging.warning(f"Slow response for image {image_path}: {elapsed:.2f}s")
+                
             logging.debug(f"Status: {response.status_code}, headers: {response.headers}")
 
             if response.status_code == 200:
-                with open(save_path, 'wb') as f:
-                    f.write(response.content)
+                async with aiofiles.open(save_path, 'wb') as f:
+                    async for chunk in response.aiter_bytes():
+                        await f.write(chunk)
                 logging.info(f"Downloaded image: {save_path}")
             else:
                 logging.warning(f"[Attempt {attempt}] Failed to download {url}: {response.status_code}")
@@ -58,11 +69,13 @@ async def async_batch_download_images(image_infos: List[dict], save_dir: str):
         save_dir (str): Local directory to save images.
     """
     os.makedirs(save_dir, exist_ok=True)
-
+    transport = httpx.AsyncHTTPTransport(retries=2)
+    
     async with httpx.AsyncClient(
         headers=common_headers,
         timeout=httpx.Timeout(TIME_OUT),
-        limits=httpx.Limits(max_connections=MAX_CONCURRENT_DOWNLOADS)
+        limits=httpx.Limits(max_connections=MAX_CONCURRENT_DOWNLOADS),
+        transport=transport
     ) as client:
         tasks = [
             download_image(
@@ -75,39 +88,37 @@ async def async_batch_download_images(image_infos: List[dict], save_dir: str):
         ]
         await asyncio.gather(*tasks)
         
-        
-async def download_cast_images(cast_list: List[dict], save_dir: str = "app/static/images/cast"):
-    """
-    Download profile images of cast members.
-
-    Args:
-        cast_list (List[dict]): Each dict must include:
-            - name (str): Actor's name (used for filename)
-            - profile_path (str): Image path from TMDB
-        save_dir (str): Directory to save images.
-    """
+      
+async def download_cast_image(client: httpx.AsyncClient, cast: dict, save_dir: str = "app/static/images/cast"):
     os.makedirs(save_dir, exist_ok=True)
+    profile_path = cast.get("profile_path")
+    id = cast.get("id")
 
+    if not profile_path or not id:
+        return
+
+    await download_image(
+        client=client,
+        image_path=profile_path,
+        save_dir=save_dir,
+        movie_id=str(id),
+    )
+        
+async def download_cast_images_batch(cast_lists: List[List[dict]], save_dir: str = "app/static/images/cast"):
+    os.makedirs(save_dir, exist_ok=True)
+    transport = httpx.AsyncHTTPTransport(retries=2)
+    
     async with httpx.AsyncClient(
+        http2=True,
         headers=common_headers,
         timeout=httpx.Timeout(TIME_OUT),
-        limits=httpx.Limits(max_connections=MAX_CONCURRENT_DOWNLOADS)
+        limits=httpx.Limits(max_connections=MAX_CONCURRENT_DOWNLOADS),
+        transport=transport
     ) as client:
+
         tasks = []
-
-        for cast in cast_list:
-            profile_path = cast.get("profile_path")
-            id = cast.get("id")
-
-            if not profile_path or not id:
-                continue  
-
-            task = download_image(
-                client,
-                image_path=profile_path,
-                save_dir=save_dir,
-                movie_id=id,
-            )
-            tasks.append(task)
+        for cast in cast_lists:
+            tasks.append(download_cast_image(client, cast, save_dir))
 
         await asyncio.gather(*tasks)
+        
