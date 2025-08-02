@@ -20,50 +20,51 @@ async def download_image(
     client: httpx.AsyncClient,
     image_path: str,
     save_dir: str,
-    movie_id: str = None,
+    id: int,
     retries: int = 2
 ):
     if not image_path:
         logging.warning("Empty image path, skipping.")
         return
 
+    if not id:
+        logging.warning("No id provided, skipping.")
+        return
+
     url = f"{BASE_IMAGE_URL}{image_path}"
-    file_name = f"{movie_id}.jpg"
+    file_name = f"{id}.jpg"
     save_path = os.path.join(save_dir, file_name)
-    
-    # Check cache before downloading
+
     cache_key = os.path.abspath(save_path)
     if cache_key in downloaded_images_cache:
         logging.debug(f"Image in cache, skipping: {save_path}")
         return
-    
+
     if os.path.exists(save_path) and os.path.getsize(save_path) > 0:
         logging.debug(f"Image exists, skipping: {save_path}")
+        downloaded_images_cache.add(cache_key) 
         return
 
     for attempt in range(1, retries + 1):
         async with semaphore:
-            logging.debug(f"[Attempt {attempt}] Downloading: {url}")
-            start = time.time()
-            response = await client.stream("GET", url, timeout=TIME_OUT)
-            elapsed = time.time() - start
-            if elapsed > 5:
-                logging.warning(f"Slow response for image {image_path}: {elapsed:.2f}s")
-                
-            logging.debug(f"Status: {response.status_code}, headers: {response.headers}")
-
-            if response.status_code == 200:
-                async with aiofiles.open(save_path, 'wb') as f:
-                    async for chunk in response.aiter_bytes():
-                        await f.write(chunk)
-                logging.debug(f"Saving image as {save_path} (from {image_path}, movie_id={movie_id})")
-            else:
-                logging.warning(f"[Attempt {attempt}] Failed to download {url}: {response.status_code}")
-            return
+            try:
+                async with client.stream("GET", url, timeout=TIME_OUT) as response:
+                    if response.status_code == 200:
+                        async with aiofiles.open(save_path, 'wb') as f:
+                            async for chunk in response.aiter_bytes():
+                                await f.write(chunk)
+                        logging.debug(f"Saving image as {save_path} (from {image_path}, id={id})")
+                        downloaded_images_cache.add(cache_key)
+                        return 
+                    else:
+                        logging.warning(f"[Attempt {attempt}] Failed to download {url}: {response.status_code}")
+            except Exception as e:
+                logging.error(f"[Attempt {attempt}] Exception while downloading {url}: {e}")
         
         await asyncio.sleep(2 ** attempt)  # exponential backoff
 
     logging.error(f"Failed after {retries} attempts: {url}")
+
 
 async def async_batch_download_images(image_infos: List[dict], save_dir: str):
     """
@@ -90,7 +91,7 @@ async def async_batch_download_images(image_infos: List[dict], save_dir: str):
                 client,
                 info.get("image_path"),
                 save_dir,
-                movie_id=info.get("movie_id"),
+                id=info.get("movie_id"),
             )
             for info in image_infos if info.get("image_path")
         ]
@@ -109,7 +110,7 @@ async def download_cast_image(client: httpx.AsyncClient, cast: dict, save_dir: s
         client=client,
         image_path=profile_path,
         save_dir=save_dir,
-        movie_id=str(id),
+        id=str(id),
     )
         
 async def download_cast_images_batch(cast_lists: List[dict], save_dir: str = "app/static/images/cast"):
