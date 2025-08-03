@@ -143,7 +143,7 @@ async def main():
                     filtered_casts.append({
                         "id": c.get("id"),
                         "profile_path": c.get("profile_path", ""),
-                        "porpularity": c.get("popularity", 0),
+                        "popularity": c.get("popularity", 0),
                     })
                     
             sorted_casts = sorted(filtered_casts, key=lambda x: x["popularity"], reverse=True)[:3]
