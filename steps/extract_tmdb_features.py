@@ -1,4 +1,4 @@
-import 
+import json
 from collections import defaultdict
 from pathlib import Path
 
@@ -143,7 +143,7 @@ def main():
 
     # Extract and save
     extract_features(movies_meta, RAW_DIR / "movies_features.json", RAW_DIR / "movies_reviews.json")
-    extract_features(tv_meta, RAW_DIR / "tv_features.json", RAW_DIR / "tv_reviews.json")
+    extract_features(tv_meta, RAW_DIR / "tv_features.json", RAW_DIR / "tv_reviews.json", is_tv=True)
 
 if __name__ == "__main__":
     main()

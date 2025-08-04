@@ -274,9 +274,13 @@ stages:
       size: 667701166
     - path: steps/extract_tmdb_features.py
       hash: md5
-      md5: d9da5aa4d63d58f304841e43207e691d
-      size: 4625
+      md5: 4753cff22a47a0040f61256dbb61ea23
+      size: 5105
     outs:
+    - path: data/raw/movie_cast_metadata.json
+      hash: md5
+      md5: 6ca6de9112dc6ef4f32d08dfb319d93d
+      size: 2287225
     - path: data/raw/movies_features.json
       hash: md5
       md5: 407ed46f40a7de29c2a38a43f9f908db
@@ -285,10 +289,14 @@ stages:
       hash: md5
       md5: d751713988987e9331980363e24189ce
       size: 2
+    - path: data/raw/tv_cast_metadata.json
+      hash: md5
+      md5: 2f6f03364a53ca8fb3324919df868a5c
+      size: 1618166
     - path: data/raw/tv_features.json
       hash: md5
-      md5: 31100ea23e14c3f4b12951b88f518873
-      size: 10281064
+      md5: 1778cb68497a748d692e6339770a3b80
+      size: 10608811
     - path: data/raw/tv_reviews.json
       hash: md5
       md5: d751713988987e9331980363e24189ce
