@@ -12,9 +12,9 @@ feature_repo/online_store.db
 feature_repo/.feast
 feature_repo/data/
 feature_repo/store_1000/
-feature_repo/store_2664/
-feature_repo/store_3688/
-feature_repo/store_768/
+feature_repo/store_2047/
+feature_repo/store_2013/
+feature_repo/store_384/
 .vscode
 steps/*.pyc
 steps/__pycache__
