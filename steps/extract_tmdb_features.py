@@ -1,12 +1,11 @@
 import json
-from collections import defaultdict
 from pathlib import Path
 
 RAW_DIR = Path("data/raw")
 
 def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool=False):
     features = []
-    all_cast = defaultdict(list)
+    all_cast = []
     for item in meta_list:
         details = item.get("details", item)
         
@@ -34,7 +33,8 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
                 character = (c.get("character") or c.get("roles", [{}])[0].get("character") or "").lower()
                 if "uncredited" not in character and "voice" not in character:
                     cast.append({
-                        "id": c.get("id"),
+                        "id": id,
+                        "cast_id": c.get("id"),
                         "name": c.get("name"),
                         "character": character,
                         "popularity": c.get("popularity", 0),
@@ -42,7 +42,7 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
 
             crew = " ".join([c.get("name") for c in credits.get("crew", [])])
         sorted_cast_list = sorted(cast, key=lambda x: x["popularity"], reverse=True)[:3]
-        all_cast[id] = sorted_cast_list
+        all_cast.extend(sorted_cast_list)
         cast = [c["name"] for c in sorted_cast_list]
         
         # Poster & Backdrop
