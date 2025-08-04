@@ -25,6 +25,8 @@ stages:
       - data/raw/tv_features.json
       - data/raw/movies_reviews.json
       - data/raw/tv_reviews.json
+      - data/raw/movie_cast_metadata.json
+      - data/raw/tv_cast_metadata.json
 
   ingest:
     wdir: .

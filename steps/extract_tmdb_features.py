@@ -1,10 +1,12 @@
-import json
+import 
+from collections import defaultdict
 from pathlib import Path
 
 RAW_DIR = Path("data/raw")
 
 def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool=False):
     features = []
+    all_cast = defaultdict(list)
     for item in meta_list:
         details = item.get("details", item)
         
@@ -32,12 +34,17 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
                 character = (c.get("character") or c.get("roles", [{}])[0].get("character") or "").lower()
                 if "uncredited" not in character and "voice" not in character:
                     cast.append({
+                        "id": c.get("id"),
                         "name": c.get("name"),
                         "character": character,
+                        "popularity": c.get("popularity", 0),
                     })
 
             crew = " ".join([c.get("name") for c in credits.get("crew", [])])
-            
+        sorted_cast_list = sorted(cast, key=lambda x: x["popularity"], reverse=True)[:3]
+        all_cast[id] = sorted_cast_list
+        cast = [c["name"] for c in sorted_cast_list]
+        
         # Poster & Backdrop
         poster_path = details.get("poster_path")
         backdrop_path = details.get("backdrop_path")
@@ -116,6 +123,16 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
     # Save review
     with open(review_out_path, "w", encoding="utf-8") as f:
         json.dump(movie_reviews, f, ensure_ascii=False, indent=2)
+        
+    # Save cast metadata
+    if is_tv:
+        cast_out_path = f"{RAW_DIR}/tv_cast_metadata.json"
+    else:
+        cast_out_path = f"{RAW_DIR}/movie_cast_metadata.json"
+        
+    with open(cast_out_path, "w", encoding="utf-8") as f:
+        json.dump(all_cast, f, ensure_ascii=False, indent=2)
+
 
 def main():
     # Load raw metadata
