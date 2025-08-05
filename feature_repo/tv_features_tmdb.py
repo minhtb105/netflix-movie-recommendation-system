@@ -17,19 +17,20 @@ tv_features_view = FeatureView(
     entities=[series_id],
     ttl=None,
     schema=[
-        Field(name="feature_vector", dtype=Array(Float32)),
+        Field(name="feature_vector", dtype=Array(Float32), vector_index=True, vector_search_metric="COSINE"),
         Field(name="vote_average", dtype=Float32),
         Field(name="vote_count", dtype=Int32),
         Field(name="video_key", dtype=String)
     ],
     online=True,
-    source=tv_source
+    source=tv_source,
 )
 
 os.makedirs("store_2013", exist_ok=True)
 store_path = os.path.join(os.path.dirname(__file__), "store_2013")
 fs_2013 = FeatureStore(repo_path=store_path)
 fs_2013.apply([series_id, tv_features_view])
+
 
 review_source = FileSource(
     path=os.path.join(os.path.dirname(__file__), "data/tv_tmdb/tv_reviews_train.parquet"),
@@ -45,11 +46,11 @@ tv_reviews_view = FeatureView(
     ttl=None,
     schema=[
         Field(name="username", dtype=String),
-        Field(name="content_vectorize", dtype=Array(Float32)),
+        Field(name="content_vectorize", dtype=Array(Float32), vector_index=True, vector_search_metric="COSINE"),
         Field(name="rating", dtype=Int64)
     ],
     online=True,
-    source=review_source
+    source=review_source,
 )
 
 os.makedirs("store_384", exist_ok=True)

@@ -1,6 +1,6 @@
 from feast import Entity, FeatureView, Field, FileSource, FeatureStore
 from feast import ValueType
-from feast.types import Float64, Int32, Int64, Array
+from feast.types import Float64, Int32, Int64, Array, Float32
 import os
 
 
@@ -13,7 +13,7 @@ movie = Entity(name='movie_id',
               value_type=ValueType.INT64)
 
 movie_fv = FeatureView(
-    name="movie_features",
+    name="movie_features_movielens",
     entities=[movie],
     ttl=None,
     schema=[
@@ -42,10 +42,10 @@ movie_fv = FeatureView(
         Field(name='release_date_hour', dtype=Float64),
         Field(name='release_date_dayofweek', dtype=Float64),
         Field(name='release_date_is_weekend', dtype=Int32),
-        Field(name='title_tfidf', dtype=Array(Float64)),
+        Field(name='title_tfidf', dtype=Array(Float32), vector_index=True, vector_search_metric="COSINE"),
     ],
     online=True,
-    source=movie_source
+    source=movie_source,
 )
 
 os.makedirs("store_1000", exist_ok=True)

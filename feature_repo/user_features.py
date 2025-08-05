@@ -1,6 +1,7 @@
-from feast import Entity, FeatureView, Field, FileSource
+from feast import Entity, FeatureView, Field, FileSource, FeatureStore
 from feast import ValueType
 from feast.types import Int64, Float64, String
+import os
 
 
 user_source = FileSource(
@@ -44,3 +45,7 @@ user_fv = FeatureView(
     ],
     source=user_source
 )
+
+store_path = os.path.dirname(__file__)
+fs = FeatureStore(repo_path=store_path)
+fs.apply([user, user_fv])
