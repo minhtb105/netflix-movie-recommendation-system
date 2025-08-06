@@ -3,9 +3,9 @@ from feast import FeatureStore
 
 BASE_PATH = "feature_repo"
 fs_1000 = FeatureStore(repo_path=f"{BASE_PATH}/store_1000")
-fs_768 = FeatureStore(repo_path=f"{BASE_PATH}/store_768")
-fs_2664 = FeatureStore(repo_path=f"{BASE_PATH}/store_2664")
-fs_3688 = FeatureStore(repo_path=f"{BASE_PATH}/store_3688")
+fs_384 = FeatureStore(repo_path=f"{BASE_PATH}/store_384")
+fs_2013 = FeatureStore(repo_path=f"{BASE_PATH}/store_2013")
+fs_2047 = FeatureStore(repo_path=f"{BASE_PATH}/store_2047")
 
 def get_user_features_online(user_ids):
     entity_rows = [{"user_id": uid} for uid in user_ids]
@@ -98,7 +98,7 @@ def get_rating_features_online(user_ids, item_ids):
 
 def get_movie_features_tmdb_online(movie_ids):
     entity_rows = [{"id": mid} for mid in movie_ids]
-    movie_tmdb_df = fs_3688.get_online_features(
+    movie_tmdb_df = fs_2047.get_online_features(
         features=[
             "movie_features_tmdb:feature_vector",
             "movie_features_tmdb:vote_average",
@@ -112,7 +112,7 @@ def get_movie_features_tmdb_online(movie_ids):
 
 def get_movie_reviews_tmdb_online(movie_ids):
     entity_rows = [{"id": mid} for mid in movie_ids]
-    movie_reviews_tmdb_df = fs_768.get_online_features(
+    movie_reviews_tmdb_df = fs_384.get_online_features(
         features=[
             "movie_reviews_tmdb:review_vectorize",
         ],
@@ -123,7 +123,7 @@ def get_movie_reviews_tmdb_online(movie_ids):
 
 def get_tv_features_tmdb_online(tv_ids):
     entity_rows = [{"id": tid} for tid in tv_ids]
-    tv_tmdb_df = fs_2664.get_online_features(
+    tv_tmdb_df = fs_2013.get_online_features(
         features=[
             "tv_features_tmdb:feature_vector",
             "tv_features_tmdb:vote_average",
@@ -137,7 +137,7 @@ def get_tv_features_tmdb_online(tv_ids):
 
 def get_tv_reviews_tmdb_online(tv_ids):
     entity_rows = [{"id": tid} for tid in tv_ids]
-    tv_reviews_tmdb_df = fs_768.get_online_features(
+    tv_reviews_tmdb_df = fs_384.get_online_features(
         features=[
             "tv_reviews_tmdb:review_vectorize",
         ],
