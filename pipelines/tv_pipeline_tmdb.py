@@ -17,8 +17,10 @@ import yaml
 from datetime import datetime, UTC 
 
 
-def process_tv_pipeline():
-    params = yaml.safe_load(open("params.yaml"))["process_tv_tmdb"]
+def process_tv_pipeline(params: dict = None):
+    if params is None:
+        params = yaml.safe_load(open("params.yaml"))["process_tv_tmdb"]
+        
     df = pd.read_json(params['file_path'])
     
     df["video_key"] = df["videos"].apply(lambda vids: vids[0]["key"] if isinstance(vids, list) and len(vids) > 0 else "unknown")
@@ -73,8 +75,9 @@ def process_tv_pipeline():
    
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(f"{output_dir}/tv_features_train.parquet", index=False)
-    review_df.to_parquet(f"{output_dir}/tv_reviews_train.parquet", index=False)
+    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S")
+    df.to_parquet(f"{output_dir}/tv_features_{timestamp}.parquet", index=False)
+    review_df.to_parquet(f"{output_dir}/tv_reviews_{timestamp}.parquet", index=False)
 
 
 def combine_features(df: pd.DataFrame, vector_cols: list[str], keep_cols: list[str]) -> pd.DataFrame:

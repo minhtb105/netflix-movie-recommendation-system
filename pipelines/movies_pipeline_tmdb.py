@@ -17,8 +17,10 @@ import yaml
 from datetime import datetime, UTC 
 
 
-def process_movies_pipeline():
-    params = yaml.safe_load(open("params.yaml"))["process_movies_tmdb"]
+def process_movies_pipeline(params: dict = None):
+    if params is None:
+        params = yaml.safe_load(open("params.yaml"))["process_movies_tmdb"]
+        
     df = pd.read_json(params['file_path'])
     
     df["video_key"] = df["videos"].apply(lambda vids: vids[0]["key"] if isinstance(vids, list) and len(vids) > 0 else "unknown")
@@ -56,12 +58,13 @@ def process_movies_pipeline():
     if "event_timestamp" not in df.columns:
         df["event_timestamp"] = datetime.now(UTC)
         review_df["event_timestamp"] = datetime.now(UTC)
-    
+        
     
     output_dir = Path(params['out_dir'])
     output_dir.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(f"{output_dir}/movie_features_train.parquet", index=False)
-    review_df.to_parquet(f"{output_dir}/movie_reviews_train.parquet", index=False)
+    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S")
+    df.to_parquet(f"{output_dir}/movie_features_{timestamp}.parquet", index=False)
+    review_df.to_parquet(f"{output_dir}/movie_reviews_{timestamp}.parquet", index=False)
 
 
 def combine_features(df: pd.DataFrame, vector_cols: list[str], keep_cols: list[str]) -> pd.DataFrame:

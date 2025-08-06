@@ -5,7 +5,7 @@ import os
 
 
 tv_source = FileSource(
-    path=os.path.join(os.path.dirname(__file__), "data/tv_tmdb/tv_features_train.parquet"),
+    path=os.path.join(os.path.dirname(__file__), "data/tv_tmdb/tv_features_*.parquet"),
     event_timestamp_column='event_timestamp')
 
 series_id = Entity(name='id', 
@@ -29,11 +29,10 @@ tv_features_view = FeatureView(
 os.makedirs("store_2013", exist_ok=True)
 store_path = os.path.join(os.path.dirname(__file__), "store_2013")
 fs_2013 = FeatureStore(repo_path=store_path)
-fs_2013.apply([series_id, tv_features_view])
 
 
 review_source = FileSource(
-    path=os.path.join(os.path.dirname(__file__), "data/tv_tmdb/tv_reviews_train.parquet"),
+    path=os.path.join(os.path.dirname(__file__), "data/tv_tmdb/tv_reviews_*.parquet"),
     event_timestamp_column='event_timestamp')
 
 review_id = Entity(name='id', 
@@ -56,4 +55,7 @@ tv_reviews_view = FeatureView(
 os.makedirs("store_384", exist_ok=True)
 store_path = os.path.join(os.path.dirname(__file__), "store_384")
 fs_384 = FeatureStore(repo_path=store_path)
-fs_384.apply([review_id, tv_reviews_view])
+
+if __name__ == "__main__":
+    fs_2013.apply([series_id, tv_features_view])
+    fs_384.apply([review_id, tv_reviews_view])
