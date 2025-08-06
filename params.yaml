@@ -107,4 +107,91 @@ process_tv_tmdb:
     - "revenue"
     - "popularity"
   out_dir: "feature_repo/data/tv_tmdb"
-  
+
+
+process_trending_movie_tmdb:
+  file_path: "data/raw/trending_movie_features.json"
+  review_path: "data/raw/trending_movie_reviews.json"
+  drop_cols:
+    - "poster_path"
+    - "backdrop_path"
+    - "videos"
+  keep_cols:
+    - "id"
+    - "title"
+    - "overview"
+    - "vote_average"
+    - "vote_count"
+    - "genres"
+    - "video_key"
+  vectorize_cols: 
+    - "title"
+    - "overview"
+    - "keywords"
+    - "cast"
+    - "crew"
+  output_cols:
+    - "title_vectorize"
+    - "overview_vectorize"
+    - "keywords_vectorize"
+    - "cast_vectorize"
+    - "crew_vectorize"
+  normalize_col:
+    - "vote_average"
+    - "runtime"
+  enc_cols:
+    - "original_language"
+    - "origin_country"
+    - "production_countries"
+  multi_lable_enc_cols:
+    - "genres"
+  log_transform_cols:
+    - "vote_count"
+    - "budget"
+    - "revenue"
+    - "popularity"
+  out_dir: "feature_repo/data/movies_tmdb"
+
+process_trending_tv_tmdb:
+  file_path: "data/raw/trending_tv_features.json"
+  review_path: "data/raw/trending_tv_reviews.json"
+  drop_cols:
+    - "poster_path"
+    - "backdrop_path"
+    - "videos"
+  keep_cols:
+    - "id"
+    - "title"
+    - "overview"
+    - "vote_average"
+    - "vote_count"
+    - "genres"
+    - "video_key"
+  vectorize_cols: 
+    - "title"
+    - "overview"
+    - "keywords"
+    - "cast"
+    - "crew"
+  output_cols:
+    - "title_vectorize"
+    - "overview_vectorize"
+    - "keywords_vectorize"
+    - "cast_vectorize"
+    - "crew_vectorize"
+  normalize_col:
+    - "vote_average"
+    - "runtime"
+  enc_cols:
+    - "original_language"
+    - "origin_country"
+    - "production_countries"
+  multi_lable_enc_cols:
+    - "genres"
+  log_transform_cols:
+    - "vote_count"
+    - "budget"
+    - "revenue"
+    - "popularity"
+  out_dir: "feature_repo/data/tv_tmdb"
+ 
