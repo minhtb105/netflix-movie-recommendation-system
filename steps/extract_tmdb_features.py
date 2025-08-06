@@ -3,7 +3,7 @@ from pathlib import Path
 
 RAW_DIR = Path("data/raw")
 
-def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool=False):
+def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool=False, cast_out_path: str=None):
     features = []
     all_cast = []
     for item in meta_list:
@@ -125,10 +125,11 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
         json.dump(movie_reviews, f, ensure_ascii=False, indent=2)
         
     # Save cast metadata
-    if is_tv:
-        cast_out_path = f"{RAW_DIR}/tv_cast_metadata.json"
-    else:
-        cast_out_path = f"{RAW_DIR}/movie_cast_metadata.json"
+    if cast_out_path is None:
+        if is_tv:
+            cast_out_path = f"{RAW_DIR}/tv_cast_metadata.json"
+        else:
+            cast_out_path = f"{RAW_DIR}/movie_cast_metadata.json"
         
     with open(cast_out_path, "w", encoding="utf-8") as f:
         json.dump(all_cast, f, ensure_ascii=False, indent=2)
