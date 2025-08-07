@@ -28,7 +28,7 @@ process_movies_tmdb:
   drop_cols: 
     - "poster_path"
     - "backdrop_path"
-    - "videos"
+    - "video"
   keep_cols:
     - "id"
     - "tittle"
@@ -71,7 +71,7 @@ process_tv_tmdb:
   drop_cols:
     - "poster_path"
     - "backdrop_path"
-    - "videos"
+    - "video"
   keep_cols:
     - "id"
     - "title"
@@ -115,7 +115,7 @@ process_trending_movie_tmdb:
   drop_cols:
     - "poster_path"
     - "backdrop_path"
-    - "videos"
+    - "video"
   keep_cols:
     - "id"
     - "title"
@@ -158,7 +158,7 @@ process_trending_tv_tmdb:
   drop_cols:
     - "poster_path"
     - "backdrop_path"
-    - "videos"
+    - "video"
   keep_cols:
     - "id"
     - "title"
