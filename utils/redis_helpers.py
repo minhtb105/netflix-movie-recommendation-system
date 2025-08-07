@@ -12,9 +12,17 @@ def save_features_to_redis(file_path, prefix, redis_host="localhost", redis_port
         _id = item["id"]
         key = f"{prefix}:{_id}"
         pipe.set(key, json.dumps(item, ensure_ascii=False))
+        
     pipe.execute()
 
-    print(f"Saved {len(features)} items to Redis with prefix '{prefix}'")
+
+def get_item_from_redis(redis_client, prefix: str, item_id: int):
+    key = f"{prefix}:{item_id}"
+    value = redis_client.get(key)
+    if value:
+        return json.loads(value)
+    
+    return None
     
 if __name__ == "__main__":
     save_features_to_redis(
