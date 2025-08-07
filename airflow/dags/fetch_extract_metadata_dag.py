@@ -35,6 +35,7 @@ def fetch_extract_trending_metadata_dag():
                         cast_out_path=f"{RAW_DIR}/trending_movie_cast_metadata.json")
         extract_features(tv_metadata, 
                         out_path=f"{RAW_DIR}/trending_tv_features.json", 
+                        review_out_path=f"{RAW_DIR}/trending_tv_reviews.json",
                         is_tv=True,
                         cast_out_path=f"{RAW_DIR}/trending_tv_cast_metadata.json")
     
