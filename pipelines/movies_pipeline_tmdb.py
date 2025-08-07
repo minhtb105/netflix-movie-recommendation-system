@@ -23,7 +23,7 @@ def process_movies_pipeline(params: dict = None):
         
     df = pd.read_json(params['file_path'])
     
-    df["video_key"] = df["videos"].apply(lambda vids: vids[0]["key"] if isinstance(vids, list) and len(vids) > 0 else "unknown")
+    df["video_key"] = df["video"].get("key", None)
     
     drop_cols = params['drop_cols']
     df = df.drop(columns=drop_cols)
