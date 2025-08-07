@@ -40,7 +40,6 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
                         "popularity": c.get("popularity", 0),
                     })
 
-            crew = " ".join([c.get("name") for c in credits.get("crew", [])])
         sorted_cast_list = sorted(cast, key=lambda x: x["popularity"], reverse=True)[:3]
         all_cast.extend(sorted_cast_list)
         cast = [c["name"] for c in sorted_cast_list]
@@ -56,6 +55,22 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
 
         # Videos
         videos = item.get("videos", {}).get("results", [])
+        trailers = [
+            {
+                "name": v["name"],
+                "key": v["key"],
+                "site": v["site"],
+                "type": v["type"],
+                "official": v["official"],
+                "published_at": v["published_at"],
+            }
+            for v in videos
+            if v.get("site") == "YouTube"
+            and v.get("type") == "Trailer"
+            and v.get("official") is True
+        ]
+        trailers = sorted(trailers, key=lambda x: x["published_at"], reverse=True)
+        video = trailers[0] if trailers else None
 
         # Reviews
         reviews = item.get("reviews", {}).get("results", [])
@@ -109,7 +124,6 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
             "genres": genres,
             "keywords": keywords,
             "cast": cast,
-            "crew": crew,
             "poster_path": poster_path,
             "backdrop_path": backdrop_path,
             "videos": videos,
