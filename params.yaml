@@ -42,7 +42,6 @@ process_movies_tmdb:
     - "overview"
     - "keywords"
     - "cast"
-    - "crew"
   output_cols:
     - "title_vectorize"
     - "overview_vectorize"
@@ -85,7 +84,6 @@ process_tv_tmdb:
     - "overview"
     - "keywords"
     - "cast"
-    - "crew"
   output_cols:
     - "title_vectorize"
     - "overview_vectorize"
@@ -129,7 +127,6 @@ process_trending_movie_tmdb:
     - "overview"
     - "keywords"
     - "cast"
-    - "crew"
   output_cols:
     - "title_vectorize"
     - "overview_vectorize"
@@ -172,7 +169,6 @@ process_trending_tv_tmdb:
     - "overview"
     - "keywords"
     - "cast"
-    - "crew"
   output_cols:
     - "title_vectorize"
     - "overview_vectorize"

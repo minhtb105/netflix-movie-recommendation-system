@@ -73,10 +73,10 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
         video = trailers[0] if trailers else None
 
         # Reviews
-        reviews = item.get("reviews", {}).get("results", [])
-        movie_reviews = []
-        for review in reviews:
-            movie_reviews.append({
+        results = item.get("reviews", {}).get("results", [])
+        reviews = []
+        for review in results:
+            reviews.append({
                 "id": id,
                 "username": review['author_details'].get('username', ''),
                 "content": review.get('content', ''),
@@ -136,7 +136,7 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
 
     # Save review
     with open(review_out_path, "w", encoding="utf-8") as f:
-        json.dump(movie_reviews, f, ensure_ascii=False, indent=2)
+        json.dump(reviews, f, ensure_ascii=False, indent=2)
         
     # Save cast metadata
     if cast_out_path is None:
