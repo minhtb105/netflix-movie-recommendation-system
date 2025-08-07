@@ -19,7 +19,7 @@ def save_features_to_redis_dag():
                             python=PROJECT_PYTHON_PATH,
                             retries=2, retry_delay=timedelta(minutes=10))
     def _run():
-        from steps.save_to_redis import save_features_to_redis
+        from utils.redis_helpers import save_features_to_redis
 
         save_features_to_redis(
             file_path="data/raw/trending_movie_features.json",
