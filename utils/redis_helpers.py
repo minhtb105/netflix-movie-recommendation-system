@@ -3,7 +3,7 @@ import json
 
 def save_features_to_redis(file_path, prefix, 
                            redis_host="localhost", 
-                           redis_port=6479,
+                           redis_port=6379,
                            key_field="id"):
     r = redis.Redis(host=redis_host, port=redis_port, decode_responses=True)
     
