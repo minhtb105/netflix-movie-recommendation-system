@@ -126,7 +126,7 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
             "cast": cast,
             "poster_path": poster_path,
             "backdrop_path": backdrop_path,
-            "videos": videos,
+            "video": video,
         }
         features.append(record)
 
