@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 
-RAW_DIR = Path("/root/myproject/netflix-movie-recommendation-system/data/raw")
-PROJECT_PYTHON_PATH = "/root/myproject/netflix-movie-recommendation-system/.venv/bin/python3.10"
+RAW_DIR = Path(__file__).parent.parent / "data/raw"
+PROJECT_PYTHON_PATH = Path(__file__).parent.parent / ".venv/bin/python3.10"
 
 @dag(
     dag_id='fetch_extract_features',
