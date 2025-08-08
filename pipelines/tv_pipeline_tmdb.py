@@ -61,7 +61,7 @@ def process_tv_pipeline(params: dict = None):
         df["event_timestamp"] = datetime.now(timezone.utc)
         review_df["event_timestamp"] = datetime.now(timezone.utc)
    
-    features_output_dir = Path(params['out_dir'])
+    features_output_dir = Path(params['features_out_dir'])
     features_output_dir.mkdir(parents=True, exist_ok=True)
     reviews_output_dir = Path(params['reviews_out_dir'])
     reviews_output_dir.mkdir(parents=True, exist_ok=True)
