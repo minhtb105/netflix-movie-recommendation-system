@@ -132,7 +132,8 @@ stages:
       - process_movies_tmdb.enc_cols
       - process_movies_tmdb.multi_lable_enc_cols
       - process_movies_tmdb.log_transform_cols
-      - process_movies_tmdb.out_dir
+      - process_movies_tmdb.features_out_dir
+      - process_movies_tmdb.reviews_out_dir
     outs:
       - feature_repo/data/movies_tmdb
 
@@ -152,7 +153,8 @@ stages:
       - process_tv_tmdb.enc_cols
       - process_tv_tmdb.multi_lable_enc_cols
       - process_tv_tmdb.log_transform_cols
-      - process_tv_tmdb.out_dir
+      - process_tv_tmdb.features_out_dir
+      - process_tv_tmdb.reviews_out_dir
     outs:
       - feature_repo/data/tv_tmdb
       
