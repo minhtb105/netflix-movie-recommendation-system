@@ -274,8 +274,8 @@ stages:
       size: 757877720
     - path: steps/extract_tmdb_features.py
       hash: md5
-      md5: 670998345366ceb7b9057295b969291d
-      size: 5621
+      md5: 0a5ff303baa1d80e4116ad11ec2a34b4
+      size: 5695
     outs:
     - path: data/raw/movie_cast_metadata.json
       hash: md5
@@ -287,8 +287,8 @@ stages:
       size: 10516078
     - path: data/raw/movies_reviews.json
       hash: md5
-      md5: d751713988987e9331980363e24189ce
-      size: 2
+      md5: 2d4e2eafefc3481ec144e8dace06e7c9
+      size: 23532689
     - path: data/raw/tv_cast_metadata.json
       hash: md5
       md5: 5e98a55105cfa47954b40a9f259e8ded
@@ -299,8 +299,8 @@ stages:
       size: 5950341
     - path: data/raw/tv_reviews.json
       hash: md5
-      md5: d751713988987e9331980363e24189ce
-      size: 2
+      md5: 3c83bbe6b835ea2afc17f16fe10b63e4
+      size: 2307813
   process_ratings_movielens:
     cmd: python pipelines/ratings_pipeline_movielens.py
     deps:
@@ -401,8 +401,8 @@ stages:
     deps:
     - path: pipelines/movies_pipeline_tmdb.py
       hash: md5
-      md5: c96e09f6dc952eb4c2d9afa2e2a78d2e
-      size: 3120
+      md5: 6910031a34f13f1157f2403d63f55a17
+      size: 3303
     - path: src/data_strategy.py
       hash: md5
       md5: 88e145d328c94dad8b4b55dd38f37126
@@ -416,7 +416,7 @@ stages:
         process_movies_tmdb.drop_cols:
         - poster_path
         - backdrop_path
-        - videos
+        - video
         process_movies_tmdb.enc_cols:
         - original_language
         - origin_country
@@ -444,7 +444,6 @@ stages:
         - overview
         - keywords
         - cast
-        - crew
         process_tv_tmdb.keep_cols:
         - id
         - title
@@ -456,16 +455,16 @@ stages:
     outs:
     - path: feature_repo/data/movies_tmdb
       hash: md5
-      md5: d3fc81351d6e20b54130805c9dd68a38.dir
-      size: 2740213
+      md5: c69f28e7246a4c56abb7a8579082ac3c.dir
+      size: 129872627
       nfiles: 2
   process_tv_tmdb:
     cmd: python pipelines/tv_pipeline_tmdb.py
     deps:
     - path: pipelines/tv_pipeline_tmdb.py
       hash: md5
-      md5: 33a70ea22970caf4044065afe7f0336a
-      size: 3544
+      md5: e16081eacc0e961c538fd898afdf5640
+      size: 3271
     - path: src/data_strategy.py
       hash: md5
       md5: 88e145d328c94dad8b4b55dd38f37126
@@ -479,7 +478,7 @@ stages:
         process_tv_tmdb.drop_cols:
         - poster_path
         - backdrop_path
-        - videos
+        - video
         process_tv_tmdb.enc_cols:
         - original_language
         - origin_country
@@ -515,10 +514,9 @@ stages:
         - overview
         - keywords
         - cast
-        - crew
     outs:
     - path: feature_repo/data/tv_tmdb
       hash: md5
-      md5: 85c8e7788178adb2e302b0549dc3d518.dir
-      size: 2637172
+      md5: 8429866ba94a5ac0809862a317f8007e.dir
+      size: 58939283
       nfiles: 2
