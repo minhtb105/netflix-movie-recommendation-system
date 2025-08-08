@@ -6,6 +6,8 @@ RAW_DIR = Path("data/raw")
 def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool=False, cast_out_path: str=None):
     features = []
     all_cast = []
+    all_reviews = []
+    
     for item in meta_list:
         details = item.get("details", item)
         
@@ -83,7 +85,8 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
                 "rating": review['author_details'].get('rating', 0)
             })
 
-
+        all_reviews.extend(reviews)
+        
         # Budget
         budget = details.get("budget", 0)
 
@@ -136,7 +139,7 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
 
     # Save review
     with open(review_out_path, "w", encoding="utf-8") as f:
-        json.dump(reviews, f, ensure_ascii=False, indent=2)
+        json.dump(all_reviews, f, ensure_ascii=False, indent=2)
         
     # Save cast metadata
     if cast_out_path is None:
