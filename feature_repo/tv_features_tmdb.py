@@ -26,9 +26,9 @@ tv_features_view = FeatureView(
     source=tv_source,
 )
 
-os.makedirs("store_2013", exist_ok=True)
-store_path = os.path.join(os.path.dirname(__file__), "store_2013")
-fs_2013 = FeatureStore(repo_path=store_path)
+os.makedirs("store_2094", exist_ok=True)
+store_path = os.path.join(os.path.dirname(__file__), "store_2094")
+fs_2094 = FeatureStore(repo_path=store_path)
 
 
 review_source = FileSource(

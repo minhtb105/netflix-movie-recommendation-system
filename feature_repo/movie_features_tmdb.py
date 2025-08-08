@@ -24,9 +24,9 @@ movie_features_view = FeatureView(
     source=movie_source,
 )
 
-store_path_2047 = os.path.join(os.path.dirname(__file__), "store_2047")
-os.makedirs(store_path_2047, exist_ok=True)
-fs_2047 = FeatureStore(repo_path=store_path_2047)
+store_path_2901 = os.path.join(os.path.dirname(__file__), "store_2901")
+os.makedirs(store_path_2901, exist_ok=True)
+fs_2901 = FeatureStore(repo_path=store_path_2901)
 
 review_source = FileSource(
     path=os.path.join(os.path.dirname(__file__), "data/movies_tmdb/movie_reviews_*.parquet"),
