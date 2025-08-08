@@ -62,7 +62,8 @@ process_movies_tmdb:
     - "budget"
     - "revenue"
     - "popularity"
-  out_dir: "feature_repo/data/movies_tmdb"
+  features_out_dir: "feature_repo/data/movies_tmdb/features"
+  reviews_out_dir: "feature_repo/data/movies_tmdb/reviews"
 
 process_tv_tmdb:
   file_path: "data/raw/tv_features.json"
@@ -104,7 +105,8 @@ process_tv_tmdb:
     - "budget"
     - "revenue"
     - "popularity"
-  out_dir: "feature_repo/data/tv_tmdb"
+  features_out_dir: "feature_repo/data/tv_tmdb/features"
+  reviews_out_dir: "feature_repo/data/tv_tmdb/reviews"
 
 
 process_trending_movie_tmdb:
@@ -147,7 +149,8 @@ process_trending_movie_tmdb:
     - "budget"
     - "revenue"
     - "popularity"
-  out_dir: "feature_repo/data/movies_tmdb"
+  features_out_dir: "feature_repo/data/movies_tmdb/features"
+  reviews_out_dir: "feature_repo/data/movies_tmdb/reviews"
 
 process_trending_tv_tmdb:
   file_path: "data/raw/trending_tv_features.json"
@@ -189,5 +192,5 @@ process_trending_tv_tmdb:
     - "budget"
     - "revenue"
     - "popularity"
-  out_dir: "feature_repo/data/tv_tmdb"
- 
+  features_out_dir: "feature_repo/data/tv_tmdb/features"
+  reviews_out_dir: "feature_repo/data/tv_tmdb/reviews"

@@ -61,11 +61,13 @@ def process_tv_pipeline(params: dict = None):
         df["event_timestamp"] = datetime.now(timezone.utc)
         review_df["event_timestamp"] = datetime.now(timezone.utc)
    
-    output_dir = Path(params['out_dir'])
-    output_dir.mkdir(parents=True, exist_ok=True)
+    features_output_dir = Path(params['out_dir'])
+    features_output_dir.mkdir(parents=True, exist_ok=True)
+    reviews_output_dir = Path(params['reviews_out_dir'])
+    reviews_output_dir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
-    df.to_parquet(f"{output_dir}/tv_features_{timestamp}.parquet", index=False)
-    review_df.to_parquet(f"{output_dir}/tv_reviews_{timestamp}.parquet", index=False)
+    df.to_parquet(f"{features_output_dir}/tv_features_{timestamp}.parquet", index=False)
+    review_df.to_parquet(f"{reviews_output_dir}/tv_reviews_{timestamp}.parquet", index=False)
 
 
 def combine_features(df: pd.DataFrame, vector_cols: list[str], keep_cols: list[str]) -> pd.DataFrame:
