@@ -28,20 +28,8 @@ def process_tv_pipeline(params: dict = None):
     drop_cols = params['drop_cols']
     df = df.drop(columns=drop_cols)
     
-    n = len(df)
-    
-    for i in range(n):
-        casts = []
-        for cast_info in df.loc[i, 'cast']:
-            character = str(cast_info.get('character') or '').lower()
-            if 'uncredited' not in character and 'voice' not in character:
-                casts.append(cast_info['name'])
-                
-        if casts:
-            df.loc[i, 'cast'] = " ".join(casts)
-        else:
-            df.loc[i, 'cast'] = "unknown"   
-    
+    df['cast'] = df['cast'].apply(lambda x: ', '.join(x) if isinstance(x, list) else str(x))
+
     vectorize_cols = params['vectorize_cols']
     output_cols = params['output_cols']
     for col, output_col in zip(vectorize_cols, output_cols):

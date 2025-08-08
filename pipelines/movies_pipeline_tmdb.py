@@ -28,6 +28,8 @@ def process_movies_pipeline(params: dict = None):
     drop_cols = params['drop_cols']
     df = df.drop(columns=drop_cols)
     
+    df['cast'] = df['cast'].apply(lambda x: ', '.join(x) if isinstance(x, list) else str(x))
+     
     vectorize_cols = params['vectorize_cols']
     output_cols = params['output_cols']
     for col, output_col in zip(vectorize_cols, output_cols):
