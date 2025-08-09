@@ -45,6 +45,7 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
         sorted_cast_list = sorted(cast, key=lambda x: x["popularity"], reverse=True)[:3]
         all_cast.extend(sorted_cast_list)
         cast = [c["name"] for c in sorted_cast_list]
+        cast_id = [c["cast_id"] for c in sorted_cast_list]
         
         # Poster & Backdrop
         poster_path = details.get("poster_path")
@@ -127,6 +128,7 @@ def extract_features(meta_list, out_path: str, review_out_path: str, is_tv: bool
             "genres": genres,
             "keywords": keywords,
             "cast": cast,
+            "cast_id": cast_id,
             "poster_path": poster_path,
             "backdrop_path": backdrop_path,
             "video": video,
