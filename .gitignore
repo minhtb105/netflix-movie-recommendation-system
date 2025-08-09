@@ -12,8 +12,8 @@ feature_repo/online_store.db
 feature_repo/.feast
 feature_repo/data/
 feature_repo/store_1000/
-feature_repo/store_2047/
-feature_repo/store_2013/
+feature_repo/store_2901/
+feature_repo/store_2094/
 feature_repo/store_384/
 .vscode
 steps/*.pyc
