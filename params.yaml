@@ -29,6 +29,7 @@ process_movies_tmdb:
     - "poster_path"
     - "backdrop_path"
     - "video"
+    - "cast_id"
   keep_cols:
     - "id"
     - "tittle"
@@ -72,6 +73,7 @@ process_tv_tmdb:
     - "poster_path"
     - "backdrop_path"
     - "video"
+    - "cast_id"
   keep_cols:
     - "id"
     - "title"
@@ -116,6 +118,7 @@ process_trending_movie_tmdb:
     - "poster_path"
     - "backdrop_path"
     - "video"
+    - "cast_id"
   keep_cols:
     - "id"
     - "title"
@@ -159,6 +162,7 @@ process_trending_tv_tmdb:
     - "poster_path"
     - "backdrop_path"
     - "video"
+    - "cast_id"
   keep_cols:
     - "id"
     - "title"
