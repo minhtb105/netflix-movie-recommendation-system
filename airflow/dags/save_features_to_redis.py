@@ -23,20 +23,22 @@ def save_features_to_redis_dag():
         from utils.redis_helpers import save_features_to_redis
 
         save_features_to_redis(
-            file_path="data/raw/trending_movie_features.json",
+            file_path=f"{RAW_DIR}/trending_movie_features.json",
             prefix="movie_id"
         )
         save_features_to_redis(
-            file_path="data/raw/trending_tv_features.json",
+            file_path=f"{RAW_DIR}/trending_tv_features.json",
             prefix="tv_id"
         )
         save_features_to_redis(
-            file_path="data/raw/trending_movie_cast_metadata.json",
-            prefix="movie_id"
+            file_path=f"{RAW_DIR}/trending_movie_cast_metadata.json",
+            prefix="cast_id",
+            key_field="cast_id"
         )
         save_features_to_redis(
-            file_path="data/raw/trending_tv_cast_metadata.json",
-            prefix="tv_id"
+            file_path=f"{RAW_DIR}/trending_tv_cast_metadata.json",
+            prefix="cast_id",
+            key_field="cast_id"
         )
         
     wait_for_feast = ExternalTaskSensor(
