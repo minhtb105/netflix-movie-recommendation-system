@@ -274,8 +274,8 @@ stages:
       size: 757877720
     - path: steps/extract_tmdb_features.py
       hash: md5
-      md5: 0a5ff303baa1d80e4116ad11ec2a34b4
-      size: 5695
+      md5: 27b84b6b5f6468692c9fbf520f36476a
+      size: 5786
     outs:
     - path: data/raw/movie_cast_metadata.json
       hash: md5
@@ -283,8 +283,8 @@ stages:
       size: 3332163
     - path: data/raw/movies_features.json
       hash: md5
-      md5: 5061d23349e8d9a02ec049f7710b7556
-      size: 10516078
+      md5: 779e14a8b529d8aeb311850cb52dd829
+      size: 11057035
     - path: data/raw/movies_reviews.json
       hash: md5
       md5: 2d4e2eafefc3481ec144e8dace06e7c9
@@ -295,8 +295,8 @@ stages:
       size: 1876889
     - path: data/raw/tv_features.json
       hash: md5
-      md5: ed81099c502c1c5b860c96e37af4b39c
-      size: 5950341
+      md5: b45c5a462d94a9ce68c25ef3ab52787e
+      size: 6270433
     - path: data/raw/tv_reviews.json
       hash: md5
       md5: 3c83bbe6b835ea2afc17f16fe10b63e4
@@ -401,8 +401,8 @@ stages:
     deps:
     - path: pipelines/movies_pipeline_tmdb.py
       hash: md5
-      md5: 2a568f12b4399833ee578e754c9b424f
-      size: 3458
+      md5: 4611f563dd9a52b13aa454efe761c923
+      size: 3460
     - path: src/data_strategy.py
       hash: md5
       md5: 88e145d328c94dad8b4b55dd38f37126
@@ -417,6 +417,7 @@ stages:
         - poster_path
         - backdrop_path
         - video
+        - cast_id
         process_movies_tmdb.enc_cols:
         - original_language
         - origin_country
@@ -458,7 +459,7 @@ stages:
     outs:
     - path: feature_repo/data/movies_tmdb
       hash: md5
-      md5: bb238e4c86bf425ee069fa411864d282.dir
+      md5: ebe3f2e2ea3fbb555acfc77cb10a6acd.dir
       size: 129872627
       nfiles: 2
   process_tv_tmdb:
@@ -482,6 +483,7 @@ stages:
         - poster_path
         - backdrop_path
         - video
+        - cast_id
         process_tv_tmdb.enc_cols:
         - original_language
         - origin_country
@@ -521,6 +523,6 @@ stages:
     outs:
     - path: feature_repo/data/tv_tmdb
       hash: md5
-      md5: 7db15ce71556fc611565a2106973b5df.dir
+      md5: ecf208dd3ae85d011ba74c2624eb849a.dir
       size: 58939283
       nfiles: 2
