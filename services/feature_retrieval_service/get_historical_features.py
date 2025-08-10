@@ -11,7 +11,7 @@ def get_user_features_df():
     user_df = store.get_historical_features(
         entity_df=entity_df,
         features=[
-            "user_features:age",
+            "user_features:age", 
             "user_features:zip_code",
             "user_features:gender_F",
             "user_features:gender_M",
