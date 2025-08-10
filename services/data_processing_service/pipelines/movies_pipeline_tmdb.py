@@ -61,11 +61,10 @@ def process_movies_pipeline(params: dict = None):
         df["event_timestamp"] = datetime.now(timezone.utc)
         review_df["event_timestamp"] = datetime.now(timezone.utc)
         
-
     features_output_dir = Path(params['features_out_dir'])
     features_output_dir.mkdir(parents=True, exist_ok=True)
     reviews_output_dir = Path(params['reviews_out_dir'])
-    reviews_output_dir.mkdir(parents=True, exist_ok=True)
+    reviews_output_dir.mkdir(parents=True, exist_ok=True)   
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
     df.to_parquet(f"{features_output_dir}/movie_features_{timestamp}.parquet", index=False)
     review_df.to_parquet(f"{reviews_output_dir}/movie_reviews_{timestamp}.parquet", index=False)
