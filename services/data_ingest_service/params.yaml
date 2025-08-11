@@ -1,0 +1,3 @@
+ingest:
+  base_path: "data/raw/ml-100k"
+  processed_dir: "data/processed"

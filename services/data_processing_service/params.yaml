@@ -1,7 +1,3 @@
-ingest:
-  base_path: "data/raw/ml-100k"
-  processed_dir: "data/processed"
-
 process_ratings_movielens:
   file_path: "data/processed/ratings.csv"
   out_dir: "feature_repo/data/ratings_movielens"
@@ -110,7 +106,6 @@ process_tv_tmdb:
   features_out_dir: "feature_repo/data/tv_tmdb/features"
   reviews_out_dir: "feature_repo/data/tv_tmdb/reviews"
 
-
 process_trending_movie_tmdb:
   file_path: "data/raw/trending_movie_features.json"
   review_path: "data/raw/trending_movie_reviews.json"
@@ -198,3 +193,4 @@ process_trending_tv_tmdb:
     - "popularity"
   features_out_dir: "feature_repo/data/tv_tmdb/features"
   reviews_out_dir: "feature_repo/data/tv_tmdb/reviews"
+  
