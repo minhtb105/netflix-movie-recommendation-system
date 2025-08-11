@@ -51,7 +51,7 @@
 
 ## ⚙️ Prerequisites
 
-* **OS**: Linux or macOS (tested)
+* **OS**: Linux (tested)
 * **Docker**
 * **Python 3.10+**
 * **Azure CLI** (if using Azure Blob remote)
