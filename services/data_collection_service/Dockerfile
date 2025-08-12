@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential curl && \
@@ -7,10 +7,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY ..
 
-EXPOSE 8000
+EXPOSE 8009
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["python", "-m", "pipelines.tmdb_metadata_pipelines"]
