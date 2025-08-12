@@ -1,0 +1,25 @@
+version: "1.0"
+
+services:
+  web_service:
+    build: ./services/web_service
+    ports:
+      - "8000:8000"
+    volumes:
+      - shared_images:/app/static/images
+    environment:
+      - PYTHONUNBUFFERED=1
+      - STATIC_IMAGE_DIR=/app/static/images
+
+  tmdb_service:
+    build: ./services/tmdb_service
+    ports:
+      - "8009:8009"
+    volumes:
+      - shared_images:/app/static/images
+    environment:
+      - PYTHONUNBUFFERED=1
+      - STATIC_IMAGE_DIR=/app/static/images
+
+volumes:
+  shared_images:
