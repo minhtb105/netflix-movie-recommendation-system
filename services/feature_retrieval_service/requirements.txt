@@ -1,0 +1,4 @@
+fastapi==0.116.1
+feast==0.51.0
+redis==6.2.0
+pymilvus==2.3.7
