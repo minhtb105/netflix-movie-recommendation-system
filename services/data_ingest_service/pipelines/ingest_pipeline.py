@@ -7,7 +7,7 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from steps.ingest_data import ingest_df
-import yaml
+import yaml 
 
 
 def ingest_ml100k_pipeline():

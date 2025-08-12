@@ -27,20 +27,17 @@ def movie_detail(movie_id: int, request: Request):
 
 @router.get("/tv/{tv_id}")
 def tv_detail(tv_id: int, request: Request):
-    tv_df =  get_tv_features_tmdb_online([tv_id])
-    review_df =  get_tv_reviews_tmdb_online([tv_id])
-
-    tv = tv_df[tv_df["id"] == tv_id].to_dict(orient="records")
-    review = review_df[review_df["id"] == tv_id].to_dict(orient="records")
-
+    tv = get_item_from_redis(r, "tv_id", tv_id)
+    review = get_item_from_redis(r, "tv_review", tv_id)
+    
     if not tv:
         return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
 
     return templates.TemplateResponse(
-        "tv_detail.html",
+        "movie_detail.html",
         {
             "request": request,
-            "tv": tv[0],                 
+            "movie": movie[0],          
             "review": review[0] if review else None
         }
     )
