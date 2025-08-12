@@ -1,42 +1,5 @@
 schema: '2.0'
 stages:
-  ingest:
-    cmd: python pipelines/ingest_pipeline.py
-    deps:
-    - path: data/raw/ml-100k/u.data
-      hash: md5
-      md5: 6e47046882bad158b0efbb84cd5cb987
-      size: 1979173
-    - path: data/raw/ml-100k/u.item
-      hash: md5
-      md5: c9e7f390115d79079537301d5204f3f7
-      size: 236344
-    - path: data/raw/ml-100k/u.user
-      hash: md5
-      md5: 1b53539edc13caad0282c8500608a319
-      size: 22628
-    - path: pipelines/ingest_pipeline.py
-      hash: md5
-      md5: b56c18c06617bab7f541ccd74a2607e8
-      size: 1788
-    - path: src/ingest_strategy.py
-      hash: md5
-      md5: 5ad652acedbe06a9d016afa7201e7cc7
-      size: 1820
-    - path: steps/ingest_data.py
-      hash: md5
-      md5: 391065f6fda3dca71df44bd6217ff1a7
-      size: 992
-    params:
-      params.yaml:
-        ingest.base_path: data/raw/ml-100k
-        ingest.processed_dir: data/processed
-    outs:
-    - path: data/processed
-      hash: md5
-      md5: c4cd683f670cf1c0d88cda46cd1a5eb9.dir
-      size: 2239923
-      nfiles: 3
   process_ratings:
     cmd: python pipelines/ratings_pipeline.py
     deps:
@@ -120,188 +83,7 @@ stages:
       md5: faeb10708a7c2db45ea021f79893ff4e.dir
       size: 34546
       nfiles: 1
-  user_item_matrix:
-    cmd: python -c "from pipelines.training_pipeline import 
-      save_user_item_matrix; save_user_item_matrix()"
-    deps:
-    - path: pipelines/training_pipeline.py
-      hash: md5
-      md5: 5bfa53af7408442a0690a5b0b0290bb2
-      size: 1935
-    - path: src/model_dev.py
-      hash: md5
-      md5: e1ed35efffcbd1a1dd3babc0b841d6e2
-      size: 7747
-    - path: steps/get_historical_features.py
-      hash: md5
-      md5: 9b12d185342a9fa17fc4ddcf545aaf72
-      size: 5810
-    outs:
-    - path: model/user_item_matrix.pkl
-      hash: md5
-      md5: 316ac1cf2efbc3307f225265c3fad70d
-      size: 12423646
-  top_n_rating:
-    cmd: python -c "from pipelines.training_pipeline import 
-      top_n_rating_pipeline; top_n_rating_pipeline()"
-    deps:
-    - path: pipelines/training_pipeline.py
-      hash: md5
-      md5: c1b0cb4b9688cee530ba0f91992b2125
-      size: 1333
-    - path: src/model_dev.py
-      hash: md5
-      md5: f7b1c6f839d060590cb47529238ddc40
-      size: 6431
-    - path: steps/fetch_features.py
-      hash: md5
-      md5: 00eedcabe1c2c31a1f31e895e08f097d
-      size: 3925
-    - path: steps/train_model.py
-      hash: md5
-      md5: 2188e71dc1fa695b7d8ef9c74876c9bc
-      size: 1901
-    outs:
-    - path: model/popularity_model.pkl
-      hash: md5
-      md5: 2b69518f5442f5d91097c12aaa4570de
-      size: 40086
-  user_based_cf:
-    cmd: python -c "from pipelines.training_pipeline import 
-      user_based_cf_pipeline; user_based_cf_pipeline()"
-    deps:
-    - path: model/user_item_matrix.pkl
-      hash: md5
-      md5: 316ac1cf2efbc3307f225265c3fad70d
-      size: 12423646
-    - path: pipelines/training_pipeline.py
-      hash: md5
-      md5: 5bfa53af7408442a0690a5b0b0290bb2
-      size: 1935
-    - path: src/model_dev.py
-      hash: md5
-      md5: e1ed35efffcbd1a1dd3babc0b841d6e2
-      size: 7747
-    - path: steps/get_historical_features.py
-      hash: md5
-      md5: 9b12d185342a9fa17fc4ddcf545aaf72
-      size: 5810
-    - path: steps/train_model.py
-      hash: md5
-      md5: 8ddff7adfee829012e80c389c632e066
-      size: 1612
-  item_based_cf:
-    cmd: python -c "from pipelines.training_pipeline import 
-      item_based_cf_pipeline; item_based_cf_pipeline()"
-    deps:
-    - path: model/user_item_matrix.pkl
-      hash: md5
-      md5: 316ac1cf2efbc3307f225265c3fad70d
-      size: 12423646
-    - path: pipelines/training_pipeline.py
-      hash: md5
-      md5: 5bfa53af7408442a0690a5b0b0290bb2
-      size: 1935
-    - path: src/model_dev.py
-      hash: md5
-      md5: e1ed35efffcbd1a1dd3babc0b841d6e2
-      size: 7747
-    - path: steps/get_historical_features.py
-      hash: md5
-      md5: 9b12d185342a9fa17fc4ddcf545aaf72
-      size: 5810
-    - path: steps/train_model.py
-      hash: md5
-      md5: 8ddff7adfee829012e80c389c632e066
-      size: 1612
-  fetch_tmdb_metadata:
-    cmd: python pipelines/tmdb_metadata_pipeline.py
-    deps:
-    - path: pipelines/tmdb_metadata_pipeline.py
-      hash: md5
-      md5: 98f895f658a1b2bf3e30d2ad05a67d68
-      size: 5867
-    - path: services/tv_api.py
-      hash: md5
-      md5: 77447d58a0abbfa3293de199252ef6dc
-      size: 3212
-    - path: src/base_client.py
-      hash: md5
-      md5: 3253cefdff8be36fe8258c86b523e10b
-      size: 1542
-    - path: src/base_client.py
-      hash: md5
-      md5: 3253cefdff8be36fe8258c86b523e10b
-      size: 1542
-    - path: utils/downloader.py
-      hash: md5
-      md5: fcec66a03bda09586a467b3579a47d12
-      size: 4359
-    outs:
-    - path: app/static/images/cast
-      hash: md5
-      md5: 38beecb99eb85bf1f19c46d1c73932b8.dir
-      size: 348382156
-      nfiles: 15692
-    - path: app/static/images/movie
-      hash: md5
-      md5: dcf531275650cecc11cdacaefbe960b9.dir
-      size: 265891892
-      nfiles: 9197
-    - path: app/static/images/tv
-      hash: md5
-      md5: e6067015b89c2821e61edb7b69fb963a.dir
-      size: 175283141
-      nfiles: 5644
-    - path: data/raw/movies_metadata.json
-      hash: md5
-      md5: 1c477d0578302670163df9b3ae9ce260
-      size: 624968896
-    - path: data/raw/tv_metadata.json
-      hash: md5
-      md5: 785ebbf18be56b5a7cd977153eecb865
-      size: 757877720
-  extract_tmdb_features:
-    cmd: python steps/extract_tmdb_features.py
-    deps:
-    - path: data/raw/movies_metadata.json
-      hash: md5
-      md5: 1c477d0578302670163df9b3ae9ce260
-      size: 624968896
-    - path: data/raw/tv_metadata.json
-      hash: md5
-      md5: 785ebbf18be56b5a7cd977153eecb865
-      size: 757877720
-    - path: steps/extract_tmdb_features.py
-      hash: md5
-      md5: 27b84b6b5f6468692c9fbf520f36476a
-      size: 5786
-    outs:
-    - path: data/raw/movie_cast_metadata.json
-      hash: md5
-      md5: d4ef898793c7092782b01d04488c34f6
-      size: 3332163
-    - path: data/raw/movies_features.json
-      hash: md5
-      md5: 779e14a8b529d8aeb311850cb52dd829
-      size: 11057035
-    - path: data/raw/movies_reviews.json
-      hash: md5
-      md5: 2d4e2eafefc3481ec144e8dace06e7c9
-      size: 23532689
-    - path: data/raw/tv_cast_metadata.json
-      hash: md5
-      md5: 5e98a55105cfa47954b40a9f259e8ded
-      size: 1876889
-    - path: data/raw/tv_features.json
-      hash: md5
-      md5: b45c5a462d94a9ce68c25ef3ab52787e
-      size: 6270433
-    - path: data/raw/tv_reviews.json
-      hash: md5
-      md5: 3c83bbe6b835ea2afc17f16fe10b63e4
-      size: 2307813
-  process_ratings_movielens:
+    process_ratings_movielens:
     cmd: python pipelines/ratings_pipeline_movielens.py
     deps:
     - path: data/processed/ratings.csv
@@ -526,3 +308,43 @@ stages:
       md5: ecf208dd3ae85d011ba74c2624eb849a.dir
       size: 58939283
       nfiles: 2
+  extract_tmdb_features:
+    cmd: python steps/extract_tmdb_features.py
+    deps:
+    - path: data/raw/movies_metadata.json
+      hash: md5
+      md5: 1c477d0578302670163df9b3ae9ce260
+      size: 624968896
+    - path: data/raw/tv_metadata.json
+      hash: md5
+      md5: 785ebbf18be56b5a7cd977153eecb865
+      size: 757877720
+    - path: steps/extract_tmdb_features.py
+      hash: md5
+      md5: 27b84b6b5f6468692c9fbf520f36476a
+      size: 5786
+    outs:
+    - path: data/raw/movie_cast_metadata.json
+      hash: md5
+      md5: d4ef898793c7092782b01d04488c34f6
+      size: 3332163
+    - path: data/raw/movies_features.json
+      hash: md5
+      md5: 779e14a8b529d8aeb311850cb52dd829
+      size: 11057035
+    - path: data/raw/movies_reviews.json
+      hash: md5
+      md5: 2d4e2eafefc3481ec144e8dace06e7c9
+      size: 23532689
+    - path: data/raw/tv_cast_metadata.json
+      hash: md5
+      md5: 5e98a55105cfa47954b40a9f259e8ded
+      size: 1876889
+    - path: data/raw/tv_features.json
+      hash: md5
+      md5: b45c5a462d94a9ce68c25ef3ab52787e
+      size: 6270433
+    - path: data/raw/tv_reviews.json
+      hash: md5
+      md5: 3c83bbe6b835ea2afc17f16fe10b63e4
+      size: 2307813

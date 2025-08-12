@@ -1,0 +1,71 @@
+schema: '2.0'
+stages:
+  user_item_matrix:
+    cmd: python -c "from pipelines.training_pipeline import 
+      save_user_item_matrix; save_user_item_matrix()"
+    deps:
+    - path: pipelines/training_pipeline.py
+      hash: md5
+      md5: 5bfa53af7408442a0690a5b0b0290bb2
+      size: 1935
+    - path: src/model_dev.py
+      hash: md5
+      md5: e1ed35efffcbd1a1dd3babc0b841d6e2
+      size: 7747
+    - path: steps/get_historical_features.py
+      hash: md5
+      md5: 9b12d185342a9fa17fc4ddcf545aaf72
+      size: 5810
+    outs:
+    - path: model/user_item_matrix.pkl
+      hash: md5
+      md5: 316ac1cf2efbc3307f225265c3fad70d
+      size: 12423646
+  user_based_cf:
+    cmd: python -c "from pipelines.training_pipeline import 
+      user_based_cf_pipeline; user_based_cf_pipeline()"
+    deps:
+    - path: model/user_item_matrix.pkl
+      hash: md5
+      md5: 316ac1cf2efbc3307f225265c3fad70d
+      size: 12423646
+    - path: pipelines/training_pipeline.py
+      hash: md5
+      md5: 5bfa53af7408442a0690a5b0b0290bb2
+      size: 1935
+    - path: src/model_dev.py
+      hash: md5
+      md5: e1ed35efffcbd1a1dd3babc0b841d6e2
+      size: 7747
+    - path: steps/get_historical_features.py
+      hash: md5
+      md5: 9b12d185342a9fa17fc4ddcf545aaf72
+      size: 5810
+    - path: steps/train_model.py
+      hash: md5
+      md5: 8ddff7adfee829012e80c389c632e066
+      size: 1612
+  item_based_cf:
+    cmd: python -c "from pipelines.training_pipeline import 
+      item_based_cf_pipeline; item_based_cf_pipeline()"
+    deps:
+    - path: model/user_item_matrix.pkl
+      hash: md5
+      md5: 316ac1cf2efbc3307f225265c3fad70d
+      size: 12423646
+    - path: pipelines/training_pipeline.py
+      hash: md5
+      md5: 5bfa53af7408442a0690a5b0b0290bb2
+      size: 1935
+    - path: src/model_dev.py
+      hash: md5
+      md5: e1ed35efffcbd1a1dd3babc0b841d6e2
+      size: 7747
+    - path: steps/get_historical_features.py
+      hash: md5
+      md5: 9b12d185342a9fa17fc4ddcf545aaf72
+      size: 5810
+    - path: steps/train_model.py
+      hash: md5
+      md5: 8ddff7adfee829012e80c389c632e066
+      size: 1612
