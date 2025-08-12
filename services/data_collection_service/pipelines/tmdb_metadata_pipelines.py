@@ -6,7 +6,12 @@ from utils.downloader import async_batch_download_images, download_cast_images_b
 
 RAW_DIR = Path("data/raw")
 RAW_DIR.mkdir(parents=True, exist_ok=True)
-BASE_STATIC_DIR = Path(__file__).resolve().parents[2] / "web_service" / "static" / "images"
+BASE_STATIC_DIR = Path(
+    os.getenv(
+        "STATIC_IMAGE_DIR", 
+        Path(__file__).resolve().parents[2] / "web_service" / "static" / "images"  # fallback local
+    )
+)
 TMDB_SERVICE_URL = "http://tmdb_service:8000"
 
 
