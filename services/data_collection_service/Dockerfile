@@ -13,4 +13,4 @@ COPY ..
 
 EXPOSE 8009
 
-CMD ["python", "-m", "pipelines.tmdb_metadata_pipelines"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8009", "--reload"]

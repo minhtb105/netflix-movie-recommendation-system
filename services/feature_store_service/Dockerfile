@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -15,6 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose port for FastAPI
-EXPOSE 8000
+EXPOSE 8002
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8002"]
