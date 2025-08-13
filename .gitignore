@@ -17,7 +17,7 @@ services/feature_store_service/feature_store.yaml
 .venv
 .idea
 .env
-users.json
+services/web_service/users.json
 airflow_env
 airflow/dags/__pycache__
 airflow/config
