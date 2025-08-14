@@ -12,11 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-COPY dvc.lock ./
-COPY dvc.yaml ./
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
-RUN pip install "dvc"
 
 COPY . .
 
