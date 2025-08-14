@@ -5,3 +5,4 @@ scipy==1.15.3
 sentence_transformers==5.0.0
 fastapi==0.116.1
 PyYAML==6.0.2
+uvicorn==0.34.0
