@@ -1,6 +1,6 @@
 import os
 import logging
-from src.base_client import TMDBBaseClient
+from clients.base_client import TMDBBaseClient
 from utils.downloader import download_image
 
 class CollectionService(TMDBBaseClient):

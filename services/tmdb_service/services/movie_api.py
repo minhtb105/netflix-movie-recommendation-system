@@ -1,4 +1,4 @@
-from src.base_client import TMDBBaseClient
+from clients.base_client import TMDBBaseClient
 from utils.downloader import async_batch_download_images
 from typing import Any, Dict
 from datetime import date, datetime

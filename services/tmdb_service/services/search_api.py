@@ -1,4 +1,4 @@
-from src.base_client import TMDBBaseClient
+from clients.base_client import TMDBBaseClient
 
 
 class SearchService(TMDBBaseClient):
