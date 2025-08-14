@@ -2,15 +2,15 @@ import os
 import logging
 from tenacity import retry, stop_after_attempt, wait_fixed, retry_if_exception_type
 import httpx
-from dotenv import load_dotenv
 import asyncio
 
-
-load_dotenv()
 
 class TMDBBaseClient:
     def __init__(self, max_concurrent_requests=5):
         self.token = os.getenv("TMDB_ACCESS_TOKEN")
+        if not self.token:
+            raise RuntimeError("TMDB_ACCESS_TOKEN is not set. Please set it in environment or .env")
+
         self.timeout = int(os.getenv("TIME_OUT", 10))
         self.base_api_url = "https://api.themoviedb.org/3"
 
