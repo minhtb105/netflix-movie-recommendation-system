@@ -1,5 +1,4 @@
 from clients.base_client import TMDBBaseClient
-from utils.downloader import download_image
 from typing import Any, Dict
 from datetime import date, datetime
 
