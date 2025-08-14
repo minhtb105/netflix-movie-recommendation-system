@@ -19,6 +19,7 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 RUN pip install "dvc"
 
 COPY . .
-RUN dvc repro
+
 EXPOSE 8007
+
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8007"]
