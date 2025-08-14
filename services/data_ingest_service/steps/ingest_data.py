@@ -3,11 +3,11 @@ from pathlib import Path
 import sys
 from typing import Union, List, Optional, Annotated
 
-project_root = Path(__file__).resolve().parent.parent
+project_root = Path(__file__).resolve().parents[3]
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from src.ingest_strategy import *
+from services.data_ingest_service.src.ingest_strategy import *
 
 
 def ingest_df(
