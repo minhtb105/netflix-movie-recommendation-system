@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Query
-from .services.trending_service import TrendingService
+from services.trending_api import TrendingService
 
 router = APIRouter(prefix="/trending", tags=["Trending"])
 service = TrendingService()

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Query
-from services.tv_service import TVService
+from services.tv_api import TVService
 from datetime import date
 
 router = APIRouter(prefix="/tv", tags=["TV"])

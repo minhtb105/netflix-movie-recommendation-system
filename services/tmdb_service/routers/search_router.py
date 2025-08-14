@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Query
-from .search_service import SearchService
+from services.search_api import SearchService
 
 router = APIRouter(prefix="/search", tags=["Search"])
 search_service = SearchService()
