@@ -2,17 +2,17 @@ from pathlib import Path
 import sys
 import logging
 
-project_root = Path(__file__).resolve().parents[3]
+project_root = Path(__file__).resolve().parents[1]
 print(project_root)
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from services.data_ingest_service.steps.ingest_data import ingest_df
+from steps.ingest_data import ingest_df
 import yaml 
 
 
 def ingest_ml100k_pipeline():
-    params_path = project_root / "services/data_ingest_service/params.yaml"
+    params_path = project_root / "params.yaml"
     with open(params_path, "r") as f:
         params = yaml.safe_load(f)["ingest"]
         
