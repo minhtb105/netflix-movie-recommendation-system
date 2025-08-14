@@ -1,7 +1,6 @@
 import os
 import logging
 from clients.base_client import TMDBBaseClient
-from utils.downloader import download_image
 
 class CollectionService(TMDBBaseClient):
     async def get_collection_details(self, collection_id: int, language: str = "en-US"):
