@@ -18,22 +18,23 @@ RUN python -m pip install --upgrade pip setuptools wheel && \
     pip wheel --no-cache-dir --wheel-dir=/wheels/wheels -r requirements.txt
 
 # ---------- final: production image ----------
-FROM python:3.10-slim AS final
+ROM python:3.10-slim AS final
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Copy only wheels (artifacts) từ builder
+# Copy only wheels and requirements.txt first
 COPY --from=builder /wheels/wheels /wheels/wheels
+COPY requirements.txt .
 
-# Copy source
-COPY . .
-
-# Install from wheels (no compilers needed in final image)
+# Install from wheels and remove wheel files & pip cache in the same RUN
 RUN python -m pip install --upgrade pip && \
-    pip install --no-index --no-cache-dir --find-links=/wheels/wheels -r requirements.txt
+    pip install --no-index --no-cache-dir --find-links=/wheels/wheels -r requirements.txt && \
+    rm -rf /wheels/wheels /root/.cache/pip
+
+COPY . .
 
 EXPOSE 8003
 
