@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from services.data_processing_service.pipelines.movies_pipeline_movielens import process_movies_pipeline
-from services.data_processing_service.pipelines.ratings_pipeline_movielens import process_ratings_pipeline
-from services.data_processing_service.pipelines.users_pipeline_movielens import process_users_pipeline
+from pipelines.movies_pipeline_movielens import process_movies_pipeline
+from pipelines.ratings_pipeline_movielens import process_ratings_pipeline
+from pipelines.users_pipeline_movielens import process_users_pipeline
 import traceback
 
 router = APIRouter()

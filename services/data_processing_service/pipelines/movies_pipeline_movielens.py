@@ -1,9 +1,9 @@
 from pathlib import Path
 import sys
 
-project_root = Path(__file__).resolve().parent.parent
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
+service_root = Path(__file__).resolve().parent.parent
+if str(service_root) not in sys.path:
+    sys.path.insert(0, str(service_root))
 
 from steps.prepare_data import clean_df, vectorize_text
 from src.feature_engineer import FeatureEngineer
@@ -12,7 +12,7 @@ import pandas as pd
 import yaml
 
 def process_movies_pipeline():
-    params = yaml.safe_load(open("params.yaml"))["process_movies_movielens"]
+    params = yaml.safe_load(open(service_root/ "params.yaml"))["process_movies_movielens"]
     df = pd.read_csv(params['file_path'])
     
     date_col = params['date_col']

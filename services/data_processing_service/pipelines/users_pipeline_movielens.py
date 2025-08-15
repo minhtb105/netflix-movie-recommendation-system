@@ -1,9 +1,9 @@
 from pathlib import Path
 import sys
 
-project_root = Path(__file__).resolve().parent.parent
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
+service_root = Path(__file__).resolve().parent.parent
+if str(service_root) not in sys.path:
+    sys.path.insert(0, str(service_root))
 
 from typing import List
 import pandas as pd
@@ -12,7 +12,7 @@ import yaml
 from datetime import datetime, UTC
 
 def process_users_pipeline():
-    params = yaml.safe_load(open("params.yaml"))["process_users_movielens"]
+    params = yaml.safe_load(open(service_root / "params.yaml"))["process_users_movielens"]
     df = pd.read_csv(params['file_path'])
     df = clean_df(df)
     

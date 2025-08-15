@@ -1,9 +1,9 @@
 from pathlib import Path
 import sys
 
-project_root = Path(__file__).resolve().parent.parent
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
+service_root = Path(__file__).resolve().parent.parent
+if str(service_root) not in sys.path:
+    sys.path.insert(0, str(service_root))
 
 from steps.prepare_data import *
 import yaml
@@ -11,7 +11,7 @@ from datetime import datetime, UTC
 
 
 def process_ratings_pipeline():
-    params = yaml.safe_load(open("params.yaml"))["process_ratings_movielens"]
+    params = yaml.safe_load(open(service_root / "params.yaml"))["process_ratings_movielens"]
     df = pd.read_csv(params['file_path'])
     
     timestamp_col = params['timestamp_col']
