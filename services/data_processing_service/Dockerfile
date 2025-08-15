@@ -1,28 +1,40 @@
-# Base image
-FROM python3.10-slim
+# ---------- builder: compile wheels ----------
+FROM python:3.10-slim AS builder
 
-# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /wheels
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements và build wheels
+COPY requirements.txt .
+
+RUN python -m pip install --upgrade pip setuptools wheel && \
+    pip wheel --no-cache-dir --wheel-dir=/wheels/wheels -r requirements.txt
+
+# ---------- final: production image ----------
+FROM python:3.10-slim AS final
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install OS dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# Copy only wheels (artifacts) từ builder
+COPY --from=builder /wheels/wheels /wheels/wheels
 
-# Copy the requirements file
-COPY requirements.txt .
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r reqquirements.txt
-
-# Copy the entire service into the container
+# Copy source
 COPY . .
 
-# Expose FastAPI port
+# Install from wheels (no compilers needed in final image)
+RUN python -m pip install --upgrade pip && \
+    pip install --no-index --no-cache-dir --find-links=/wheels/wheels -r requirements.txt
+
 EXPOSE 8003
 
-# Start the FastAPI application
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8003", "--reload"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8003"]
