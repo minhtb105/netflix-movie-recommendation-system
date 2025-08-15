@@ -7,7 +7,6 @@ if str(service_root) not in sys.path:
 
 from steps.prepare_data import *
 import yaml
-from datetime import datetime, UTC
 
 
 def process_ratings_pipeline():
