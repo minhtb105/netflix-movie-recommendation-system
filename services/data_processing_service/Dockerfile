@@ -21,8 +21,6 @@ RUN pip install --no-cache-dir -r reqquirements.txt
 # Copy the entire service into the container
 COPY . .
 
-RUN mkdir -p static/images
-
 # Expose FastAPI port
 EXPOSE 8003
 
