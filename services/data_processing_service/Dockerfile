@@ -9,33 +9,39 @@ WORKDIR /wheels
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     python3-dev \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and build wheels
 COPY requirements.txt .
 
+# Build wheels for all dependencies
 RUN python -m pip install --upgrade pip setuptools wheel && \
+    pip wheel --no-cache-dir --wheel-dir=/wheels/wheels \
+        torch --index-url https://download.pytorch.org/whl/cpu && \
     pip wheel --no-cache-dir --wheel-dir=/wheels/wheels -r requirements.txt
+
 
 # ---------- final: production image ----------
 FROM python:3.10-slim AS final
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    TRANSFORMERS_CACHE=/app/cache/huggingface \
+    HF_HOME=/app/cache/huggingface
 
 WORKDIR /app
 
-# Copy only wheels and requirements.txt first
-COPY --from=builder /wheels/wheels /wheels/wheels
+
+COPY --from=builder /wheels /wheels
 COPY requirements.txt .
 
-# Install from wheels and remove wheel files & pip cache in the same RUN
 RUN python -m pip install --upgrade pip && \
-    pip install --no-index --no-cache-dir --find-links=/wheels/wheels -r requirements.txt && \
-    rm -rf /wheels/wheels /root/.cache/pip
+    pip install --no-index --no-cache-dir --find-links=/wheels -r requirements.txt && \
+    rm -rf /wheels /root/.cache/pip /usr/local/lib/python3.10/site-packages/tests
 
 COPY . .
 
-EXPOSE 8003
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
 
+EXPOSE 8003
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8003"]
