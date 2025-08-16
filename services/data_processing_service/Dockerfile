@@ -11,14 +11,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements và build wheels
+# Copy requirements and build wheels
 COPY requirements.txt .
 
 RUN python -m pip install --upgrade pip setuptools wheel && \
     pip wheel --no-cache-dir --wheel-dir=/wheels/wheels -r requirements.txt
 
 # ---------- final: production image ----------
-ROM python:3.10-slim AS final
+FROM python:3.10-slim AS final
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
