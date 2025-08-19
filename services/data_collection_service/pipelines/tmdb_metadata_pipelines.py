@@ -2,6 +2,7 @@ import asyncio
 import httpx
 from pathlib import Path
 import json
+import os
 from utils.downloader import async_batch_download_images, download_cast_images_batch
 
 RAW_DIR = Path("data/raw")
