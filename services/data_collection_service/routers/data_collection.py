@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query
 import asyncio
 from pathlib import Path
-from ..pipelines import tmdb_metadata_pipelines as pipeline
+from pipelines import tmdb_metadata_pipelines as pipeline
 
 router = APIRouter(prefix="/data-collection", tags=["Data Collection"])
 
