@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 
 # Build wheels for all dependencies
-RUN python -m pip install --upgrade pip setuptools wheel && \
+RUN --mount=type=cache,target=/root/.cache/pip python -m pip install --upgrade pip setuptools wheel && \
     pip wheel --no-cache-dir --wheel-dir=/wheels \
         torch --index-url https://download.pytorch.org/whl/cpu && \
     pip wheel --no-cache-dir --wheel-dir=/wheels/ -r requirements.txt
