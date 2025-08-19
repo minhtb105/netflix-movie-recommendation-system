@@ -8,11 +8,6 @@ services/feature_store_service/registry.db
 services/feature_store_service/online_store.db
 services/feature_store_service/.feast
 services/feature_store_service/data/
-services/feature_store_service/store_1000/
-services/feature_store_service/store_2901/
-services/feature_store_service/store_2094/
-services/feature_store_service/store_384/
-services/feature_store_service/feature_store.yaml
 .vscode
 .venv
 .idea
