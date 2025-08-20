@@ -13,7 +13,7 @@ BASE_STATIC_DIR = Path(
         Path(__file__).resolve().parents[2] / "web_service" / "static" / "images"  # fallback local
     )
 )
-TMDB_SERVICE_URL = "http://tmdb_service:8009"
+TMDB_SERVICE_URL = os.getenv("TMDB_SERVICE_URL", "http://tmdb_service:8009")
 
 
 async def fetch_movie_ids(max_pages=300):
