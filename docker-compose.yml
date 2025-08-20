@@ -1,25 +1,27 @@
-version: "1.0"
-
 services:
-  web_service:
-    build: ./services/web_service
-    ports:
-      - "8000:8000"
-    volumes:
-      - shared_images:/app/static/images
-    environment:
-      - PYTHONUNBUFFERED=1
-      - STATIC_IMAGE_DIR=/app/static/images
-
   tmdb_service:
-    build: ./services/tmdb_service
+    image: tmdb_service:v1
     ports:
       - "8009:8009"
-    volumes:
-      - shared_images:/app/static/images
     environment:
       - PYTHONUNBUFFERED=1
       - STATIC_IMAGE_DIR=/app/static/images
+      - TIME_OUT=30
+
+  data_collection_service:
+    image: data_collection_service:v1
+    ports:
+      - "8003:8003"
+    volumes:
+      - shared_images:/app/static/images
+      - /data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - STATIC_IMAGE_DIR=/app/static/images
+      - TIME_OUT=30
+
+    depends_on:
+      - tmdb_service
 
 volumes:
   shared_images:
