@@ -43,5 +43,5 @@ COPY . .
 
 RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
 
-EXPOSE 8003
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8003"]
+EXPOSE 8004
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8004"]
