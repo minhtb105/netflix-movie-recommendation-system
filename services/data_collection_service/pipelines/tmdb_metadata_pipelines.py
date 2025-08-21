@@ -4,7 +4,10 @@ from pathlib import Path
 import json
 import os
 from utils.downloader import async_batch_download_images, download_cast_images_batch
+from clients.tmdb_service_client import TMDBServiceClient
 
+
+client = TMDBServiceClient()
 RAW_DIR = Path("data/raw")
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 BASE_STATIC_DIR = Path(
@@ -13,39 +16,36 @@ BASE_STATIC_DIR = Path(
         Path(__file__).resolve().parents[2] / "web_service" / "static" / "images"  # fallback local
     )
 )
-TMDB_SERVICE_URL = os.getenv("TMDB_SERVICE_URL", "http://tmdb_service:8009")
 
 
 async def fetch_movie_ids(max_pages=300):
     movie_ids = set()
-    async with httpx.AsyncClient() as client:
-        for endpoint in ["movie/popular", "movie/top_rated", "movie/upcoming"]:
-            for page in range(1, max_pages + 1):
-                r = await client.get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
-                data = r.json()
-                if data and "results" in data:
-                    movie_ids.update(m["id"] for m in data["results"])
-                await asyncio.sleep(0.25)
+    for endpoint in ["movie/popular", "movie/top_rated", "movie/upcoming"]:
+        for page in range(1, max_pages + 1):
+            r = await client.get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
+            data = r.json()
+            if data and "results" in data:
+                movie_ids.update(m["id"] for m in data["results"])
+            await asyncio.sleep(0.25)
                 
     return list(movie_ids)
 
 
 async def fetch_movie_metadata(movie_ids, out_path):
     all_meta = []
-    async with httpx.AsyncClient() as client:
-        for mid in movie_ids:
-            details, videos, reviews = await asyncio.gather(
-                client.get(f"{TMDB_SERVICE_URL}/movie/{mid}"),
-                client.get(f"{TMDB_SERVICE_URL}/movie/{mid}/videos"),
-                client.get(f"{TMDB_SERVICE_URL}/movie/{mid}/reviews"),
-            )
-            all_meta.append({
-                "id": mid,
-                "details": details.json(),
-                "videos": videos.json(),
-                "reviews": reviews.json()
-            })
-            await asyncio.sleep(0.25)
+    for mid in movie_ids:
+        details, videos, reviews = await asyncio.gather(
+            client.get(f"{TMDB_SERVICE_URL}/movie/{mid}"),
+            client.get(f"{TMDB_SERVICE_URL}/movie/{mid}/videos"),
+            client.get(f"{TMDB_SERVICE_URL}/movie/{mid}/reviews"),
+        )
+        all_meta.append({
+            "id": mid,
+            "details": details.json(),
+            "videos": videos.json(),
+            "reviews": reviews.json()
+        })
+        await asyncio.sleep(0.25)
 
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(all_meta, f, ensure_ascii=False, indent=2)
@@ -84,34 +84,32 @@ async def process_movie_images(movies_meta):
 
 async def fetch_tv_ids(max_pages=300):
     tv_ids = set()
-    async with httpx.AsyncClient() as client:
-        for endpoint in ["tv/popular", "tv/top_rated", "tv/on_the_air"]:
-            for page in range(1, max_pages + 1):
-                r = await client.get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
-                data = r.json()
-                if data and "results" in data:
-                    tv_ids.update(tv["id"] for tv in data["results"])
-                await asyncio.sleep(0.25)
+    for endpoint in ["tv/popular", "tv/top_rated", "tv/on_the_air"]:
+        for page in range(1, max_pages + 1):
+            r = await client.get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
+            data = r.json()
+            if data and "results" in data:
+                tv_ids.update(tv["id"] for tv in data["results"])
+            await asyncio.sleep(0.25)
                 
     return list(tv_ids)
 
 
 async def fetch_tv_metadata(tv_ids, out_path):
     all_meta = []
-    async with httpx.AsyncClient() as client:
-        for tid in tv_ids:
-            details, videos, reviews = await asyncio.gather(
-                client.get(f"{TMDB_SERVICE_URL}/tv/{tid}"),
-                client.get(f"{TMDB_SERVICE_URL}/tv/{tid}/videos"),
-                client.get(f"{TMDB_SERVICE_URL}/tv/{tid}/reviews"),
-            )
-            all_meta.append({
-                "id": tid,
-                "details": details.json(),
-                "videos": videos.json(),
-                "reviews": reviews.json()
-            })
-            await asyncio.sleep(0.25)
+    for tid in tv_ids:
+        details, videos, reviews = await asyncio.gather(
+            client.get(f"{TMDB_SERVICE_URL}/tv/{tid}"),
+            client.get(f"{TMDB_SERVICE_URL}/tv/{tid}/videos"),
+            client.get(f"{TMDB_SERVICE_URL}/tv/{tid}/reviews"),
+        )
+        all_meta.append({
+            "id": tid,
+            "details": details.json(),
+            "videos": videos.json(),
+            "reviews": reviews.json()
+        })
+        await asyncio.sleep(0.25)
 
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(all_meta, f, ensure_ascii=False, indent=2)
