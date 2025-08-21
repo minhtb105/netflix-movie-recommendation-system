@@ -7,18 +7,20 @@ services:
       - PYTHONUNBUFFERED=1
       - STATIC_IMAGE_DIR=/app/static/images
       - TIME_OUT=30
+      - TMDB_ACCESS_TOKEN=${TMDB_ACCESS_TOKEN}
 
   data_collection_service:
     image: data_collection_service:v1
     ports:
       - "8003:8003"
     volumes:
-      - shared_images:/app/static/images
+      - ./services/web_service/static/images:/app/static/images
       - /data:/app/data
     environment:
       - PYTHONUNBUFFERED=1
       - STATIC_IMAGE_DIR=/app/static/images
       - TIME_OUT=30
+      - TMDB_SERVICE_URL=http://tmdb_service:8009
 
     depends_on:
       - tmdb_service
