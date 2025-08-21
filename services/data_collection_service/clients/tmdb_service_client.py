@@ -22,6 +22,9 @@ class TMDBServiceClient:
         async with self.semaphore:
             try:
                 response = await self.client.get(url, params=params)
+                if response.status_code == 404:
+                    return {}
+                
                 response.raise_for_status()
                 return response.json()
             except httpx.HTTPStatusError as e:

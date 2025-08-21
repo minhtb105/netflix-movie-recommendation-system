@@ -41,9 +41,9 @@ async def fetch_movie_metadata(movie_ids, out_path):
         )
         all_meta.append({
             "id": mid,
-            "details": details.json(),
-            "videos": videos.json(),
-            "reviews": reviews.json()
+            "details": details,
+            "videos": videos,
+            "reviews": reviews
         })
         await asyncio.sleep(0.25)
 
@@ -106,9 +106,9 @@ async def fetch_tv_metadata(tv_ids, out_path):
         )
         all_meta.append({
             "id": tid,
-            "details": details.json(),
-            "videos": videos.json(),
-            "reviews": reviews.json()
+            "details": details,
+            "videos": videos,
+            "reviews": reviews
         })
         await asyncio.sleep(0.25)
 
