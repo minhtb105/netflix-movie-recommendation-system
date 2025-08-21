@@ -22,7 +22,7 @@ async def fetch_movie_ids(max_pages=300):
     movie_ids = set()
     for endpoint in ["movie/popular", "movie/top_rated", "movie/upcoming"]:
         for page in range(1, max_pages + 1):
-            r = await client._get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
+            r = await client._get(endpoint, params={"page": page})
             data = r.json()
             if data and "results" in data:
                 movie_ids.update(m["id"] for m in data["results"])
@@ -35,9 +35,9 @@ async def fetch_movie_metadata(movie_ids, out_path):
     all_meta = []
     for mid in movie_ids:
         details, videos, reviews = await asyncio.gather(
-            client.get(f"{TMDB_SERVICE_URL}/movie/{mid}"),
-            client.get(f"{TMDB_SERVICE_URL}/movie/{mid}/videos"),
-            client.get(f"{TMDB_SERVICE_URL}/movie/{mid}/reviews"),
+            client._get(f"/movie/{mid}"),
+            client._get(f"/movie/{mid}/videos"),
+            client._get(f"/movie/{mid}/reviews"),
         )
         all_meta.append({
             "id": mid,
@@ -86,7 +86,7 @@ async def fetch_tv_ids(max_pages=300):
     tv_ids = set()
     for endpoint in ["tv/popular", "tv/top_rated", "tv/on_the_air"]:
         for page in range(1, max_pages + 1):
-            r = await client._get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
+            r = await client._get(f"endpoint", params={"page": page})
             data = r.json()
             if data and "results" in data:
                 tv_ids.update(tv["id"] for tv in data["results"])
@@ -99,9 +99,9 @@ async def fetch_tv_metadata(tv_ids, out_path):
     all_meta = []
     for tid in tv_ids:
         details, videos, reviews = await asyncio.gather(
-            client.get(f"{TMDB_SERVICE_URL}/tv/{tid}"),
-            client.get(f"{TMDB_SERVICE_URL}/tv/{tid}/videos"),
-            client.get(f"{TMDB_SERVICE_URL}/tv/{tid}/reviews"),
+            client._get(f"/tv/{tid}"),
+            client._get(f"/tv/{tid}/videos"),
+            client._get(f"/tv/{tid}/reviews"),
         )
         all_meta.append({
             "id": tid,
