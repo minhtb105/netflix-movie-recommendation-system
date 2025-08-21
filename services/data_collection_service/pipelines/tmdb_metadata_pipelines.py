@@ -35,9 +35,9 @@ async def fetch_movie_metadata(movie_ids, out_path):
     all_meta = []
     for mid in movie_ids:
         details, videos, reviews = await asyncio.gather(
-            client._get(f"/movie/{mid}"),
-            client._get(f"/movie/{mid}/videos"),
-            client._get(f"/movie/{mid}/reviews"),
+            client._get(f"movie/{mid}"),
+            client._get(f"movie/{mid}/videos"),
+            client._get(f"movie/{mid}/reviews"),
         )
         all_meta.append({
             "id": mid,
@@ -99,9 +99,9 @@ async def fetch_tv_metadata(tv_ids, out_path):
     all_meta = []
     for tid in tv_ids:
         details, videos, reviews = await asyncio.gather(
-            client._get(f"/tv/{tid}"),
-            client._get(f"/tv/{tid}/videos"),
-            client._get(f"/tv/{tid}/reviews"),
+            client._get(f"tv/{tid}"),
+            client._get(f"tv/{tid}/videos"),
+            client._get(f"tv/{tid}/reviews"),
         )
         all_meta.append({
             "id": tid,

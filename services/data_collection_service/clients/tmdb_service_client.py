@@ -18,7 +18,7 @@ class TMDBServiceClient:
         retry=retry_if_exception_type(httpx.RequestError)
     )
     async def _get(self, endpoint: str, params: dict = None):
-        url = f"{self.base_service_url}{endpoint}"
+        url = f"{self.base_service_url}/{endpoint}"
         async with self.semaphore:
             try:
                 response = await self.client.get(url, params=params)
