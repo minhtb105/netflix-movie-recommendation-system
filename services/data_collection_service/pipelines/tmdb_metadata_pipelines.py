@@ -146,7 +146,6 @@ async def process_tv_images(tv_meta):
     await async_batch_download_images(image_infos, save_dir=BASE_STATIC_DIR / "tv")
     await download_cast_images_batch(cast_list)
 
-
 async def main():
     movie_ids, tv_ids = await asyncio.gather(
         fetch_movie_ids(),
