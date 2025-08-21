@@ -22,7 +22,7 @@ async def fetch_movie_ids(max_pages=300):
     movie_ids = set()
     for endpoint in ["movie/popular", "movie/top_rated", "movie/upcoming"]:
         for page in range(1, max_pages + 1):
-            r = await client.get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
+            r = await client._get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
             data = r.json()
             if data and "results" in data:
                 movie_ids.update(m["id"] for m in data["results"])
@@ -86,7 +86,7 @@ async def fetch_tv_ids(max_pages=300):
     tv_ids = set()
     for endpoint in ["tv/popular", "tv/top_rated", "tv/on_the_air"]:
         for page in range(1, max_pages + 1):
-            r = await client.get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
+            r = await client._get(f"{TMDB_SERVICE_URL}/{endpoint}", params={"page": page})
             data = r.json()
             if data and "results" in data:
                 tv_ids.update(tv["id"] for tv in data["results"])
