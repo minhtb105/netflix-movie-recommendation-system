@@ -48,7 +48,7 @@ jobs:
       
       - name: Run tests
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/services/data_ingest_service
           pytest services/${{ env.SERVICE_NAME }}/tests --maxfail=1 --disable-warnings -q
 
       - name: Validate DVC pipeline
