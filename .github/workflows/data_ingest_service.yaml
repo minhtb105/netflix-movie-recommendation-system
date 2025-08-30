@@ -48,7 +48,6 @@ jobs:
       
       - name: Run tests
         run: |
-          cd services/${{ env.SERVICE_NAME }}
           pytest services/${{ env.SERVICE_NAME }}/tests --maxfail=1 --disable-warnings -q
 
       - name: Validate DVC pipeline
