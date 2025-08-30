@@ -56,7 +56,7 @@ jobs:
           dvc repro --dry-run
 
   cd: 
-    runs-on: ubuntu-lastest 
+    runs-on: ubuntu-latest 
     needs: ci 
     if: github.ref == 'refs/heads/main'
     steps:
