@@ -48,6 +48,7 @@ jobs:
       
       - name: Run tests
         run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
           pytest services/${{ env.SERVICE_NAME }}/tests --maxfail=1 --disable-warnings -q
 
       - name: Validate DVC pipeline
