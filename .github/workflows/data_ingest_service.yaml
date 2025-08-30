@@ -8,6 +8,7 @@ on:
   pull_request:
     paths:
       - "services/data_ingest_service/**"
+  workflow_dispatch: 
   
 env:
   SERVICE_NAME: data_ingest_service
