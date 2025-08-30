@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-ingest-service
+  labels:
+    app: data-ingest 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-ingest
+  template:
+    metadata:
+      labels:
+        app: data-ingest
+    spec:
+      containers:
+      - name: data-ingest-container
+        image: ghcr.io/minhtran/data_ingest_service:v1
+        ports:
+        - containerPort: 8007
+  
