@@ -53,9 +53,9 @@ jobs:
 
       - name: Validate DVC pipeline
         run: |
-          cd services/${{ env.SERVICE_NAME }}
-          dvc status
-          dvc repro --dry-run
+          dvc status -R services/${{ env.SERVICE_NAME }}
+          dvc repro --dry-run -R services/${{ env.SERVICE_NAME }}
+
 
   cd: 
     runs-on: ubuntu-latest 
