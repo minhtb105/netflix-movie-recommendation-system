@@ -1,7 +1,11 @@
-import pytest
+from fastapi.testclient import TestClient
+from app import app
 
-def test_import_main():
-    try:
-        import app 
-    except Exception as e:
-        pytest.fail(f"Import app module failed: {e}")
+client = TestClient(app)
+
+def test_health_check():
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+    
+    
