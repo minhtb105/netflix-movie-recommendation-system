@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from feast import FeatureStore
+from schemas.movielens_feature import UserFeatureRequest
 import os
 
 router = APIRouter(prefix="/user_features", tags=["User Features"])
@@ -26,3 +27,13 @@ def get_user_features(user_id: int):
         return features
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/")
+def add_user_features(data: UserFeatureRequest):
+    try:
+        df = pd.DataFrame([data.dict()])
+        fs.write_to_online_store("user_features", df)
+        return {"status": "success", "message": f"user {data.user_id} stored"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
