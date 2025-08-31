@@ -5,6 +5,7 @@ on:
     paths:
       - "services/data_ingest_service/**"
       - ".github/workflows/data_ingest_service.yaml"
+      - "dvc.yaml"
   pull_request:
     paths:
       - "services/data_ingest_service/**"
