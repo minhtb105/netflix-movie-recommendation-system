@@ -42,9 +42,14 @@ jobs:
           restore-keys: |
             dvc-${{ runner.os }}-
 
+      - name: Configure DVC remote with connection string
+        run: |
+          dvc remote modify --local azure connection_string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
+          dvc remote modify --local azure container_name dvcstore
+
       - name: Pull data from DVC 
         run: |
-          dvc remote modify --local azure account_key ${{ secrets.AZURE_STORAGE_KEY }}
+          dvc pull data/raw/ml-100k -r azure
       
       - name: Run tests
         run: |
@@ -75,10 +80,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Configure DVC remote with connection string
+        run: |
+          dvc remote modify --local azure connection_string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
+
       - name: Pull data from DVC (for Docker build)
         run: |
-          dvc remote modify --local azure account_key ${{ secrets.AZURE_STORAGE_KEY }}
-
+          dvc pull data/raw/ml-100k -r azure
 
       - name: Build and push Docker image  
         run: |
