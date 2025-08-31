@@ -53,8 +53,8 @@ jobs:
 
       - name: Validate DVC pipeline
         run: |
-          dvc status -R services/${{ env.SERVICE_NAME }}
-          dvc repro --dry-run -R services/${{ env.SERVICE_NAME }}
+          dvc status ingest
+          dvc repro --dry-run ingest
 
 
   cd: 
