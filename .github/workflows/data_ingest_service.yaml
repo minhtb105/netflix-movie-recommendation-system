@@ -48,7 +48,7 @@ jobs:
 
       - name: Pull data from DVC 
         run: |
-          dvc pull data/raw/ml-100k -r azure
+          dvc pull -r azure
       
       - name: Run tests
         run: |
@@ -85,7 +85,7 @@ jobs:
 
       - name: Pull data from DVC (for Docker build)
         run: |
-          dvc pull data/raw/ml-100k -r azure
+          dvc pull -r azure
 
       - name: Build and push Docker image  
         run: |
