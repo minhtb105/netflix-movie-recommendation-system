@@ -1,13 +1,13 @@
 process_ratings_movielens:
   file_path: "data/processed/ratings.csv"
-  out_dir: "feature_repo/data/ratings_movielens"
+  out_dir: "data/feature/ratings_movielens"
   timestamp_col: "timestamp"
   test_size: 0.2
 
 process_movies_movielens:
   file_path: "data/processed/movies.csv"
   date_col: "release_date"
-  out_dir: "feature_repo/data/movies_movielens"
+  out_dir: "data/feature/movies_movielens"
   vectorize_col: "title"
   max_features: 1000
 
@@ -16,7 +16,7 @@ process_users_movielens:
   enc_cols:
     - "gender"
     - "occupation"
-  out_dir: "feature_repo/data/users_movielens"
+  out_dir: "data/feature/users_movielens"
 
 process_movies_tmdb:
   file_path: "data/raw/movies_features.json"
@@ -59,8 +59,8 @@ process_movies_tmdb:
     - "budget"
     - "revenue"
     - "popularity"
-  features_out_dir: "feature_repo/data/movies_tmdb/features"
-  reviews_out_dir: "feature_repo/data/movies_tmdb/reviews"
+  features_out_dir: "data/feature/movies_tmdb/features"
+  reviews_out_dir: "data/feature/movies_tmdb/reviews"
 
 process_tv_tmdb:
   file_path: "data/raw/tv_features.json"
@@ -103,8 +103,8 @@ process_tv_tmdb:
     - "budget"
     - "revenue"
     - "popularity"
-  features_out_dir: "feature_repo/data/tv_tmdb/features"
-  reviews_out_dir: "feature_repo/data/tv_tmdb/reviews"
+  features_out_dir: "data/feature_repo/tv_tmdb/features"
+  reviews_out_dir: "data/feature_repo/tv_tmdb/reviews"
 
 process_trending_movie_tmdb:
   file_path: "data/raw/trending_movie_features.json"
@@ -147,8 +147,8 @@ process_trending_movie_tmdb:
     - "budget"
     - "revenue"
     - "popularity"
-  features_out_dir: "feature_repo/data/movies_tmdb/features"
-  reviews_out_dir: "feature_repo/data/movies_tmdb/reviews"
+  features_out_dir: "data/feature/movies_tmdb/features"
+  reviews_out_dir: "data/feature/movies_tmdb/reviews"
 
 process_trending_tv_tmdb:
   file_path: "data/raw/trending_tv_features.json"
@@ -191,6 +191,6 @@ process_trending_tv_tmdb:
     - "budget"
     - "revenue"
     - "popularity"
-  features_out_dir: "feature_repo/data/tv_tmdb/features"
-  reviews_out_dir: "feature_repo/data/tv_tmdb/reviews"
+  features_out_dir: "data/feature/tv_tmdb/features"
+  reviews_out_dir: "data/feature/tv_tmdb/reviews"
   
