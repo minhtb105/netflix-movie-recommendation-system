@@ -55,7 +55,7 @@ jobs:
       - name: Validate DVC pipeline
         run: |
           dvc status ingest
-          dvc repro --dry-run ingest
+          dvc repro --dry ingest
 
 
   cd: 
