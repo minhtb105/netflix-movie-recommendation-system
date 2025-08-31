@@ -44,7 +44,7 @@ jobs:
 
       - name: Pull data from DVC 
         run: |
-          dvc pull --remote azure 
+          dvc remote modify --local azure account_key ${{ secrets.AZURE_STORAGE_KEY }}
       
       - name: Run tests
         run: |
@@ -77,9 +77,7 @@ jobs:
 
       - name: Pull data from DVC (for Docker build)
         run: |
-          dvc remote add -d azure azure://dvcstore
-          dvc remote modify azure account_name minh1234
-          dvc remote modify azure account_key ${{ secrets.AZURE_STORAGE_KEY }}
+          dvc remote modify --local azure account_key ${{ secrets.AZURE_STORAGE_KEY }}
 
 
       - name: Build and push Docker image  
