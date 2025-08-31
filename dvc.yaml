@@ -27,7 +27,6 @@ stages:
       - services/web_service/static/images/tv
       - services/web_service/static/images/cast
   
-  stages:
   extract_tmdb_features:
     cmd: python services/data_processing_service/steps/extract_tmdb_features.py
     deps:
