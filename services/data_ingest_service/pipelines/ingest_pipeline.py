@@ -2,7 +2,7 @@ from pathlib import Path
 import sys
 import logging
 
-project_root = Path(__file__).resolve().parents[1]
+project_root = Path(__file__).resolve().parents[3]
 print(project_root)
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
@@ -12,7 +12,7 @@ import yaml
 
 
 def ingest_ml100k_pipeline():
-    params_path = project_root / "params.yaml"
+    params_path = project_root / "services/data_ingest_service/params.yaml"
     with open(params_path, "r") as f:
         params = yaml.safe_load(f)["ingest"]
         
@@ -46,7 +46,7 @@ def ingest_ml100k_pipeline():
         names=["user_id", "age", "gender", "occupation", "zip_code"]
     )
     
-    processed_dir = Path(params['processed_dir'])
+    processed_dir = Path(project_root / params['processed_dir'])
     processed_dir.mkdir(parents=True, exist_ok=True)
     ratings.to_csv(processed_dir / "ratings.csv", index=False)
     movies.to_csv(processed_dir / "movies.csv", index=False)
