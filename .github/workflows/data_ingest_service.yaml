@@ -42,10 +42,9 @@ jobs:
           restore-keys: |
             dvc-${{ runner.os }}-
 
-      # - name: Pull data from DVC 
-      #   run: |
-      #     cd services/${{ env.SERVICE_NAME }}
-      #     dvc pull --remote azure 
+      - name: Pull data from DVC 
+        run: |
+          dvc pull --remote azure 
       
       - name: Run tests
         run: |
@@ -76,13 +75,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Pull data from DVC (for Docker build)
-      #   run: |
-      #     cd services/${{ env.SERVICE_NAME }}
-      #     dvc install dvc[azure]
-      #     dvc remote modify origin access_key_id ${{ secrets.AZURE_ACCESS_KEY_ID }}
-      #     dvc remote modify origin secret_access_key ${{ secrets.AZURE_SECRET_ACCESS_KEY }}
-      #     dvc pull --remote azure
+      - name: Pull data from DVC (for Docker build)
+        run: |
+          dvc remote add -d azure azure://dvcstore
+          dvc remote modify azure account_name minh1234
+          dvc remote modify azure account_key ${{ secrets.AZURE_STORAGE_KEY }}
+
 
       - name: Build and push Docker image  
         run: |
