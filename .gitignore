@@ -1,5 +1,7 @@
 # Ignore all raw/processed/feature data
-data/
+data/processed
+data/raw/movies_metadata.json
+data/raw/tv_metadata.json
 services/__pycache__
 utils/__pycache__
 .dvc/config
