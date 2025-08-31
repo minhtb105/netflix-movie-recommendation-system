@@ -5,7 +5,7 @@ import os
 
 
 X_train_source = FileSource(
-    path=r'data/ratings_movielens/rating_train.parquet',
+    path=os.path.join(os.path.dirname(__file__).parent[2], 'data/feature/ratings_movielens/rating_train.parquet'),
     event_timestamp_column="timestamp")
 
 user = Entity(name='user_id', 
@@ -34,7 +34,7 @@ X_train_fv = FeatureView(
 )
 
 X_test_source = FileSource(
-    path=r"data/ratings_movielens/rating_test.parquet",
+    path=os.path.join(os.path.dirname(__file__).parent[2], "data/feature/ratings_movielens/rating_test.parquet"),
     event_timestamp_column="timestamp")
 
 X_test_fv = FeatureView(

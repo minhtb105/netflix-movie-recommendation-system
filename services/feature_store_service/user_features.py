@@ -5,7 +5,7 @@ import os
 
 
 user_source = FileSource(
-    path=r'data/users_movielens/user_features.parquet', 
+    path=os.path.join(os.path.dirname(__file__).pảent[2], 'data/feature/users_movielens/user_features.parquet'), 
     event_timestamp_column="event_timestamp")
 
 user = Entity(name='user_id', 

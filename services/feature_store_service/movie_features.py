@@ -5,7 +5,7 @@ import os
 
 
 movie_source = FileSource(
-    path=os.path.join(os.path.dirname(__file__), "data/movies_movielens/movie_features.parquet"),
+    path=os.path.join(os.path.dirname(__file__).parent[2], "data/feature/movies_movielens/movie_features.parquet"),
     event_timestamp_column='release_date')
 
 movie = Entity(name='movie_id', 

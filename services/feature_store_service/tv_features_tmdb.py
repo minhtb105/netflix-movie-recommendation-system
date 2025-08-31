@@ -5,7 +5,7 @@ import os
 
 
 tv_source = FileSource(
-    path=os.path.join(os.path.dirname(__file__), "data/tv_tmdb/features"),
+    path=os.path.join(os.path.dirname(__file__).parent[2], "data/feature/tv_tmdb/features"),
     event_timestamp_column='event_timestamp')
 
 series_id = Entity(name='id', 
@@ -32,7 +32,7 @@ fs_2094 = FeatureStore(repo_path=store_path)
 
 
 review_source = FileSource(
-    path=os.path.join(os.path.dirname(__file__), "data/tv_tmdb/reviews"),
+    path=os.path.join(os.path.dirname(__file__).parent[2], "data/feature/tv_tmdb/reviews"),
     event_timestamp_column='event_timestamp')
 
 review_id = Entity(name='id', 
