@@ -1,5 +1,6 @@
 [core]
     remote = azure
 ['remote "azure"']
-    url = azure://dvcstore
-    account_name = minh1234
+    url = azure://dvcstore/dvc
+    
+    
