@@ -82,7 +82,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure DVC remote with connection string
-        run: |
+        run: | 
           dvc remote remove azure
           dvc remote add -d azure dvcstore/dvc
           dvc remote modify azure connection_string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
