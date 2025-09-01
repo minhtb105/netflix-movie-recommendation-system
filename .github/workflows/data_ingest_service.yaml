@@ -13,7 +13,7 @@ on:
 
 env:
   SERVICE_NAME: data_ingest_service
-  DOCKER_IMAGE: ghcr.io/minhtran/data_ingest_service:v1
+  DOCKER_IMAGE: ghcr.io/minhtran/data_ingest_service
   PYTHON_VERSION: '3.10'
 
 jobs:
