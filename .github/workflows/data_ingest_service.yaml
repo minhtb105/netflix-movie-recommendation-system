@@ -38,7 +38,6 @@ jobs:
 
       - name: Configure DVC remote with connection string
         run: |
-          dvc remote add -d azure_tmp dvcstore/dvc
           dvc remote modify azure_tmp connection_string "${AZURE_STORAGE_CONNECTION_STRING}" --local
 
       - name: Check DVC remote
@@ -82,7 +81,6 @@ jobs:
 
       - name: Configure DVC remote with connection string
         run: | 
-          dvc remote add -d azure_tmp dvcstore/dvc
           dvc remote modify azure_tmp connection_string "${AZURE_STORAGE_CONNECTION_STRING}" --local
 
       - name: Pull data from DVC (for Docker build)
