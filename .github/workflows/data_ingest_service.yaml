@@ -2,10 +2,14 @@ name: CI-CD - data_ingest_service
 
 on:
   push:
-    paths:
-      - "services/data_ingest_service/**"
-      - ".github/workflows/data_ingest_service.yaml"
-      - "dvc.yaml"
+      branches:
+        - main
+      paths-ignore:
+        - "README.md"
+      paths:
+        - "services/data_ingest_service/**"
+        - ".github/workflows/data_ingest_service.yaml"
+        - "dvc.yaml"
   pull_request:
     paths:  
       - "services/data_ingest_service/**"
