@@ -66,6 +66,13 @@ jobs:
           export PYTHONPATH=$PYTHONPATH:$(pwd)/services/data_ingest_service
           pytest services/${{ env.SERVICE_NAME }}/tests --maxfail=1 --disable-warnings -q
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
