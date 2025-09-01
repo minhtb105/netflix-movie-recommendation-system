@@ -77,6 +77,11 @@ jobs:
         run: |
           dvc remote modify --local azure connection_string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
 
+      - name: Check DVC remote
+        run: dvc remote list -v
+      - name: Check dvc.lock
+        run: cat dvc.lock
+
       - name: Pull data from DVC (for Docker build)
         run: |
           dvc pull -r azure ingest
