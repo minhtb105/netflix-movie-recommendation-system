@@ -38,7 +38,7 @@ jobs:
 
       - name: Configure DVC remote with connection string
         run: |
-          dvc remote modify azure connection_string "${AZURE_STORAGE_CONNECTION_STRING}" --local
+          dvc remote modify azure connection_string "${AZURE_STORAGE_CONNECTION_STRING}"
 
       - name: Check DVC remote
         run: dvc remote list -v
@@ -81,7 +81,7 @@ jobs:
 
       - name: Configure DVC remote with connection string
         run: | 
-          dvc remote modify azure connection_string "${AZURE_STORAGE_CONNECTION_STRING}" --local
+          dvc remote modify azure connection_string "${AZURE_STORAGE_CONNECTION_STRING}"
 
       - name: Pull data from DVC (for Docker build)
         run: |
