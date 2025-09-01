@@ -1,0 +1,40 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python services/data_ingest_service/pipelines/ingest_pipeline.py
+    deps:
+    - path: data/raw/ml-100k/u.data
+      hash: md5
+      md5: 6e47046882bad158b0efbb84cd5cb987
+      size: 1979173
+    - path: data/raw/ml-100k/u.item
+      hash: md5
+      md5: c9e7f390115d79079537301d5204f3f7
+      size: 236344
+    - path: data/raw/ml-100k/u.user
+      hash: md5
+      md5: 1b53539edc13caad0282c8500608a319
+      size: 22628
+    - path: services/data_ingest_service/pipelines/ingest_pipeline.py
+      hash: md5
+      md5: dfdc3e1098d1ff5b8e365b041b489e89
+      size: 1967
+    - path: services/data_ingest_service/src/ingest_strategy.py
+      hash: md5
+      md5: 773c91894d5b725b2475082b661d93d5
+      size: 1836
+    - path: services/data_ingest_service/steps/ingest_data.py
+      hash: md5
+      md5: 0f298b58dd46cc22e23e9363cfb56fbc
+      size: 975
+    params:
+      params.yaml:
+        data_ingest_service.ingest:
+          base_path: data/raw/ml-100k
+          processed_dir: data/processed
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: c4cd683f670cf1c0d88cda46cd1a5eb9.dir
+      size: 2239923
+      nfiles: 3
