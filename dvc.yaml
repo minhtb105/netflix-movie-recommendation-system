@@ -10,7 +10,7 @@ stages:
       - data/raw/ml-100k/u.item
       - data/raw/ml-100k/u.user
     params:
-      - services/data_ingest_service/params.yaml
+      - data_ingest_service.ingest
     outs:
       - data/processed
 
@@ -49,7 +49,7 @@ stages:
       - data/processed/ratings.csv
       - services/data_processing_service/src/data_strategy.py
     params:
-      - services/data_processing_service/params.yaml
+      - data_processing_service.process_ratings_movielens
     outs:
       - data/feature/ratings_movielens
 
@@ -61,7 +61,7 @@ stages:
       - data/processed/movies.csv
       - services/data_processing_service/src/data_strategy.py
     params:
-      - services/data_processing_service/params.yaml
+      - data_processing_service.process_movies_movielens
     outs:
       - data/feature/movies_movielens
 
@@ -73,7 +73,7 @@ stages:
       - services/data_processing_service/data/processed/users.csv
       - services/data_processing_service/src/data_strategy.py
     params:
-      - services/data_processing_service/params.yaml
+      - data_processing_service.process_users_movielens
     outs:
       - data/feature/users_movielens
 
@@ -84,7 +84,7 @@ stages:
       - services/data_processing_service/steps/prepare_data.py
       - services/data_processing_service/src/data_strategy.py
     params:
-      - services/data_processing_service/params.yaml
+      - data_processing_service.process_movies_tmdb
     outs:
       - data/feature/movies_tmdb
 
@@ -95,7 +95,7 @@ stages:
       - services/data_processing_service/steps/prepare_data.py
       - services/data_processing_service/src/data_strategy.py
     params:
-      - services/data_processing_service/params.yaml
+      - data_processing_service.process_tv_tmdb
     outs:
       - data/feature/tv_tmdb
       
