@@ -13,8 +13,12 @@ on:
 
 env:
   SERVICE_NAME: data_ingest_service
-  DOCKER_IMAGE: ghcr.io/minhtran/data_ingest_service
+  DOCKER_IMAGE: ghcr.io/minhtb105/data_ingest_service
   PYTHON_VERSION: '3.10'
+
+permissions:
+  contents: read
+  packages: write 
 
 jobs:
   ci-cd:
@@ -24,9 +28,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('services/${{ env.SERVICE_NAME }}/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: |
@@ -78,7 +90,10 @@ jobs:
         with:
           context: services/${{ env.SERVICE_NAME }}
           push: true
-          tags: ${{ env.DOCKER_IMAGE }}:v1
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:latest
+            ${{ env.DOCKER_IMAGE }}:v1
+            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
 
       - name: Deploy to Kubernetes
         uses: azure/k8s-deploy@v4
@@ -86,6 +101,6 @@ jobs:
           manifests: |
             k8s/${{ env.SERVICE_NAME }}/deployment.yaml
             k8s/${{ env.SERVICE_NAME }}/service.yaml
-          images: ${{ env.DOCKER_IMAGE }}:v1
+          images: ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
           namespace: default
           kubectl-version: 'latest'
