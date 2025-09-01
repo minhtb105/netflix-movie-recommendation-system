@@ -2,5 +2,3 @@
     remote = azure
 ['remote "azure"']
     url = azure://dvcstore/dvc
-    
-    

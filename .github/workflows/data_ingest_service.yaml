@@ -37,8 +37,10 @@ jobs:
           pip install pytest
 
       - name: Configure DVC remote with connection string
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
         run: |
-          dvc remote modify azure connection_string "${AZURE_STORAGE_CONNECTION_STRING}"
+          dvc remote modify azure connection_string "$AZURE_STORAGE_CONNECTION_STRING"
 
       - name: Check DVC remote
         run: dvc remote list -v
@@ -80,9 +82,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure DVC remote with connection string
-        run: | 
-          dvc remote modify azure connection_string "${AZURE_STORAGE_CONNECTION_STRING}"
-
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+        run: |
+          dvc remote modify azure connection_string "$AZURE_STORAGE_CONNECTION_STRING"
+          
       - name: Pull data from DVC (for Docker build)
         run: |
           dvc pull -r azure ingest
