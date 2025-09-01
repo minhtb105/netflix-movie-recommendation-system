@@ -3,9 +3,9 @@ from pathlib import Path
 import sys
 from typing import Union, List, Optional, Annotated
 
-project_root = Path(__file__).resolve().parents[1]
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
+service_path = Path(__file__).resolve().parents[1]
+if str(service_path) not in sys.path:
+    sys.path.insert(0, str(service_path))
 
 from src.ingest_strategy import *
 

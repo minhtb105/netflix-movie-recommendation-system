@@ -7,6 +7,10 @@ project_root = Path(__file__).resolve().parents[3]
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
+service_path = project_root / "services" / "data_ingest_service"
+if str(service_path) not in sys.path:
+    sys.path.insert(0, str(service_path))
+
 from steps.ingest_data import ingest_df
 
 logging.basicConfig(level=logging.INFO)
