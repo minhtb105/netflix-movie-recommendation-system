@@ -95,6 +95,11 @@ jobs:
             ${{ env.DOCKER_IMAGE }}:v1
             ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
 
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Set up kubectl
         uses: azure/setup-kubectl@v4
         with:
@@ -103,9 +108,8 @@ jobs:
       - name: Set AKS context
         uses: azure/aks-set-context@v3
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          cluster-name: minh1234
           resource-group: Minh_group
+          cluster-name: minh1234
 
       - name: Deploy to Kubernetes
         uses: azure/k8s-deploy@v4
