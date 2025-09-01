@@ -4,8 +4,6 @@ on:
   push:
       branches:
         - main
-      paths-ignore:
-        - "README.md"
       paths:
         - "services/data_ingest_service/**"
         - ".github/workflows/data_ingest_service.yaml"
