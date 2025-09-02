@@ -9,7 +9,11 @@ on:
       - "dvc.yaml"
       - "k8s/data_ingest_service/**"
   pull_request:
-    paths: ["services/data_ingest_service/**"]
+    paths: 
+     - "services/data_ingest_service/**"
+     - ".github/workflows/data_ingest_service.yaml"
+     - "dvc.yaml"
+     - "k8s/data_ingest_service/**"
   workflow_dispatch:
 
 env:
