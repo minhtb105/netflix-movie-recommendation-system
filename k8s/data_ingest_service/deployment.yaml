@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: data-ingest-container
-        image: ghcr.io/minhtran/data_ingest_service:v1
+        image: ghcr.io/minhtb105/data_ingest_service:${GITHUB_SHA}
         ports:
         - containerPort: 8007
   
