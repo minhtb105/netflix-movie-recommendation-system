@@ -15,7 +15,7 @@ async def test_get_collection_details():
         return_value=Response(200, json={"id": collection_id, "name": "Collection A"})
     )
 
-     async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient() as client:
         service = CollectionService(client=client)
         data = await service.get_collection_details(collection_id)
 
