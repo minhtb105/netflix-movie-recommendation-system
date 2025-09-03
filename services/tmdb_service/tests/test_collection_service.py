@@ -10,16 +10,14 @@ pytestmark = pytest.mark.asyncio
 @respx.mock
 async def test_get_collection_details():
     collection_id = 321
-    service = CollectionService()
     
-    route = respx.get(
-        f"https://api.themoviedb.org/3/collection/{collection_id}",
-        client=service.client
-    ).mock(
+    route = respx.get(f"https://api.themoviedb.org/3/collection/{collection_id}").mock(
         return_value=Response(200, json={"id": collection_id, "name": "Collection A"})
     )
 
-    data = await service.get_collection_details(collection_id)
+     async with httpx.AsyncClient() as client:
+        service = CollectionService(client=client)
+        data = await service.get_collection_details(collection_id)
 
     assert route.called
     assert data["id"] == collection_id
@@ -28,17 +26,16 @@ async def test_get_collection_details():
 @pytest.mark.asyncio
 async def test_get_collection_details_404():
     collection_id = 9999
-    service = CollectionService()
     
     route = respx.get(
-        f"https://api.themoviedb.org/3/collection/{collection_id}",
-        client=service.client
-    ).mock(
+        f"https://api.themoviedb.org/3/collection/{collection_id}").mock(
         return_value=Response(404, json={"status_message": "Not Found"})
     )
 
-    with pytest.raises(httpx.HTTPStatusError):
-        await service.get_collection_details(collection_id)
+    async with httpx.AsyncClient() as client:
+        service = CollectionService(client=client)
+        with pytest.raises(httpx.HTTPStatusError):
+            await service.get_collection_details(collection_id)
 
     assert route.called
     await service.close()
@@ -46,17 +43,16 @@ async def test_get_collection_details_404():
 @pytest.mark.asyncio
 async def test_get_collection_details_500():
     collection_id = 123
-    service = CollectionService()
     
     route = respx.get(
-        f"https://api.themoviedb.org/3/collection/{collection_id}",
-        client=service.client
-    ).mock(
+        f"https://api.themoviedb.org/3/collection/{collection_id}").mock(
         return_value=Response(500, json={"status_message": "Internal server error"})
     )
 
-    with pytest.raises(httpx.HTTPStatusError):
-        await service.get_collection_details(collection_id)
+    async with httpx.AsyncClient() as client:
+        service = CollectionService(client=client)
+        with pytest.raises(httpx.HTTPStatusError):
+            await service.get_collection_details(collection_id)
 
     assert route.called
     await service.close()

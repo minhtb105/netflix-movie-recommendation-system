@@ -8,16 +8,15 @@ pytestmark = pytest.mark.asyncio
 @respx.mock
 async def test_fetch_tv_details():
     series_id = 999
-    service = TVService()
     
     route = respx.get(
-        f"https://api.themoviedb.org/3/tv/{series_id}",
-        client=service.client
-    ).mock(
+        f"https://api.themoviedb.org/3/tv/{series_id}").mock(
         return_value=Response(200, json={"id": series_id, "name": "TV Show"})
     )
 
-    data = await service.fetch_tv_details(series_id)
+    async with httpx.AsyncClient() as client:
+        service = TVService(client=client)
+        data = await service.fetch_tv_details(series_id)
 
     assert route.called
     assert data["id"] == series_id

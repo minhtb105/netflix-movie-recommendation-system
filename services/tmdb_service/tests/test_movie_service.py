@@ -12,8 +12,10 @@ async def test_fetch_now_playing():
         return_value=Response(200, json={"results": [{"id": 1, "title": "Movie A"}]})
     )
 
-    service = MovieService()
-    data = await service.fetch_now_playing(page=2, region="US")
+    
+    async with httpx.AsyncClient() as client:
+        service = MovieService(client=client)
+        data = await service.fetch_now_playing(page=2, region="US")
 
     assert route.called
     assert data["results"][0]["title"] == "Movie A"
@@ -23,16 +25,15 @@ async def test_fetch_now_playing():
 @respx.mock
 async def test_fetch_movie_details():
     movie_id = 123
-    service = MovieService()
     
     route = respx.get(
-        f"https://api.themoviedb.org/3/movie/{movie_id}",
-        client=service.client 
-    ).mock(
+        f"https://api.themoviedb.org/3/movie/{movie_id}").mock(
         return_value=Response(200, json={"id": movie_id, "title": "Detail Movie"})
     )
 
-    data = await service.fetch_movie_details(movie_id)
+    async with httpx.AsyncClient() as client:
+        service = MovieService(client=client)
+        data = await service.fetch_movie_details(movie_id)
 
     assert route.called
     assert data["id"] == movie_id
