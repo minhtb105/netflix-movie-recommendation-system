@@ -23,11 +23,15 @@ async def test_fetch_now_playing():
 @respx.mock
 async def test_fetch_movie_details():
     movie_id = 123
-    route = respx.get(f"https://api.themoviedb.org/3/movie/{movie_id}").mock(
+    service = MovieService()
+    
+    route = respx.get(
+        f"https://api.themoviedb.org/3/movie/{movie_id}",
+        client=service.client 
+    ).mock(
         return_value=Response(200, json={"id": movie_id, "title": "Detail Movie"})
     )
 
-    service = MovieService()
     data = await service.fetch_movie_details(movie_id)
 
     assert route.called

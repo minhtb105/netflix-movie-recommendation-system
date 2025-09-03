@@ -38,11 +38,15 @@ async def test_get_collection_details_404():
 @pytest.mark.asyncio
 async def test_get_collection_details_500():
     collection_id = 123
-    route = respx.get(f"https://api.themoviedb.org/3/collection/{collection_id}").mock(
+    service = CollectionService()
+    
+    route = respx.get(
+        f"https://api.themoviedb.org/3/collection/{collection_id}",
+        service = MovieService()
+    ).mock(
         return_value=Response(500, json={"status_message": "Internal server error"})
     )
 
-    service = CollectionService()
     with pytest.raises(httpx.HTTPStatusError):
         await service.get_collection_details(collection_id)
 

@@ -7,11 +7,15 @@ pytestmark = pytest.mark.asyncio
 
 @respx.mock
 async def test_fetch_trending_movies():
-    route = respx.get("https://api.themoviedb.org/3/trending/movie/day").mock(
+    service = TrendingService()
+    
+    route = respx.get(
+        "https://api.themoviedb.org/3/trending/movie/day",
+        client=service.client
+    ).mock(
         return_value=Response(200, json={"results": [{"id": 5, "title": "Trending Movie"}]})
     )
 
-    service = TrendingService()
     data = await service.fetch_trending_movies()
 
     assert route.called
