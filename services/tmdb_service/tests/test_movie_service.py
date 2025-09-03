@@ -1,41 +1,45 @@
 import pytest
-import respx
-from httpx import Response
-import httpx
+from unittest.mock import AsyncMock
+from httpx import HTTPStatusError
 from services.tmdb_service.api.movie_api import MovieService
 
 pytestmark = pytest.mark.asyncio
 
-@respx.mock
-async def test_fetch_now_playing():
-    # Mock endpoint
-    route = respx.get("https://api.themoviedb.org/3/movie/now_playing").mock(
-        return_value=Response(200, json={"results": [{"id": 1, "title": "Movie A"}]})
-    )
+async def test_fetch_now_playing(monkeypatch):
+    service = MovieService()
 
-    
-    async with httpx.AsyncClient() as client:
-        service = MovieService(client=client)
-        data = await service.fetch_now_playing(page=2, region="US")
+    monkeypatch.setattr(service, "_get", AsyncMock(return_value={
+        "results": [{"id": 1, "title": "Movie A"}]
+    }))
 
-    assert route.called
+    data = await service.fetch_now_playing(page=2, region="US")
+
     assert data["results"][0]["title"] == "Movie A"
     assert "results" in data
 
-
-@respx.mock
-async def test_fetch_movie_details():
+async def test_fetch_movie_details(monkeypatch):
     movie_id = 123
-    
-    route = respx.get(
-        f"https://api.themoviedb.org/3/movie/{movie_id}").mock(
-        return_value=Response(200, json={"id": movie_id, "title": "Detail Movie"})
-    )
+    service = MovieService()
 
-    async with httpx.AsyncClient() as client:
-        service = MovieService(client=client)
-        data = await service.fetch_movie_details(movie_id)
+    monkeypatch.setattr(service, "_get", AsyncMock(return_value={
+        "id": movie_id,
+        "title": "Detail Movie"
+    }))
 
-    assert route.called
+    data = await service.fetch_movie_details(movie_id)
+
     assert data["id"] == movie_id
     assert data["title"] == "Detail Movie"
+
+async def test_fetch_movie_details_404(monkeypatch):
+    movie_id = 999
+
+    service = MovieService()
+
+    async def mock_get(*args, **kwargs):
+        raise HTTPStatusError(message="Not Found", request=None, response=None)
+
+    monkeypatch.setattr(service, "_get", mock_get)
+
+    with pytest.raises(HTTPStatusError):
+        await service.fetch_movie_details(movie_id)

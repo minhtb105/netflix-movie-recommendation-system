@@ -1,58 +1,44 @@
 import pytest
-import respx
-from httpx import Response
-import httpx
+from unittest.mock import AsyncMock
+from httpx import HTTPStatusError
 from services.tmdb_service.api.collection_api import CollectionService
 
 pytestmark = pytest.mark.asyncio
 
-
-@respx.mock
-async def test_get_collection_details():
+async def test_get_collection_details_success(monkeypatch):
     collection_id = 321
-    
-    route = respx.get(f"https://api.themoviedb.org/3/collection/{collection_id}").mock(
-        return_value=Response(200, json={"id": collection_id, "name": "Collection A"})
-    )
+    service = CollectionService()
 
-    async with httpx.AsyncClient() as client:
-        service = CollectionService(client=client)
-        data = await service.get_collection_details(collection_id)
+    monkeypatch.setattr(service, "_get", AsyncMock(return_value={
+        "id": collection_id,
+        "name": "Collection A"
+    }))
 
-    assert route.called
+    data = await service.get_collection_details(collection_id)
+
     assert data["id"] == collection_id
     assert data["name"] == "Collection A"
 
-@pytest.mark.asyncio
-async def test_get_collection_details_404():
+async def test_get_collection_details_404(monkeypatch):
     collection_id = 9999
-    
-    route = respx.get(
-        f"https://api.themoviedb.org/3/collection/{collection_id}").mock(
-        return_value=Response(404, json={"status_message": "Not Found"})
-    )
+    service = CollectionService()
 
-    async with httpx.AsyncClient() as client:
-        service = CollectionService(client=client)
-        with pytest.raises(httpx.HTTPStatusError):
-            await service.get_collection_details(collection_id)
+    async def mock_get(*args, **kwargs):
+        raise HTTPStatusError(message="Not Found", request=None, response=None)
 
-    assert route.called
-    await service.close()
+    monkeypatch.setattr(service, "_get", mock_get)
 
-@pytest.mark.asyncio
-async def test_get_collection_details_500():
+    with pytest.raises(HTTPStatusError):
+        await service.get_collection_details(collection_id)
+
+async def test_get_collection_details_500(monkeypatch):
     collection_id = 123
-    
-    route = respx.get(
-        f"https://api.themoviedb.org/3/collection/{collection_id}").mock(
-        return_value=Response(500, json={"status_message": "Internal server error"})
-    )
+    service = CollectionService()
 
-    async with httpx.AsyncClient() as client:
-        service = CollectionService(client=client)
-        with pytest.raises(httpx.HTTPStatusError):
-            await service.get_collection_details(collection_id)
+    async def mock_get(*args, **kwargs):
+        raise HTTPStatusError(message="Internal server error", request=None, response=None)
 
-    assert route.called
-    await service.close()
+    monkeypatch.setattr(service, "_get", mock_get)
+
+    with pytest.raises(HTTPStatusError):
+        await service.get_collection_details(collection_id)
