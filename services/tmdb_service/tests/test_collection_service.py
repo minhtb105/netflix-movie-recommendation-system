@@ -2,7 +2,7 @@ import pytest
 import respx
 from httpx import Response
 import httpx
-from services.tmdb_service.api.collection_service import CollectionService
+from services.tmdb_service.api.collection_api import CollectionService
 
 pytestmark = pytest.mark.asyncio
 service = CollectionService()
