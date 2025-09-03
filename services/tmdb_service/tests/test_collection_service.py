@@ -4,6 +4,7 @@ from httpx import Response
 from services.collection_service import CollectionService
 
 pytestmark = pytest.mark.asyncio
+service = CollectionService()
 
 @respx.mock
 async def test_get_collection_details():
@@ -12,7 +13,6 @@ async def test_get_collection_details():
         return_value=Response(200, json={"id": collection_id, "name": "Collection A"})
     )
 
-    service = CollectionService()
     data = await service.get_collection_details(collection_id)
 
     assert route.called
@@ -28,7 +28,7 @@ async def test_get_collection_details_404():
 
    
     with pytest.raises(httpx.HTTPStatusError):
-        await client._get("/collection/999")
+        await service.get_collection_details(collection_id)
 
     assert route.called
     await client.close()
@@ -41,7 +41,8 @@ async def test_get_collection_details_500():
     )
 
     with pytest.raises(httpx.HTTPStatusError):
-        await client._get("/collection/500")
+        await service.get_collection_details(collection_id)
 
     assert route.called
     await client.close()
+    
