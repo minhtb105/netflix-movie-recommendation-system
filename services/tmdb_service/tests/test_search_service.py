@@ -1,6 +1,7 @@
 import pytest
 import respx
 from httpx import Response
+import httpx
 from services.tmdb_service.api.search_api import SearchService
 
 pytestmark = pytest.mark.asyncio

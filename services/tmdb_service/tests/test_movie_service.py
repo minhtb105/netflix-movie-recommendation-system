@@ -1,6 +1,7 @@
 import pytest
 import respx
 from httpx import Response
+import httpx
 from services.tmdb_service.api.movie_api import MovieService
 
 pytestmark = pytest.mark.asyncio

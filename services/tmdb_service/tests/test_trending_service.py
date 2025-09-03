@@ -1,6 +1,7 @@
 import pytest
 import respx
 from httpx import Response
+import httpx
 from services.tmdb_service.api.trending_api import TrendingService
 
 pytestmark = pytest.mark.asyncio
