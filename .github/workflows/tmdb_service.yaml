@@ -41,7 +41,7 @@ jobs:
           pip install ruff
 
       - name: Run ruff and fix
-        run: ruff check . --fix
+        run: ruff check services/${{ env.SERVICE_NAME }} --fix
 
       - name: Commit changes
         run: |
