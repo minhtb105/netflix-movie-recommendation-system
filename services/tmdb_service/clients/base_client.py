@@ -6,7 +6,7 @@ import asyncio
 
 
 class TMDBBaseClient:
-    def __init__(self, max_concurrent_requests=5):
+    def __init__(self, max_concurrent_requests=5, client=None):
         self.token = os.getenv("TMDB_ACCESS_TOKEN")
         if not self.token:
             raise RuntimeError("TMDB_ACCESS_TOKEN is not set. Please set it in environment or .env")
@@ -19,7 +19,7 @@ class TMDBBaseClient:
             "Accept": "application/json"
         }
         
-        self.client = httpx.AsyncClient(timeout=self.timeout, headers=self.headers)
+        self.client = client or httpx.AsyncClient(timeout=self.timeout, headers=self.headers)
         self.semaphore = asyncio.Semaphore(max_concurrent_requests)
 
     @retry(
