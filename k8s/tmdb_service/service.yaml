@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tmdb-service
+spec:
+  selector:
+    app: tmdb
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8009
+  type: LoadBalancer

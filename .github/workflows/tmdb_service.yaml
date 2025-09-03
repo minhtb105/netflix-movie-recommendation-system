@@ -1,0 +1,89 @@
+name: CI-CD - tmdb_service
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/tmdb_service/**"
+      - ".github/workflows/tmdb_service.yaml"
+  pull_request:
+    paths: 
+     - "services/tmdb_service/**"
+     - ".github/workflows/tmdb_service.yaml"
+  workflow_dispatch:
+
+env:
+  SERVICE_NAME: tmdb_service
+  DOCKER_IMAGE: ghcr.io/minhtb105/tmdb_service
+  PYTHON_VERSION: '3.10'
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('services/${{ env.SERVICE_NAME }}/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r services/${{ env.SERVICE_NAME }}/requirements.txt
+
+      - name: Run lint & tests
+        run: |
+          ruff check .
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/services/data_collection_service
+          pytest services/${{ env.SERVICE_NAME }}/tests --maxfail=1 --disable-warnings -q
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: services/${{ env.SERVICE_NAME }}
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:latest
+            ${{ env.DOCKER_IMAGE }}:v1
+            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+
+  deploy:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v4
+      with:
+        version: v1.30.0   
+
+    - name: Set AKS context
+      uses: azure/aks-set-context@v3
+      with:
+        resource-group: Minh_group
+        cluster-name: myAKSCluster
+
+    - name: Deploy to Kubernetes
+      uses: azure/k8s-deploy@v4
+      with:
+        manifests: |
+          k8s/${{ env.SERVICE_NAME }}/deployment.yaml
+          k8s/${{ env.SERVICE_NAME }}/service.yaml
+        images: ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+        namespace: default

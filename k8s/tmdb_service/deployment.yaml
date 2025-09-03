@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tmdb-service
+  labels:
+    app: tmdb 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tmdb
+  template:
+    metadata:
+      labels:
+        app: tmdb
+    spec:
+      containers:
+      - name: tmdb-container
+        image: ghcr.io/minhtb105/tmdb_service:${GITHUB_SHA}
+        ports:
+        - containerPort: 8009
+  
