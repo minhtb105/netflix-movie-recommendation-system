@@ -1,7 +1,7 @@
 import pytest
 import respx
 from httpx import Response
-from services.tv_service import TVService
+from services.tmdb_service.api.tv_api import TVService
 
 pytestmark = pytest.mark.asyncio
 
