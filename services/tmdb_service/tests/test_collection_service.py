@@ -1,6 +1,7 @@
 import pytest
 import respx
 from httpx import Response
+import httpx
 from services.collection_service import CollectionService
 
 pytestmark = pytest.mark.asyncio
@@ -31,7 +32,7 @@ async def test_get_collection_details_404():
         await service.get_collection_details(collection_id)
 
     assert route.called
-    await client.close()
+    await service.close()
 
 @pytest.mark.asyncio
 async def test_get_collection_details_500():
@@ -44,5 +45,4 @@ async def test_get_collection_details_500():
         await service.get_collection_details(collection_id)
 
     assert route.called
-    await client.close()
-    
+    await service.close()

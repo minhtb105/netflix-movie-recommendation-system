@@ -43,4 +43,3 @@ class TMDBBaseClient:
 
     async def close(self):
         await self.client.aclose()
-        
