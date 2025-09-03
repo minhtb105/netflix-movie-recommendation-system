@@ -42,7 +42,7 @@ async def test_get_collection_details_500():
     
     route = respx.get(
         f"https://api.themoviedb.org/3/collection/{collection_id}",
-        service = MovieService()
+        client=service.client
     ).mock(
         return_value=Response(500, json={"status_message": "Internal server error"})
     )
