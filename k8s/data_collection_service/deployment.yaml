@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-collection-service
+  labels:
+    app: data-collection
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-collection
+  template:
+    metadata:
+      labels:
+        app: data-collection
+    spec:
+      containers:
+      - name: data-collection-container
+        image: ghcr.io/minhtb105/data_collection_service:${github.sha}
+        ports:
+        - containerPort: 8003
+  
