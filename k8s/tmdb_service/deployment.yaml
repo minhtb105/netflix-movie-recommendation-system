@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tmdb-container
-        image: ghcr.io/minhtb105/tmdb_service:${GITHUB_SHA}
+        image: ghcr.io/minhtb105/tmdb_service:${github.sha}
         ports:
         - containerPort: 8009
   
