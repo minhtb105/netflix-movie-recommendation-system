@@ -42,7 +42,7 @@ jobs:
       - name: Run lint & tests
         run: |
           ruff check .
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/services/data_collection_service
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/services/tmdb_service
           pytest services/${{ env.SERVICE_NAME }}/tests --maxfail=1 --disable-warnings -q
 
       - name: Login to GitHub Container Registry
