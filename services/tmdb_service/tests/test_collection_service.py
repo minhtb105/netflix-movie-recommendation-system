@@ -5,7 +5,7 @@ import httpx
 from services.tmdb_service.api.collection_api import CollectionService
 
 pytestmark = pytest.mark.asyncio
-service = CollectionService()
+
 
 @respx.mock
 async def test_get_collection_details():
@@ -14,6 +14,7 @@ async def test_get_collection_details():
         return_value=Response(200, json={"id": collection_id, "name": "Collection A"})
     )
 
+    service = CollectionService()
     data = await service.get_collection_details(collection_id)
 
     assert route.called
@@ -27,7 +28,7 @@ async def test_get_collection_details_404():
         return_value=Response(404, json={"status_message": "Not Found"})
     )
 
-   
+    service = CollectionService()
     with pytest.raises(httpx.HTTPStatusError):
         await service.get_collection_details(collection_id)
 
@@ -41,6 +42,7 @@ async def test_get_collection_details_500():
         return_value=Response(500, json={"status_message": "Internal server error"})
     )
 
+    service = CollectionService()
     with pytest.raises(httpx.HTTPStatusError):
         await service.get_collection_details(collection_id)
 
