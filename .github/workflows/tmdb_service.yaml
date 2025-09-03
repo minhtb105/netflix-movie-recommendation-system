@@ -6,10 +6,12 @@ on:
     paths:
       - "services/tmdb_service/**"
       - ".github/workflows/tmdb_service.yaml"
+      - "k8s/tmdb_service/**"
   pull_request:
     paths: 
      - "services/tmdb_service/**"
      - ".github/workflows/tmdb_service.yaml"
+     - "k8s/tmdb_service/**"
   workflow_dispatch:
 
 env:
@@ -93,6 +95,9 @@ jobs:
         with:
           resource-group: Minh_group
           cluster-name: myAKSCluster
+
+      - name: List k8s folder
+        run: ls -R k8s
 
       - name: Deploy to Kubernetes
         uses: azure/k8s-deploy@v4
