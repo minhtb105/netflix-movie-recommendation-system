@@ -16,6 +16,7 @@ env:
   SERVICE_NAME: tmdb_service
   DOCKER_IMAGE: ghcr.io/minhtb105/tmdb_service
   PYTHON_VERSION: '3.10'
+  TMDB_ACCESS_TOKEN: ${{ secrets.TMDB_ACCESS_TOKEN }}
 
 jobs:
   ci:
