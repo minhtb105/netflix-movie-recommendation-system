@@ -1,5 +1,3 @@
-import os
-import logging
 from clients.base_client import TMDBBaseClient
 
 class CollectionService(TMDBBaseClient):
