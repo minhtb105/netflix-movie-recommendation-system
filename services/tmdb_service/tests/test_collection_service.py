@@ -2,7 +2,7 @@ import pytest
 import respx
 from httpx import Response
 import httpx
-from services.collection_service import CollectionService
+from services.collection_api import CollectionService
 
 pytestmark = pytest.mark.asyncio
 service = CollectionService()
