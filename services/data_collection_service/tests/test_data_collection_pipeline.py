@@ -1,6 +1,6 @@
 from unittest.mock import AsyncMock
 import pytest
-from ..pipelines import tmdb_metadata_pipelines as pipeline
+from pipelines import tmdb_metadata_pipelines as pipeline
 
 @pytest.mark.asyncio
 async def test_fetch_movie_ids_mock(monkeypatch):

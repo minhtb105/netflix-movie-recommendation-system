@@ -1,5 +1,5 @@
 import asyncio
-from .services.trending_api import TrendingService
+from services.trending_api import TrendingService
 
 def fetch_trending_movie_ids():
     async def _run():
