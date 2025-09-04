@@ -24,7 +24,7 @@ env:
   STATIC_IMAGE_DIR: "app/static/images"
 
 jobs:
-  ci:
+  ci: 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -47,7 +47,9 @@ jobs:
           pip install ruff
 
       - name: Run ruff and fix
-        run: ruff check services/${{ env.SERVICE_NAME }} --fix
+        run: |
+          cd services/${{ env.SERVICE_NAME }}
+          ruff check . --fix
 
       - name: Commit changes
         run: |
@@ -59,7 +61,7 @@ jobs:
 
       - name: Run lint & tests
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/services/data_collection_service
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/services/${{ env.SERVICE_NAME }}
           pytest services/${{ env.SERVICE_NAME }}/tests --maxfail=1 --disable-warnings -q
 
       - name: Login to GitHub Container Registry
@@ -70,14 +72,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: services/${{ env.SERVICE_NAME }}
-          push: true
-          tags: |
-            ${{ env.DOCKER_IMAGE }}:latest
-            ${{ env.DOCKER_IMAGE }}:v1
-            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+        run: |
+          cd services/${{ env.SERVICE_NAME }}
+          docker build -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }} .
+          docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
+          docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          docker push ${{ env.DOCKER_IMAGE }}:latest
 
   cd:
     runs-on: ubuntu-latest
