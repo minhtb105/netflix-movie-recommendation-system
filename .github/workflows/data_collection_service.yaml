@@ -68,6 +68,10 @@ jobs:
         run: |
           cd services/${{ env.SERVICE_NAME }}
           export PYTHONPATH=$(pwd)
+          echo "PWD=$(pwd)"
+          echo "PYTHONPATH=$PYTHONPATH"
+          python -c "import sys; print(sys.path)"
+          python -c "import utils.downloader; print(utils.downloader.__file__)"
           pytest tests --maxfail=1 -q
 
       - name: Login to GitHub Container Registry
