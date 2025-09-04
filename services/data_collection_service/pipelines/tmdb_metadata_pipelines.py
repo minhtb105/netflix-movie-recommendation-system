@@ -2,8 +2,8 @@ import asyncio
 from pathlib import Path
 import json
 import os
-from services.data_collection_service.utils.downloader import async_batch_download_images, download_cast_images_batch
-from services.data_collection_service.clients.tmdb_service_client import TMDBServiceClient
+from utils.downloader import async_batch_download_images, download_cast_images_batch
+from clients.tmdb_service_client import TMDBServiceClient
 
 
 client = TMDBServiceClient()
