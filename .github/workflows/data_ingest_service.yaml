@@ -96,10 +96,9 @@ jobs:
 
       - name: Run tests
         run: |
-          cd services/${{ env.SERVICE_NAME }}
-          export PYTHONPATH=$(pwd)
-          pytest tests --maxfail=1 -q
-
+          export PYTHONPATH=services/${{ env.SERVICE_NAME }}
+          pytest services/${{ env.SERVICE_NAME }}/tests --maxfail=1 -q
+          
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
