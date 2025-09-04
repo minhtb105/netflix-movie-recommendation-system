@@ -61,7 +61,7 @@ jobs:
 
       - name: Run lint & tests
         run: |
-          cd services/data_collection_service
+          cd services/${{ env.SERVICE_NAME }}
           export PYTHONPATH=$(pwd)
           pytest tests --maxfail=1 -q
 
