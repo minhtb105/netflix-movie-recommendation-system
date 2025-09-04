@@ -1,20 +1,20 @@
 from pathlib import Path
 import sys
-
-service_root = Path(__file__).resolve().parent.parent
-if str(service_root) not in sys.path:
-    sys.path.insert(0, str(service_root))
-
+import pandas as pd
+import numpy as np
+import yaml
+from datetime import datetime, timezone
 from steps.prepare_data import (
     clean_df, vectorize_text, 
     normalize_df, encode_df,
     multi_label_encode_df,
 )
 from src.data_strategy import BERTVectorizeStrategy
-import pandas as pd
-import numpy as np
-import yaml
-from datetime import datetime, timezone
+
+
+service_root = Path(__file__).resolve().parent.parent
+if str(service_root) not in sys.path:
+    sys.path.insert(0, str(service_root))
 
 
 def process_movies_pipeline(params: dict = None):
@@ -99,3 +99,4 @@ def combine_features(df: pd.DataFrame, vector_cols: list[str], keep_cols: list[s
 
 if __name__ == "__main__":
     process_movies_pipeline()
+    

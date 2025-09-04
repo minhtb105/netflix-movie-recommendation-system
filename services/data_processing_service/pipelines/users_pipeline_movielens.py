@@ -1,15 +1,15 @@
 from pathlib import Path
 import sys
+from typing import List
+import pandas as pd
+import yaml
+from datetime import datetime, timezone
+from steps.prepare_data import clean_df, encode_df, normalize_df
+
 
 service_root = Path(__file__).resolve().parent.parent
 if str(service_root) not in sys.path:
     sys.path.insert(0, str(service_root))
-
-from typing import List
-import pandas as pd
-from steps.prepare_data import clean_df, encode_df, normalize_df
-import yaml
-from datetime import datetime, timezone
 
 
 def process_users_pipeline():

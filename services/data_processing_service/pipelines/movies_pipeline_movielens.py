@@ -1,15 +1,15 @@
 from pathlib import Path
 import sys
+import pandas as pd
+import yaml
+from steps.prepare_data import clean_df, vectorize_text
+from src.feature_engineer import FeatureEngineer
+from src.data_strategy import TextVectorizeStrategy
 
 service_root = Path(__file__).resolve().parent.parent
 if str(service_root) not in sys.path:
     sys.path.insert(0, str(service_root))
 
-from steps.prepare_data import clean_df, vectorize_text
-from src.feature_engineer import FeatureEngineer
-from src.data_strategy import TextVectorizeStrategy
-import pandas as pd
-import yaml
 
 def process_movies_pipeline():
     params = yaml.safe_load(open(service_root/ "params.yaml"))["process_movies_movielens"]

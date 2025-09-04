@@ -1,13 +1,12 @@
 from pathlib import Path
+import yaml
 import sys
+from steps.prepare_data import *
+
 
 service_root = Path(__file__).resolve().parent.parent
 if str(service_root) not in sys.path:
     sys.path.insert(0, str(service_root))
-
-from steps.prepare_data import *
-import yaml
-
 
 def process_ratings_pipeline():
     params = yaml.safe_load(open(service_root / "params.yaml"))["process_ratings_movielens"]
