@@ -62,7 +62,7 @@ jobs:
       - name: Run lint & tests
         run: |
           cd services/${{ env.SERVICE_NAME }}
-          export PYTHONPATH=.
+          export PYTHONPATH=$(pwd)
           pytest tests --maxfail=1 --disable-warnings -q
 
       - name: Login to GitHub Container Registry
