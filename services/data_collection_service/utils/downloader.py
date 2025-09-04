@@ -2,10 +2,8 @@ import os
 import logging
 import asyncio
 import httpx
-import re
 import aiofiles
 from typing import List
-import time
 
 
 BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w300"
