@@ -2,13 +2,12 @@ import pandas as pd
 from pathlib import Path
 import sys
 from typing import Union, List, Optional, Annotated
+from ..src.ingest_strategy import *
+
 
 service_path = Path(__file__).resolve().parents[1]
 if str(service_path) not in sys.path:
     sys.path.insert(0, str(service_path))
-
-from src.ingest_strategy import *
-
 
 def ingest_df(
     source_path: Union[str, Path],

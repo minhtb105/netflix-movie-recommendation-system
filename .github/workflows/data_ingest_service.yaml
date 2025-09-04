@@ -50,6 +50,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r services/${{ env.SERVICE_NAME }}/requirements.txt
           pip install pytest azure-storage-blob
+          pip install ruff
 
       - name: Download raw data from Azure Blob
         env:
@@ -78,10 +79,24 @@ jobs:
                 print(f"Downloaded {blob.name} → {blob_path}")
           EOF
 
+      - name: Run ruff and fix
+        run: |
+          cd services/${{ env.SERVICE_NAME }}
+          ruff check . --fix
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore: auto-fix code style with ruff" || echo "No changes to commit"
+          git push
+
       - name: Run tests
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/services/data_ingest_service
-          pytest services/${{ env.SERVICE_NAME }}/tests --maxfail=1 --disable-warnings -q
+          cd services/${{ env.SERVICE_NAME }}
+          export PYTHONPATH=$(pwd)
+          pytest tests --maxfail=1 -q
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
