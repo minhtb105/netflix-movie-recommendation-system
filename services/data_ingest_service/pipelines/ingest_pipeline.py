@@ -1,5 +1,4 @@
 from pathlib import Path
-import sys
 import logging
 import yaml
 from steps.ingest_data import ingest_df

@@ -1,6 +1,5 @@
 import pandas as pd
 from pathlib import Path
-import sys
 from typing import Union, List, Optional
 from src.ingest_strategy import IngestContext
 
