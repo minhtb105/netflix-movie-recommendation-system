@@ -1,5 +1,4 @@
 import asyncio
-import httpx
 from pathlib import Path
 import json
 import os
