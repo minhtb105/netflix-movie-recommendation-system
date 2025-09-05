@@ -77,12 +77,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        run: |
-          cd services/${{ env.SERVICE_NAME }}
-          docker build -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }} .
-          docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
-          docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
-          docker push ${{ env.DOCKER_IMAGE }}:latest
+        uses: docker/build-push-action@v4
+        with:
+          context: services/${{ env.SERVICE_NAME }}
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:latest
+            ${{ env.DOCKER_IMAGE }}:v1
+            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
 
   cd:
     runs-on: ubuntu-latest
