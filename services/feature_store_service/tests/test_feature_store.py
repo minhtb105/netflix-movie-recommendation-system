@@ -1,4 +1,5 @@
-from feast import FeatureView, Field, Entity, String, Int64, Float32, FeatureStore, DataSource
+from feast import FeatureView, Field, Entity
+from feast.types import String, Int64, Float32
 from pathlib import Path
 from unittest.mock import MagicMock
 
