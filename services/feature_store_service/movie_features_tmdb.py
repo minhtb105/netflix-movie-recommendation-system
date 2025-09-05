@@ -52,5 +52,5 @@ os.makedirs(store_path_384, exist_ok=True)
 fs_384 = FeatureStore(repo_path=store_path_384)
 
 if __name__ == "__main__":
-    fs_2047.apply([movie_id, movie_features_view])
+    fs_2901.apply([movie_id, movie_features_view])
     fs_384.apply([review_id, movie_reviews_view])

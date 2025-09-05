@@ -46,7 +46,7 @@ def get_movie_reviews(movie_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/features/movie")
-def add_movie_feature(data: MovieFeatureRequest)
+def add_movie_feature(data: MovieFeatureRequest):
     try:
         df = pd.DataFrame([{
             "id": data.id,
@@ -64,7 +64,7 @@ def add_movie_feature(data: MovieFeatureRequest)
         raise HTTPException(status_code=500, detail=str(e))
     
 @router.post("/features/review")
-def add_movie_reeview(data: ReviewFeatureRequest)
+def add_movie_reeview(data: ReviewFeatureRequest):
     try:
         df = pd.DataFrame([{
             "id": data.id,

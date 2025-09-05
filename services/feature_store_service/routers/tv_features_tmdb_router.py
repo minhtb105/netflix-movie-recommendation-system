@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from feast import FeatureStore
+import pandas as pd
 from schemas.tmdb_feature import TMDBFeatureRequest
 from schemas.tmdb_feature import ReviewFeatureRequest
 import os
@@ -53,7 +54,7 @@ def add_tv_features(data: TMDBFeatureRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/reviews")
-def add_tv_review(data: TVReviewRequest):
+def add_tv_review(data: ReviewFeatureRequest):
     try:
         df = pd.DataFrame([data.dict()])
         fs_384.write_to_online_store("tv_reviews_tmdb", df)

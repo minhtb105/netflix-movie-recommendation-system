@@ -57,5 +57,5 @@ store_path = os.path.join(os.path.dirname(__file__), "store_384")
 fs_384 = FeatureStore(repo_path=store_path)
 
 if __name__ == "__main__":
-    fs_2013.apply([series_id, tv_features_view])
+    fs_2094.apply([series_id, tv_features_view])
     fs_384.apply([review_id, tv_reviews_view])

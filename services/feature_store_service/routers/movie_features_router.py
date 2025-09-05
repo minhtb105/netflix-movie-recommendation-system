@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from feast import FeatureStore
+import pandas as pd
 from chemas.movielens_feature import MovieLensFeatureRequest
 import os
 
