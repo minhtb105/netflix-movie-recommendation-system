@@ -1,11 +1,12 @@
 from feast import FeatureView, Field, Entity
 from feast.types import String, Int64, Float32
 from feast.data_source import DataSource 
+from feast import ValueType
 from unittest.mock import MagicMock
 
 
 def test_movie_features_schema():
-    movie_entity = Entity(name="movie_id", join_keys=["movie_id"])
+    movie_entity = Entity(name="movie_id", join_keys=["movie_id"], value_type=ValueType.INT64)
     dummy_source = MagicMock(spec=DataSource)
 
     fv = FeatureView(
@@ -33,7 +34,7 @@ def test_movie_features_schema():
 
 
 def test_movie_reviews_schema():
-    review_entity = Entity(name="review_id", join_keys=["review_id"])
+    review_entity = Entity(name="review_id", join_keys=["review_id"], value_type=ValueType.INT64)
     dummy_source = MagicMock(spec=DataSource)
 
     fv = FeatureView(
@@ -59,7 +60,7 @@ def test_movie_reviews_schema():
 
 
 def test_tv_features_schema():
-    tv_entity = Entity(name="tv_id", join_keys=["tv_id"])
+    tv_entity = Entity(name="tv_id", join_keys=["tv_id"], value_type=ValueType.INT64)
     dummy_source = MagicMock(spec=DataSource)
 
     fv = FeatureView(
@@ -87,7 +88,7 @@ def test_tv_features_schema():
 
 
 def test_user_features_schema():
-    user_entity = Entity(name="user_id", join_keys=["user_id"])
+    user_entity = Entity(name="user_id", join_keys=["user_id"], value_type=ValueType.INT64)
     dummy_source = MagicMock(spec=DataSource)
 
     fv = FeatureView(
