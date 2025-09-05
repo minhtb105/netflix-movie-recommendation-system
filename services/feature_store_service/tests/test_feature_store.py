@@ -1,4 +1,3 @@
-from pathlib import Path
 from unittest.mock import MagicMock
 from feast import FeatureView, Field
 from feast.types import String, Int64, Float32
