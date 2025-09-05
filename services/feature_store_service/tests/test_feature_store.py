@@ -1,4 +1,3 @@
-import pytest
 from feast import FeatureStore
 from pathlib import Path
 
