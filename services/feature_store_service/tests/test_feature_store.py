@@ -16,7 +16,7 @@ def test_movie_features_schema():
             Field(name="video_key", dtype=String),
         ],
         online=True,
-        source=None,
+        source=MagicMock(),
     )
     fs.get_feature_view.return_value = fv
 
@@ -40,7 +40,7 @@ def test_movie_reviews_schema():
             Field(name="rating", dtype=Float32),
         ],
         online=True,
-        source=None,
+        source=MagicMock(),
     )
     fs.get_feature_view.return_value = fv
 
@@ -64,7 +64,7 @@ def test_tv_features_schema():
             Field(name="video_key", dtype=String),
         ],
         online=True,
-        source=None,
+        source=MagicMock(),
     )
     fs.get_feature_view.return_value = fv
 
@@ -89,7 +89,7 @@ def test_user_features_schema():
             Field(name="occupation_engineer", dtype=Int64),
         ],
         online=True,
-        source=None,
+        source=MagicMock(),
     )
     fs.get_feature_view.return_value = fv
 
