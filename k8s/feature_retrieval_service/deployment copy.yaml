@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feature-retrieval-service
+  labels:
+    app: feature-retrieval
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: feature-retrieval
+  template:
+    metadata:
+      labels:
+        app: feature-retrieval
+    spec:
+      containers:
+      - name: feature-retrieval-container
+        image: ghcr.io/minhtb105/feature_retrieval_service:${github.sha}
+        ports:
+        - containerPort: 8006
+  

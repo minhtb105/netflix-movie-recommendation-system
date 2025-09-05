@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: feature-retrieval-service
+spec:
+  selector:
+    app: feature-retrieval
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8006
+  type: LoadBalancer
