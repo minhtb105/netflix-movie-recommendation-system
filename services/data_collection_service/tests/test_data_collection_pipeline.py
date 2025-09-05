@@ -1,7 +1,8 @@
 from unittest.mock import AsyncMock
 import pytest
 from pipelines import tmdb_metadata_pipelines as pipeline
-import os, sys
+import os
+import sys
 
 
 _service_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
