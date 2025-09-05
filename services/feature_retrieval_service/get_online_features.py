@@ -1,4 +1,3 @@
-import pandas as pd
 from feast import FeatureStore
 
 BASE_PATH = "feature_repo"
