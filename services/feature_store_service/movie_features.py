@@ -3,7 +3,7 @@ from feast import ValueType
 from feast.types import Float64, Int32, Int64, Array, Float32
 import os
 
-
+    
 movie_source = FileSource(
     path=os.path.join(os.path.dirname(__file__).parent[2], "data/feature/movies_movielens/movie_features.parquet"),
     event_timestamp_column='release_date')
