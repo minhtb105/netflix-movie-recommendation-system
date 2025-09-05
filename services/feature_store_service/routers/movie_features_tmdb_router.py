@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from feast import FeatureStore
+import pandas as pd
 from schemas.tmdb_feature import TMDBFeatureRequest
 from schemas.tmdb_feature import ReviewFeatureRequest
 import os
@@ -46,7 +47,7 @@ def get_movie_reviews(movie_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/features/movie")
-def add_movie_feature(data: MovieFeatureRequest):
+def add_movie_feature(data: TMDBFeatureRequest):
     try:
         df = pd.DataFrame([{
             "id": data.id,
