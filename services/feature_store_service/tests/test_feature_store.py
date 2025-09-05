@@ -14,7 +14,9 @@ def test_movie_features_schema():
     # Mock data source with required attributes
     dummy_source = MagicMock(spec=DataSource)
     dummy_source.field_mapping = {}
-
+    dummy_source.created_timestamp_column = ""
+    dummy_source.event_timestamp_column = ""
+    dummy_source.date_partition_column = ""
 
     fv = FeatureView(
         name="movie_features_tmdb",
@@ -49,6 +51,9 @@ def test_movie_reviews_schema():
     # Mock data source with required attributes
     dummy_source = MagicMock(spec=DataSource)
     dummy_source.field_mapping = {}
+    dummy_source.created_timestamp_column = ""
+    dummy_source.event_timestamp_column = ""
+    dummy_source.date_partition_column = ""
 
     fv = FeatureView(
         name="movie_reviews_tmdb",
@@ -81,6 +86,9 @@ def test_tv_features_schema():
     # Mock data source with required attributes
     dummy_source = MagicMock(spec=DataSource)
     dummy_source.field_mapping = {}
+    dummy_source.created_timestamp_column = ""
+    dummy_source.event_timestamp_column = ""
+    dummy_source.date_partition_column = ""
 
     fv = FeatureView(
         name="tv_features_tmdb",
@@ -115,7 +123,9 @@ def test_user_features_schema():
     # Mock data source with required attributes
     dummy_source = MagicMock(spec=DataSource)
     dummy_source.field_mapping = {}
-
+    dummy_source.created_timestamp_column = ""
+    dummy_source.event_timestamp_column = ""
+    dummy_source.date_partition_column = ""
 
     fv = FeatureView(
         name="user_features",
