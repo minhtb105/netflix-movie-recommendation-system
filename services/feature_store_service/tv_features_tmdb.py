@@ -1,4 +1,4 @@
-from feast import Entity, FeatureView, Field, FeatureStore, FileSource, FeatureStore
+from feast import Entity, FeatureView, Field, FileSource, FeatureStore
 from feast import ValueType
 from feast.types import Float32, Array, Int32, String, Int64
 import os
