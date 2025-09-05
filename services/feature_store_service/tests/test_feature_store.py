@@ -1,5 +1,6 @@
-from feast import FeatureView, Field, Entity, DataSource
+from feast import FeatureView, Field, Entity
 from feast.types import String, Int64, Float32
+from feast.data_source import DataSource 
 from unittest.mock import MagicMock
 
 
