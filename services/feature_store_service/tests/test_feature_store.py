@@ -5,9 +5,11 @@ from feast.types import String, Int64, Float32
 
 def test_movie_features_schema():
     fs = MagicMock()
+    movie_entity = Entity(name="movie_id", join_keys=["movie_id"])
+    
     fv = FeatureView(
         name="movie_features_tmdb",
-        entities=["movie_id"],
+        entities=[movie_entity],
         schema=[
             Field(name="feature_vector", dtype=Float32),
             Field(name="vote_average", dtype=Float32),
@@ -30,9 +32,11 @@ def test_movie_features_schema():
 
 def test_movie_reviews_schema():
     fs = MagicMock()
+    review_entity = Entity(name="review_id", join_keys=["review_id"])
+    
     fv = FeatureView(
         name="movie_reviews_tmdb",
-        entities=["review_id"],
+        entities=[review_entity],
         schema=[
             Field(name="username", dtype=String),
             Field(name="content_vectorize", dtype=Float32),
@@ -53,9 +57,11 @@ def test_movie_reviews_schema():
 
 def test_tv_features_schema():
     fs = MagicMock()
+    tv_entity = Entity(name="tv_id", join_keys=["tv_id"])
+    
     fv = FeatureView(
         name="tv_features_tmdb",
-        entities=["series_id"],
+        entities=[tv_entity],
         schema=[
             Field(name="feature_vector", dtype=Float32),
             Field(name="vote_average", dtype=Float32),
@@ -78,9 +84,11 @@ def test_tv_features_schema():
 
 def test_user_features_schema():
     fs = MagicMock()
+    user_entity = Entity(name="user_id", join_keys=["user_id"])
+    
     fv = FeatureView(
         name="user_features",
-        entities=["user_id"],
+        entities=[user_entity],
         schema=[
             Field(name="age", dtype=Int64),
             Field(name="zip_code", dtype=String),
