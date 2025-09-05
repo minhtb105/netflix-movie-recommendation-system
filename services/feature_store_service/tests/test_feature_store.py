@@ -6,8 +6,15 @@ from unittest.mock import MagicMock
 
 
 def test_movie_features_schema():
-    movie_entity = Entity(name="movie_id", join_keys=["movie_id"], value_type=ValueType.INT64)
+    movie_entity = Entity(
+        name="movie_id", 
+        join_keys=["movie_id"], 
+        value_type=ValueType.INT64)
+    
+    # Mock data source with required attributes
     dummy_source = MagicMock(spec=DataSource)
+    dummy_source.field_mapping = {}
+
 
     fv = FeatureView(
         name="movie_features_tmdb",
@@ -34,8 +41,14 @@ def test_movie_features_schema():
 
 
 def test_movie_reviews_schema():
-    review_entity = Entity(name="review_id", join_keys=["review_id"], value_type=ValueType.INT64)
+    review_entity = Entity(
+        name="review_id", 
+        join_keys=["review_id"], 
+        value_type=ValueType.INT64)
+    
+    # Mock data source with required attributes
     dummy_source = MagicMock(spec=DataSource)
+    dummy_source.field_mapping = {}
 
     fv = FeatureView(
         name="movie_reviews_tmdb",
@@ -60,8 +73,14 @@ def test_movie_reviews_schema():
 
 
 def test_tv_features_schema():
-    tv_entity = Entity(name="tv_id", join_keys=["tv_id"], value_type=ValueType.INT64)
+    tv_entity = Entity(
+        name="tv_id", 
+        join_keys=["tv_id"], 
+        value_type=ValueType.INT64)
+    
+    # Mock data source with required attributes
     dummy_source = MagicMock(spec=DataSource)
+    dummy_source.field_mapping = {}
 
     fv = FeatureView(
         name="tv_features_tmdb",
@@ -88,8 +107,15 @@ def test_tv_features_schema():
 
 
 def test_user_features_schema():
-    user_entity = Entity(name="user_id", join_keys=["user_id"], value_type=ValueType.INT64)
+    user_entity = Entity(
+        name="user_id", 
+        join_keys=["user_id"], 
+        value_type=ValueType.INT64)
+    
+    # Mock data source with required attributes
     dummy_source = MagicMock(spec=DataSource)
+    dummy_source.field_mapping = {}
+
 
     fv = FeatureView(
         name="user_features",
