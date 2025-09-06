@@ -1,6 +1,3 @@
-from pathlib import Path
-import sys
-import pandas as pd
 from steps.train_model import get_or_train
 from src.model_dev import (
     UserBasedCF, ItemBasedCF, ContentBasedFiltering,
@@ -8,8 +5,6 @@ from src.model_dev import (
     compute_user_item_matrix
 )
 from steps.get_historical_features import (
-    get_user_features_df,
-    get_movie_features_df,
     get_rating_features_df,
 )
 import warnings

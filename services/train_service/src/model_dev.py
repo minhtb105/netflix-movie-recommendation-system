@@ -1,15 +1,10 @@
-import logging
 import os
 from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
-from typing import Optional
 from sklearn.metrics.pairwise import cosine_similarity
 import mlflow
 import mlflow.pyfunc as pyfunc
-from mlflow.tracking import MlflowClient
-from mlflow.pyfunc import PythonModel
-from scipy.sparse import vstack
 
 
 class Model(ABC):

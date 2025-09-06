@@ -1,5 +1,3 @@
-from pathlib import Path
-import sys
 import mlflow
 from steps.evaluate import evaluate_model
 

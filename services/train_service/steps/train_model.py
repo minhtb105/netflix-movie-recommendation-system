@@ -1,6 +1,3 @@
-import logging
-from src.model_dev import Model
-import pandas as pd
 import mlflow
 import mlflow.pyfunc as pyfunc
 from mlflow.tracking import MlflowClient
