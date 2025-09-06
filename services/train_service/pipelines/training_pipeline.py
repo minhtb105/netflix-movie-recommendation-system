@@ -1,10 +1,5 @@
 from pathlib import Path
 import sys
-
-project_root = Path(__file__).resolve().parent.parent
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
-
 import pandas as pd
 from steps.train_model import get_or_train
 from src.model_dev import (

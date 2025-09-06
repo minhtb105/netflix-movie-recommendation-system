@@ -162,11 +162,11 @@ class ContentBasedFiltering(Model):
         Recommend top_k similar movies to the given movie_id.
         Use review similarity if available, else fallback to feature similarity.
         """
-        idx = self.movie_id_to_index.get(movie_id)
+        idx = self.movie_id_to_index.get(movie_index)
         if idx is None:
             return []  # Movie not found
 
-        if movie_id in self.movies_with_reviews:
+        if movie_index in self.movies_with_reviews:
             sim_scores = self.review_similarity[idx]
         else:
             sim_scores = self.feature_similarity[idx]
