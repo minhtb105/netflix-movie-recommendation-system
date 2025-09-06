@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: train-service
+  labels:
+    app: train 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: train
+  template:
+    metadata:
+      labels:
+        app: train
+    spec:
+      containers:
+      - name: train-container
+        image: ghcr.io/minhtb105/train_service:${github.sha}
+        ports:
+        - containerPort: 8005
+  
