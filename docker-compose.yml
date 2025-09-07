@@ -14,11 +14,11 @@ services:
     ports:
       - "8003:8003"
     volumes:
-      - ./services/web_service/static/images:/app/static/images
+      - ./services/web_service/static/images/cast:/app/static/images/cast
       - ./data:/app/data
     environment:
       - PYTHONUNBUFFERED=1
-      - STATIC_IMAGE_DIR=/app/static/images
+      - STATIC_IMAGE_DIR=/app/static/images/cast
       - TIME_OUT=30
       - TMDB_SERVICE_URL=http://tmdb_service:8009
 
