@@ -1,8 +1,20 @@
 services:
   tmdb_service:
+    build:
+      context: ./services/tmdb_service
+      dockerfile: Dockerfile
+
     image: tmdb_service:v1
+
     ports:
       - "8009:8009"
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8009/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
     environment:
       - PYTHONUNBUFFERED=1
       - STATIC_IMAGE_DIR=/app/static/images
@@ -10,12 +22,19 @@ services:
       - TMDB_ACCESS_TOKEN=${TMDB_ACCESS_TOKEN}
 
   data_collection_service:
-    image: data_collection_service:v1
+    build:
+      context: ./services/data_collection_service
+      dockerfile: Dockerfile
+
+    image: data_collection_service:v1 
+
     ports:
       - "8003:8003"
+
     volumes:
       - ./services/web_service/static/images/cast:/app/static/images/cast
       - ./data:/app/data
+
     environment:
       - PYTHONUNBUFFERED=1
       - STATIC_IMAGE_DIR=/app/static/images/cast
@@ -23,7 +42,8 @@ services:
       - TMDB_SERVICE_URL=http://tmdb_service:8009
 
     depends_on:
-      - tmdb_service
+      tmdb_service:
+        condition: service_healthy
 
 volumes:
   shared_images:
