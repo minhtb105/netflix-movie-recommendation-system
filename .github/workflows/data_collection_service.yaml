@@ -23,6 +23,10 @@ env:
   TIME_OUT: 30
   STATIC_IMAGE_DIR: "app/static/images"
 
+permissions:
+  contents: write
+  packages: write 
+
 jobs:
   ci: 
     runs-on: ubuntu-latest
