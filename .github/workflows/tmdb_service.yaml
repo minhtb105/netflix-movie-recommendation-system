@@ -20,6 +20,10 @@ env:
   PYTHON_VERSION: '3.10'
   TMDB_ACCESS_TOKEN: ${{ secrets.TMDB_ACCESS_TOKEN }}
 
+permissions:
+  contents: write
+  packages: write 
+
 jobs:
   ci:
     runs-on: ubuntu-latest
