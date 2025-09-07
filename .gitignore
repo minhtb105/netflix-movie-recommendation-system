@@ -36,4 +36,5 @@ services/web_service/static/images/.gitignore
 services/data_ingest_service/steps/__pycache__
 services/data_ingest_service/src/__pycache__
 services/data_collect_service/clients/__pycache__
+services/data_collect_service/utils/__pycache__
 !data/raw/*.dvc
