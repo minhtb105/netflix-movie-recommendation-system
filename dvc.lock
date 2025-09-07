@@ -1,7 +1,8 @@
 schema: '2.0'
 stages:
   ingest:
-    cmd: python services/data_ingest_service/pipelines/ingest_pipeline.py
+    cmd: PYTHONPATH=services/data_ingest_service python 
+      services/data_ingest_service/pipelines/ingest_pipeline.py
     deps:
     - path: data/raw/ml-100k/u.data
       hash: md5
@@ -17,16 +18,16 @@ stages:
       size: 22628
     - path: services/data_ingest_service/pipelines/ingest_pipeline.py
       hash: md5
-      md5: dfdc3e1098d1ff5b8e365b041b489e89
-      size: 1967
+      md5: 4f085248e07faea8d9e7ab84a13db57f
+      size: 1793
     - path: services/data_ingest_service/src/ingest_strategy.py
       hash: md5
       md5: 773c91894d5b725b2475082b661d93d5
       size: 1836
     - path: services/data_ingest_service/steps/ingest_data.py
       hash: md5
-      md5: 0f298b58dd46cc22e23e9363cfb56fbc
-      size: 975
+      md5: 977f549f505296cd68ab38d1adb67615
+      size: 884
     params:
       params.yaml:
         data_ingest_service.ingest:

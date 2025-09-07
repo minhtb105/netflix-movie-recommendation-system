@@ -1,7 +1,7 @@
 stages:
   ingest:
     wdir: .
-    cmd: python services/data_ingest_service/pipelines/ingest_pipeline.py
+    cmd: PYTHONPATH=services/data_ingest_service python services/data_ingest_service/pipelines/ingest_pipeline.py
     deps:
       - services/data_ingest_service/pipelines/ingest_pipeline.py
       - services/data_ingest_service/steps/ingest_data.py
@@ -14,21 +14,8 @@ stages:
     outs:
       - data/processed
 
-  fetch_tmdb_metadata:
-    cmd: python services/data_collection_service/pipelines/tmdb_metadata_pipeline.py
-    deps:
-      - services/data_collection_service/pipelines/tmdb_metadata_pipeline.py
-      - services/data_collection_service/clients/tmdb_service_client.py
-      - services/data_collection_service/utils/downloader.py
-    outs:
-      - data/raw/movies_metadata.json
-      - data/raw/tv_metadata.json
-      - services/web_service/static/images/movie
-      - services/web_service/static/images/tv
-      - services/web_service/static/images/cast
-  
   extract_tmdb_features:
-    cmd: python services/data_processing_service/steps/extract_tmdb_features.py
+    cmd: PYTHONPATH=services/data_processing_service python services/data_processing_service/steps/extract_tmdb_features.py
     deps:
       - python services/data_processing_service/steps/extract_tmdb_features.py
       - data/raw/movies_metadata.json
@@ -42,7 +29,7 @@ stages:
       - data/raw/tv_cast_metadata.json
       
   process_ratings_movielens:
-    cmd: python services/data_processing_service/pipelines/ratings_pipeline_movielens.py
+    cmd: PYTHONPATH=services/data_processing_service python services/data_processing_service/pipelines/ratings_pipeline_movielens.py
     deps:
       - services/data_processing_service/pipelines/ratings_pipeline_movielens.py
       - services/data_processing_service/steps/prepare_data.py
@@ -54,7 +41,7 @@ stages:
       - data/feature/ratings_movielens
 
   process_movies_movielens:
-    cmd: python services/data_processing_service/pipelines/movies_pipeline_movielens.py
+    cmd: PYTHONPATH=services/data_processing_service python services/data_processing_service/pipelines/movies_pipeline_movielens.py
     deps:
       - services/data_processing_service/pipelines/movies_pipeline_movielens.py
       - services/data_processing_service/steps/prepare_data.py
@@ -66,7 +53,7 @@ stages:
       - data/feature/movies_movielens
 
   process_users_movielens:
-    cmd: python services/data_processing_service/pipelines/users_pipeline_movielens.py
+    cmd: PYTHONPATH=services/data_processing_service python services/data_processing_service/pipelines/users_pipeline_movielens.py
     deps:
       - services/data_processing_service/pipelines/users_pipeline_movielens.py
       - services/data_processing_service/steps/prepare_data.py
@@ -78,7 +65,7 @@ stages:
       - data/feature/users_movielens
 
   process_movies_tmdb:
-    cmd: python services/data_processing_service/pipelines/movies_pipeline_tmdb.py
+    cmd: PYTHONPATH=services/data_processing_service python services/data_processing_service/pipelines/movies_pipeline_tmdb.py
     deps:
       - services/data_processing_service/pipelines/movies_pipeline_tmdb.py
       - services/data_processing_service/steps/prepare_data.py
@@ -89,7 +76,7 @@ stages:
       - data/feature/movies_tmdb
 
   process_tv_tmdb:
-    cmd: python services/data_processing_service/pipelines/tv_pipeline_tmdb.py
+    cmd: PYTHONPATH=services/data_processing_service python services/data_processing_service/pipelines/tv_pipeline_tmdb.py
     deps:
       - services/data_processing_service/pipelines/tv_pipeline_tmdb.py
       - services/data_processing_service/steps/prepare_data.py
@@ -100,7 +87,7 @@ stages:
       - data/feature/tv_tmdb
       
   user_item_matrix:
-      cmd: python -c "from services.train_service.pipelines.training_pipeline import save_user_item_matrix; save_user_item_matrix()"
+      cmd: PYTHONPATH=services/train_service python -c "from services.train_service.pipelines.training_pipeline import save_user_item_matrix; save_user_item_matrix()"
       deps:
         - services/train_service/pipelines/training_pipeline.py
         - services/data_processing_service/steps/get_historical_features.py
@@ -109,7 +96,7 @@ stages:
         - model/user_item_matrix.pkl
     
   user_based_cf:
-      cmd: python -c "from services.train_service.pipelines.training_pipeline import user_based_cf_pipeline; user_based_cf_pipeline()"
+      cmd: PYTHONPATH=services/train_service python -c "from services.train_service.pipelines.training_pipeline import user_based_cf_pipeline; user_based_cf_pipeline()"
       deps:
         - services/train_service/pipelines/training_pipeline.py
         - services/train_service/steps/train_model.py
@@ -118,7 +105,7 @@ stages:
         - model/user_item_matrix.pkl
 
   item_based_cf:
-      cmd: python -c "from services.train_service.pipelines.training_pipeline import item_based_cf_pipeline; item_based_cf_pipeline()"
+      cmd: PYTHONPATH=services/train_service python -c "from services.train_service.pipelines.training_pipeline import item_based_cf_pipeline; item_based_cf_pipeline()"
       deps:
         - services/train_service/pipelines/training_pipeline.py
         - services/train_service/steps/train_model.py
