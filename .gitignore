@@ -7,6 +7,10 @@ utils/__pycache__
 .dvc/config.local
 .dvc/tmp/
 .dvc/cache/
+services/data_collection_service/__pycache__
+services/data_collection_service/clients/__pycache__
+services/data_collection_service/pipelines/__pycache__
+services/data_collection_service/utils/__pycache__
 services/feature_store_service/registry.db
 services/feature_store_service/online_store.db
 services/feature_store_service/.feast
